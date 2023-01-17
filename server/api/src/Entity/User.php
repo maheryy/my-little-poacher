@@ -12,7 +12,9 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -56,6 +58,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 180)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $name = null;
+
+    #[Assert\NotBlank]
     #[Assert\Email]
     #[Groups(['user:read', 'user:create', 'user:update'])]
     #[ORM\Column(length: 180, unique: true)]
@@ -68,12 +76,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
 
+    #[Groups(['user:read'])]
     #[ORM\Column(type: 'json')]
     private array $roles = [];
+
+    #[Groups(['user:read'])]
+    #[ORM\Column(type: 'integer')]
+    private int $status = 0;
+
+    #[ORM\OneToMany(mappedBy: 'seller', targetEntity: Bid::class)]
+    private Collection $bids;
+
+    #[ORM\OneToMany(mappedBy: 'bidder', targetEntity: BidLog::class)]
+    private Collection $bidLogs;
+
+    #[ORM\OneToMany(mappedBy: 'commentator', targetEntity: Comment::class)]
+    private Collection $comments;
+
+    #[ORM\OneToMany(mappedBy: 'seller', targetEntity: UserSeller::class)]
+    private Collection $userSellers;
+
+    #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Event::class)]
+    private Collection $events;
+
+    #[ORM\OneToMany(mappedBy: 'holder', targetEntity: Ticket::class)]
+    private Collection $tickets;
+
+    public function __construct()
+    {
+        $this->bids = new ArrayCollection();
+        $this->bidLogs = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->userSellers = new ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -134,6 +187,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
     /**
      * A visual identifier that represents this user.
      *
@@ -150,5 +214,185 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Bid>
+     */
+    public function getBids(): Collection
+    {
+        return $this->bids;
+    }
+
+    public function addBid(Bid $bid): self
+    {
+        if (!$this->bids->contains($bid)) {
+            $this->bids->add($bid);
+            $bid->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBid(Bid $bid): self
+    {
+        if ($this->bids->removeElement($bid)) {
+            // set the owning side to null (unless already changed)
+            if ($bid->getSeller() === $this) {
+                $bid->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BidLog>
+     */
+    public function getBidLogs(): Collection
+    {
+        return $this->bidLogs;
+    }
+
+    public function addBidLog(BidLog $bidLog): self
+    {
+        if (!$this->bidLogs->contains($bidLog)) {
+            $this->bidLogs->add($bidLog);
+            $bidLog->setBidder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBidLog(BidLog $bidLog): self
+    {
+        if ($this->bidLogs->removeElement($bidLog)) {
+            // set the owning side to null (unless already changed)
+            if ($bidLog->getBidder() === $this) {
+                $bidLog->setBidder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setCommentator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getCommentator() === $this) {
+                $comment->setCommentator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserSeller>
+     */
+    public function getUserSellers(): Collection
+    {
+        return $this->userSellers;
+    }
+
+    public function addUserSeller(UserSeller $userSeller): self
+    {
+        if (!$this->userSellers->contains($userSeller)) {
+            $this->userSellers->add($userSeller);
+            $userSeller->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSeller(UserSeller $userSeller): self
+    {
+        if ($this->userSellers->removeElement($userSeller)) {
+            // set the owning side to null (unless already changed)
+            if ($userSeller->getSeller() === $this) {
+                $userSeller->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getCreator() === $this) {
+                $event->setCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets->add($ticket);
+            $ticket->setHolder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getHolder() === $this) {
+                $ticket->setHolder(null);
+            }
+        }
+
+        return $this;
     }
 }
