@@ -1,8 +1,8 @@
 <script setup>
-import { computed } from "vue";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import router from "../../router";
 const store = useStore();
+const router = useRouter();
 const user = store.state.auth.user;
 
 const logout = () => {

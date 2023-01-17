@@ -8,7 +8,6 @@ const state = {
 const getters = {
   authenticated(state) {
     return state.token && state.user;
-    // return true;
   },
 };
 
@@ -24,8 +23,7 @@ const mutations = {
 const actions = {
   async login({ dispatch }, credentials) {
     try {
-      // TODO: review login url
-      const response = await axios.post("auth/login", credentials);
+      const response = await axios.post("auth", credentials);
       return dispatch("attempt", response.data.token);
     } catch (e) {
       throw e;
@@ -36,8 +34,7 @@ const actions = {
     if (user) return commit("setUser", user);
     try {
       commit("setToken", token);
-      // TODO: review user url
-      const response = await axios.get("auth/me");
+      const response = await axios.get("users/me");
       commit("setUser", response.data.user);
     } catch (e) {
       commit("setToken", null);
