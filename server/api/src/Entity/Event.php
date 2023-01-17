@@ -2,107 +2,196 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource(mercure: true)]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
-    
-    #[ORM\Column(type: 'string', length: 255)]
-    public string $name = '';
 
-    #[ORM\Column(type: 'string', length: 255)]
-    public string $slug = '';
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    public string $description = '';
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    public string $address = '';
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
 
-    #[ORM\Column(type: 'integer')]
-    public int $capacity = 0;
+    #[ORM\Column(length: 255)]
+    private ?string $address = null;
 
-    #[ORM\Column(type: 'integer')]
-    public int $registered_users = 0;
+    #[ORM\Column(nullable: true)]
+    private ?int $capacity = null;
 
-    #[ORM\Column(type: 'integer')]
-    public int $status = 0;
+    #[ORM\Column(nullable: true)]
+    private ?int $registered_users = null;
 
-    #[ORM\Column(type: 'datetime')]
-    public \DateTimeInterface $date;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $date = null;
 
-    #[ORM\ManyToOne(inversedBy:'events')]
-    public ?User $creator = null;
-    
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    private ?int $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creator = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
-    public ArrayCollection $tickets;
+    private Collection $tickets;
 
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getSlug(): string
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
 
-    public function getDescription(): string
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function getAddress(): string
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
     {
         return $this->address;
     }
 
-    public function getCapacity(): int
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getCapacity(): ?int
     {
         return $this->capacity;
     }
 
-    public function getRegisteredUsers(): int
+    public function setCapacity(?int $capacity): self
+    {
+        $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function getRegisteredUsers(): ?int
     {
         return $this->registered_users;
     }
 
-    public function getStatus(): int
+    public function setRegisteredUsers(?int $registered_users): self
     {
-        return $this->status;
+        $this->registered_users = $registered_users;
+
+        return $this;
     }
 
-    public function getDate(): \DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
 
-    public function getCreator(): User
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
 
-    public function getTickets(): ArrayCollection
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
     {
         return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets->add($ticket);
+            $ticket->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getEvent() === $this) {
+                $ticket->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

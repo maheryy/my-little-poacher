@@ -18,10 +18,10 @@ class LoginSuccessListener
 
         $data['user'] = [
             'id' => $user->getId(),
-            'identifier' => $user->getIdentifier(),
+            'name' => $user->getName(),
             'email' => $user->getEmail(),
             'roles' => $user->getRoles(),
-            'status' => $user->getStatus()
+            'status' => $user->getStatus(),
         ];
 
         $event->setData($data);

@@ -2,61 +2,81 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
+use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
-#[ApiResource(mercure: true)]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TicketRepository::class)]
 class Ticket
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    public string $reference = '';
+    #[ORM\Column(length: 255)]
+    private ?string $reference = null;
 
-    #[ORM\Column(type: 'integer')]
-    public int $status = 0;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $expireAt = null;
 
-    #[ORM\Column(type: 'datetime')]
-    public \DateTimeInterface $expireAt;
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tickets', targetEntity: User::class)]
-    public User $user;
-
-    #[ORM\ManyToOne(inversedBy: 'tickets', targetEntity: Event::class)]
-    public Event $event;
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $holder = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getReference(): string
+    public function getReference(): ?string
     {
         return $this->reference;
     }
 
-    public function getStatus(): int
+    public function setReference(string $reference): self
     {
-        return $this->status;
+        $this->reference = $reference;
+
+        return $this;
     }
 
-    public function getExpireAt(): \DateTimeInterface
+    public function getExpireAt(): ?\DateTimeImmutable
     {
         return $this->expireAt;
     }
 
-    public function getUser(): User
+    public function setExpireAt(\DateTimeImmutable $expireAt): self
     {
-        return $this->user;
+        $this->expireAt = $expireAt;
+
+        return $this;
     }
 
-    public function getEvent(): Event
+    public function getEvent(): ?Event
     {
         return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getHolder(): ?User
+    {
+        return $this->holder;
+    }
+
+    public function setHolder(?User $holder): self
+    {
+        $this->holder = $holder;
+
+        return $this;
     }
 }
