@@ -36,10 +36,10 @@ class Bid
     #[ORM\Column]
     public ?\DateTimeInterface $endAt = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'bids')]
+    #[ORM\ManyToOne(inversedBy: 'bids', targetEntity: User::class)]
     public User $seller;
 
-    #[ORM\ManyToOne(targetEntity: Animal::class, inversedBy: 'bids')]
+    #[ORM\ManyToOne(inversedBy: 'bids', targetEntity: Animal::class)]
     public Animal $animal;
 
     public function getId(): ?int
@@ -90,6 +90,74 @@ class Bid
     public function getAnimal(): Animal
     {
         return $this->animal;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function setInitialPrice(int $initialPrice): self
+    {
+        $this->initialPrice = $initialPrice;
+
+        return $this;
+    }
+
+    public function setStartAt(?\DateTimeInterface $startAt): self
+    {
+        $this->startAt = $startAt;
+
+        return $this;
+    }
+
+    public function setEndAt(?\DateTimeInterface $endAt): self
+    {
+        $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function setSeller(User $seller): self
+    {
+        $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function setAnimal(Animal $animal): self
+    {
+        $this->animal = $animal;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 
 }

@@ -88,4 +88,53 @@ class Animal
     {
         return $this->bids;
     }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function setScientificName(string $scientificName): self
+    {
+        $this->scientificName = $scientificName;
+
+        return $this;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function setCaptureDate(\DateTimeInterface $captureDate): self
+    {
+        $this->captureDate = $captureDate;
+
+        return $this;
+    }
+
+    public function setLongitude(float $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function setLatitude(float $latitude): self
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function setCountry(string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
 }

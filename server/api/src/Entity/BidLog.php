@@ -18,10 +18,10 @@ class BidLog
     #[ORM\Column(type: 'integer')]
     public int $price = 0;
 
-    #[ORM\ManyToOne(targetEntity: Bid::class, inversedBy: 'logs')]
+    #[ORM\ManyToOne(inversedBy: 'logs', targetEntity: Bid::class)]
     public Bid $bid;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'bidLogs')]
+    #[ORM\ManyToOne(inversedBy: 'logs', targetEntity: User::class)]
     public User $user;
 
     public function getId(): ?int

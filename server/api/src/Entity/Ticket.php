@@ -24,10 +24,10 @@ class Ticket
     #[ORM\Column(type: 'datetime')]
     public \DateTimeInterface $expireAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]
+    #[ORM\ManyToOne(inversedBy: 'tickets', targetEntity: User::class)]
     public User $user;
 
-    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'tickets')]
+    #[ORM\ManyToOne(inversedBy: 'tickets', targetEntity: Event::class)]
     public Event $event;
 
     public function getId(): ?int

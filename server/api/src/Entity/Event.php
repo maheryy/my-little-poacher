@@ -39,8 +39,9 @@ class Event
     #[ORM\Column(type: 'datetime')]
     public \DateTimeInterface $date;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'events')]
-    public User $seller;
+    #[ORM\ManyToOne(inversedBy:'events')]
+    public ?User $creator = null;
+    
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
     public ArrayCollection $tickets;
@@ -95,9 +96,9 @@ class Event
         return $this->date;
     }
 
-    public function getSeller(): User
+    public function getCreator(): User
     {
-        return $this->seller;
+        return $this->creator;
     }
 
     public function getTickets(): ArrayCollection

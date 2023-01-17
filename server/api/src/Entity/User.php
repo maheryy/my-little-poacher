@@ -57,6 +57,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 180)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $identifier = null;
+
+    #[Assert\NotBlank]
     #[Assert\Email]
     #[Groups(['user:read', 'user:create', 'user:update'])]
     #[ORM\Column(length: 180, unique: true)]
@@ -69,26 +75,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
 
+    #[Groups(['user:read'])]
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    #[ORM\OneToMany(mappedBy: 'bid', targetEntity: Bid::class, cascade: ['persist', 'remove'])]
-    public iterable $bids;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: BidLog::class, cascade: ['persist', 'remove'])]
-    public iterable $bidLogs;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Ticket::class, cascade: ['persist', 'remove'])]
-    public iterable $tickets;
-
-    public function __construct()
-    {
-        $this->bids = new ArrayCollection();
-    }
+    #[Groups(['user:read'])]
+    #[ORM\Column(type: 'integer')]
+    private int $status = 0;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $username): self
+    {
+        $this->identifier = $username;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -149,6 +158,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
     /**
      * A visual identifier that represents this user.
      *
