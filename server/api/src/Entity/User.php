@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -70,6 +71,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
+
+    #[ORM\OneToMany(mappedBy: 'bid', targetEntity: Bid::class, cascade: ['persist', 'remove'])]
+    public iterable $bids;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: BidLog::class, cascade: ['persist', 'remove'])]
+    public iterable $bidLogs;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Ticket::class, cascade: ['persist', 'remove'])]
+    public iterable $tickets;
+
+    public function __construct()
+    {
+        $this->bids = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
