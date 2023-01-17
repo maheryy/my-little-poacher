@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import NotFound from "../views/errors/NotFound.vue";
-
+import store from "../store";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,19 +7,39 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: Home,
+      component: () => import("../views/Home.vue"),
     },
     {
       path: "/login",
       name: "login",
-      component: Login,
+      component: () => import("../views/Login.vue"),
+      beforeEnter: (_, __, next) => {
+        if (store.getters["auth/authenticated"]) {
+          return next({ name: "dashboard" });
+        }
+        next();
+      },
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import("../views/protected/Dashboard.vue"),
+      meta: { auth: true },
     },
     {
       path: "/:pathMatch(.*)",
       name: "not-found",
-      component: NotFound,
+      component: () => import("../views/errors/NotFound.vue"),
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !store.getters["auth/authenticated"]) {
+    return next({ name: "login" });
+  }
+
+  next();
 });
 
 export default router;
