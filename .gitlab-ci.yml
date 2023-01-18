@@ -14,6 +14,7 @@ test-front:
     - cd client
     - npm ci
     - ls -lah
+    - ls -lah ..
     - npm run test
   cache:
     paths:
