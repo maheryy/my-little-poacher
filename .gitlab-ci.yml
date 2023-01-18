@@ -1,0 +1,15 @@
+stages:
+  - test
+  - build
+  - deploy
+
+build-front:
+  image: node:lts
+  stage: build
+  script:
+    - cd client
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - client/dist
