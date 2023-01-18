@@ -22,23 +22,24 @@ const logout = () => {
         Home
       </RouterLink>
       <RouterLink
+        :to="{ name: 'bids' }"
+        class="text-gray-200 border-blue-500 mx-1.5 sm:mx-6"
+      >
+        Enchères
+      </RouterLink>
+      <RouterLink
+        :to="{ name: 'cart' }"
+        class="text-gray-200 border-blue-500 mx-1.5 sm:mx-6"
+      >
+        Mes enchères
+      </RouterLink>
+      <RouterLink
         :to="{ name: 'login' }"
         class="text-gray-200 border-blue-500 mx-1.5 sm:mx-6"
       >
         Login
       </RouterLink>
-      <RouterLink
-        :to="{ name: 'dashboard' }"
-        class="text-gray-200 border-blue-500 mx-1.5 sm:mx-6"
-      >
-        Dashboard (protected)
-      </RouterLink>
-      <RouterLink
-        to="/not-found-route"
-        class="text-gray-200 border-blue-500 mx-1.5 sm:mx-6"
-      >
-        Not found
-      </RouterLink>
+      
       <a
         class="text-gray-200 border-blue-500 mx-1.5 sm:mx-6 cursor-pointer"
         @click="logout"

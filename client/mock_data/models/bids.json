@@ -1,0 +1,382 @@
+[
+  {
+    "id": 1,
+    "title": "Coke's hartebeest",
+    "description": "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
+    "slug": "BR-AL",
+    "status": 1,
+    "initialPrice": 7704,
+    "price": 7721,
+    "startAt": "8/1/2022",
+    "endAt": "4/2/2022",
+    "seller": {
+      "username": "jfranck0",
+      "email": "ahelin0@chron.com"
+    },
+    "animal": {
+      "name": "Racer snake",
+      "image": "http://dummyimage.com/114x100.png/cc0000/ffffff"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Arctic fox",
+    "description": "Fusce consequat. Nulla nisl. Nunc nisl.\n\nDuis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
+    "slug": "CA-NT",
+    "status": 2,
+    "initialPrice": 4961,
+    "price": 4891,
+    "startAt": "11/24/2022",
+    "endAt": "3/23/2022",
+    "seller": {
+      "username": "lhamnet1",
+      "email": "cglowacha1@oakley.com"
+    },
+    "animal": {
+      "name": "Monkey, black spider",
+      "image": "http://dummyimage.com/114x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Lion, steller's sea",
+    "description": "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.",
+    "slug": "IN-RJ",
+    "status": 3,
+    "initialPrice": 3490,
+    "price": 2246,
+    "startAt": "11/18/2022",
+    "endAt": "7/18/2022",
+    "seller": {
+      "username": "escrivener2",
+      "email": "tvairow2@time.com"
+    },
+    "animal": {
+      "name": "Hoffman's sloth",
+      "image": "http://dummyimage.com/193x100.png/ff4444/ffffff"
+    }
+  },
+  {
+    "id": 4,
+    "title": "Little brown bat",
+    "description": "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
+    "slug": "MX-COA",
+    "status": 4,
+    "initialPrice": 9382,
+    "price": 6359,
+    "startAt": "12/23/2022",
+    "endAt": "3/9/2022",
+    "seller": {
+      "username": "hthorburn3",
+      "email": "dshilleto3@wisc.edu"
+    },
+    "animal": {
+      "name": "Lizard (unidentified)",
+      "image": "http://dummyimage.com/227x100.png/dddddd/000000"
+    }
+  },
+  {
+    "id": 5,
+    "title": "Blue shark",
+    "description": "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.\n\nProin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.",
+    "slug": "KR-49",
+    "status": 5,
+    "initialPrice": 4886,
+    "price": 6610,
+    "startAt": "3/13/2022",
+    "endAt": "9/16/2022",
+    "seller": {
+      "username": "asquirrell4",
+      "email": "lhocking4@weather.com"
+    },
+    "animal": {
+      "name": "Deer, swamp",
+      "image": "http://dummyimage.com/160x100.png/dddddd/000000"
+    }
+  },
+  {
+    "id": 6,
+    "title": "Caracara (unidentified)",
+    "description": "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
+    "slug": "GA-4",
+    "status": 6,
+    "initialPrice": 8035,
+    "price": 4586,
+    "startAt": "10/17/2022",
+    "endAt": "7/18/2022",
+    "seller": {
+      "username": "cfennelow5",
+      "email": "ctalloe5@redcross.org"
+    },
+    "animal": {
+      "name": "Glider, feathertail",
+      "image": "http://dummyimage.com/196x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 7,
+    "title": "Vulture, black",
+    "description": "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
+    "slug": "MA-LAA",
+    "status": 7,
+    "initialPrice": 4398,
+    "price": 916,
+    "startAt": "1/9/2023",
+    "endAt": "10/19/2022",
+    "seller": {
+      "username": "cswiffen6",
+      "email": "kflade6@psu.edu"
+    },
+    "animal": {
+      "name": "Lion, galapagos sea",
+      "image": "http://dummyimage.com/175x100.png/cc0000/ffffff"
+    }
+  },
+  {
+    "id": 8,
+    "title": "Pheasant, ring-necked",
+    "description": "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.",
+    "slug": "AU-QLD",
+    "status": 8,
+    "initialPrice": 589,
+    "price": 7577,
+    "startAt": "1/25/2022",
+    "endAt": "2/14/2022",
+    "seller": {
+      "username": "awilcocks7",
+      "email": "ppinckney7@delicious.com"
+    },
+    "animal": {
+      "name": "Bushbuck",
+      "image": "http://dummyimage.com/180x100.png/cc0000/ffffff"
+    }
+  },
+  {
+    "id": 9,
+    "title": "Woylie",
+    "description": "Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\n\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.",
+    "slug": "US-AK",
+    "status": 9,
+    "initialPrice": 4909,
+    "price": 1762,
+    "startAt": "9/30/2022",
+    "endAt": "2/8/2022",
+    "seller": {
+      "username": "fgrishakov8",
+      "email": "spresland8@wordpress.org"
+    },
+    "animal": {
+      "name": "African pied wagtail",
+      "image": "http://dummyimage.com/141x100.png/cc0000/ffffff"
+    }
+  },
+  {
+    "id": 10,
+    "title": "Bustard, denham's",
+    "description": "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\n\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+    "slug": "ES-CL",
+    "status": 10,
+    "initialPrice": 9323,
+    "price": 3145,
+    "startAt": "1/19/2022",
+    "endAt": "4/1/2022",
+    "seller": {
+      "username": "akilgour9",
+      "email": "nbaudrey9@patch.com"
+    },
+    "animal": {
+      "name": "Lizard (unidentified)",
+      "image": "http://dummyimage.com/245x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 11,
+    "title": "Purple moorhen",
+    "description": "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+    "slug": "ET-GA",
+    "status": 11,
+    "initialPrice": 3477,
+    "price": 6896,
+    "startAt": "11/3/2022",
+    "endAt": "7/13/2022",
+    "seller": {
+      "username": "bvonwellduna",
+      "email": "brallina@forbes.com"
+    },
+    "animal": {
+      "name": "Common seal",
+      "image": "http://dummyimage.com/220x100.png/cc0000/ffffff"
+    }
+  },
+  {
+    "id": 12,
+    "title": "Caracal",
+    "description": "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.",
+    "slug": "RU-KB",
+    "status": 12,
+    "initialPrice": 2690,
+    "price": 8765,
+    "startAt": "7/11/2022",
+    "endAt": "1/7/2023",
+    "seller": {
+      "username": "shaldenbyb",
+      "email": "bianneb@nationalgeographic.com"
+    },
+    "animal": {
+      "name": "Southern brown bandicoot",
+      "image": "http://dummyimage.com/207x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 13,
+    "title": "Thrasher, curve-billed",
+    "description": "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.\n\nProin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.",
+    "slug": "US-PA",
+    "status": 13,
+    "initialPrice": 8082,
+    "price": 3999,
+    "startAt": "4/11/2022",
+    "endAt": "7/6/2022",
+    "seller": {
+      "username": "kdelouchc",
+      "email": "apurdonc@cafepress.com"
+    },
+    "animal": {
+      "name": "Water moccasin",
+      "image": "http://dummyimage.com/185x100.png/dddddd/000000"
+    }
+  },
+  {
+    "id": 14,
+    "title": "Red squirrel",
+    "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.",
+    "slug": "BE-VWV",
+    "status": 14,
+    "initialPrice": 5794,
+    "price": 8013,
+    "startAt": "9/15/2022",
+    "endAt": "3/6/2022",
+    "seller": {
+      "username": "jsummertond",
+      "email": "fshinglerd@shop-pro.jp"
+    },
+    "animal": {
+      "name": "Mule deer",
+      "image": "http://dummyimage.com/212x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 15,
+    "title": "Sheep, red",
+    "description": "In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.",
+    "slug": "US-MN",
+    "status": 15,
+    "initialPrice": 9049,
+    "price": 6849,
+    "startAt": "11/21/2022",
+    "endAt": "1/7/2023",
+    "seller": {
+      "username": "ntiee",
+      "email": "dducharte@wp.com"
+    },
+    "animal": {
+      "name": "Shrike, southern white-crowned",
+      "image": "http://dummyimage.com/246x100.png/ff4444/ffffff"
+    }
+  },
+  {
+    "id": 16,
+    "title": "Giant heron",
+    "description": "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
+    "slug": "CN-44",
+    "status": 16,
+    "initialPrice": 7546,
+    "price": 2406,
+    "startAt": "4/9/2022",
+    "endAt": "5/7/2022",
+    "seller": {
+      "username": "prenackownaf",
+      "email": "pmacmenemyf@yahoo.com"
+    },
+    "animal": {
+      "name": "Caribou",
+      "image": "http://dummyimage.com/202x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 17,
+    "title": "Cormorant, great",
+    "description": "In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.",
+    "slug": "TO-03",
+    "status": 17,
+    "initialPrice": 5100,
+    "price": 9783,
+    "startAt": "8/5/2022",
+    "endAt": "2/20/2022",
+    "seller": {
+      "username": "admisekg",
+      "email": "hjuhrukeg@blogspot.com"
+    },
+    "animal": {
+      "name": "Common raccoon",
+      "image": "http://dummyimage.com/185x100.png/cc0000/ffffff"
+    }
+  },
+  {
+    "id": 18,
+    "title": "Bat, madagascar fruit",
+    "description": "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
+    "slug": "CA-NU",
+    "status": 18,
+    "initialPrice": 1492,
+    "price": 7857,
+    "startAt": "8/28/2022",
+    "endAt": "10/12/2022",
+    "seller": {
+      "username": "ugiddyh",
+      "email": "ppineauxh@comsenz.com"
+    },
+    "animal": {
+      "name": "Ibis, glossy",
+      "image": "http://dummyimage.com/134x100.png/dddddd/000000"
+    }
+  },
+  {
+    "id": 19,
+    "title": "Cape Barren goose",
+    "description": "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
+    "slug": "US-OR",
+    "status": 19,
+    "initialPrice": 4784,
+    "price": 8234,
+    "startAt": "2/11/2022",
+    "endAt": "10/8/2022",
+    "seller": {
+      "username": "tmartinezi",
+      "email": "alourencoi@fotki.com"
+    },
+    "animal": {
+      "name": "Spotted-tailed quoll",
+      "image": "http://dummyimage.com/143x100.png/5fa2dd/ffffff"
+    }
+  },
+  {
+    "id": 20,
+    "title": "Giant armadillo",
+    "description": "Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.",
+    "slug": "RU-VOR",
+    "status": 20,
+    "initialPrice": 5930,
+    "price": 2846,
+    "startAt": "3/25/2022",
+    "endAt": "11/13/2022",
+    "seller": {
+      "username": "ywhilderj",
+      "email": "tvanbrugj@hubpages.com"
+    },
+    "animal": {
+      "name": "Fox, blue",
+      "image": "http://dummyimage.com/133x100.png/ff4444/ffffff"
+    }
+  }
+]

@@ -1,7 +1,7 @@
 import { authResolver } from "./middlewares";
 
 const options = {
-  beforeEnter: authResolver,
+  // beforeEnter: authResolver,
 };
 
 const routes = [
@@ -9,6 +9,12 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: () => import("../views/protected/Dashboard.vue"),
+    ...options,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../views/protected/Cart.vue"),
     ...options,
   },
 ];
