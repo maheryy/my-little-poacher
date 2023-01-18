@@ -5,17 +5,21 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col rounded-xl border-cyan-500 border-2 w-72 h-80">
-    <img :src="bid.animal.image" alt="Photo de l'animal" class="w-full h-1/5"/>
+  <div class="card">
+    <img :src="bid.animal.image" alt="Photo de l'animal" class="w-full h-44 object-cover card-image" />
     <div class="flex flex-col p-4">
-      <span>{{ bid.title }}</span>
-      <span>{{ bid.animal.name }}</span>
-      <span>Départ : {{ bid.initialPrice }} €</span>
-      <span>Actuel : {{ bid.price }} €</span>
-      <span>{{ bid.description.slice(0, 50) }}</span>
-      <RouterLink class="bg-teal-600 p-2 rounded-md w-fit" :to="{ name: 'bid', params: { slug: bid.slug } }">
-        Consulter
-      </RouterLink>
+      <span class="text-lg font-semibold">{{ bid.title }}</span>
+      <span class="text-sm">{{ bid.animal.name }}</span>
+      <span class="mt-2 h-20">{{ bid.description.length > 80 ? bid.description.slice(0, 80) + '...' : bid.description }}</span>
+      <div class="flex justify-between items-center mt-2">
+        <div class="flex flex-col items-center text-sm">
+          <span>Départ : <span class="font-bold">{{ bid.initialPrice }} €</span></span>
+          <span>Actuel : <span class="font-bold">{{ bid.price }} €</span></span>
+        </div>
+        <RouterLink class="btn" :to="{ name: 'bid', params: { slug: bid.slug } }">
+          Voir
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>
