@@ -12,9 +12,7 @@ import Account from '../assets/icons/account.svg'
 const store = useStore();
 const router = useRouter();
 
-const currentRoute = computed(() => router.currentRoute.value.name)
-
-console.log(currentRoute)
+const currentRoute = computed(() => router?.currentRoute.value.name)
 
 const logout = () => {
   store.dispatch("auth/logout");
