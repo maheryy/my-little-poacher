@@ -102,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'holder', targetEntity: Ticket::class)]
     private Collection $tickets;
 
-    public function __construct(array $roles, $email)
+    public function __construct()
     {
         $this->bids = new ArrayCollection();
         $this->bidLogs = new ArrayCollection();
@@ -288,7 +288,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setCommentator($this);
+            $comment->setAuthor($this);
         }
 
         return $this;
@@ -298,8 +298,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getCommentator() === $this) {
-                $comment->setCommentator(null);
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
             }
         }
 
