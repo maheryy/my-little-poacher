@@ -1,0 +1,44 @@
+default:
+  tags:
+    - runner-alexis
+  cache:
+    paths:
+      - client/.npm
+
+stages:
+  - test
+  - build
+  - deploy
+
+test-front:
+  image: node:lts
+  stage: test
+  script:
+    - cd client
+    - npm ci --cache .npm --prefer-offline
+    - ls -lah
+    - ls -lah ..
+    - npm run test
+  cache:
+    paths:
+      - client/node_modules
+
+pages:
+  image: node:lts
+  stage: build
+  only:
+    - dev
+    - main
+  script:
+    - cd client
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+    - mv dist ../public
+  cache:
+    paths:
+      - client/node_modules
+  dependencies:
+    - test-front
+  artifacts:
+    paths:
+      - public
