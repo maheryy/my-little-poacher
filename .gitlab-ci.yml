@@ -7,7 +7,7 @@ stages:
   - build
   - deploy
 
-build-front:
+pages:
   image: node:lts
   stage: build
   script:
