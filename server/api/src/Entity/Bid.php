@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'seller.id' => 'exact',
 ])]
 #[ApiResource(
-    normalizationContext: ['groups' => ['bids_read']],
+    normalizationContext: ['groups' => ['bids_read', 'bid_read']],
     denormalizationContext: ['groups' => ['bid_write']],
     paginationItemsPerPage: 12,
     paginationMaximumItemsPerPage: 12,
@@ -46,6 +47,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             denormalizationContext: ['groups' => ['bid_write']]
         ),
         new Delete,
+        new Patch(
+            denormalizationContext: ['groups' => ['bid_patch']]
+        )
     ]
 )]
 #[ORM\Entity(repositoryClass: BidRepository::class)]
@@ -54,11 +58,11 @@ class Bid
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bids_read', 'read:BidLog'])]
+    #[Groups(['bid_read','bids_read', 'read:BidLog'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bids_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read','bids_read', 'bid_write', 'read:BidLog'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -70,11 +74,11 @@ class Bid
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write','bid_patch','read:BidLog'])]
     private ?int $initialPrice = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write','bid_patch', 'read:BidLog'])]
     private ?int $currentPrice = null;
 
     #[ORM\Column]
