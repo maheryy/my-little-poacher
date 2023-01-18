@@ -3,11 +3,39 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['comments_read']],
+    denormalizationContext: ['groups' => ['comment_write']],
+    paginationItemsPerPage: 20,
+    paginationMaximumItemsPerPage: 20,
+    paginationClientEnabled: true,
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['comments_read']]
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['comment_read']]
+        ),
+        new Put(
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can edit comments.',
+            denormalizationContext: ['groups' => ['comment_write']]
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['comment_write']]
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
@@ -17,14 +45,17 @@ class Comment
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write'])]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['comment_read', 'comments_read', 'comment_write'])]
     private ?Bid $bid = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write'])]
     private ?User $author = null;
 
     public function getId(): ?int

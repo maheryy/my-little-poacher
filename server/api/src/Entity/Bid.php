@@ -100,9 +100,11 @@ class Bid
     private ?User $seller = null;
 
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: BidLog::class)]
+    #[Groups(['bid_read'])]
     private Collection $bidLogs;
 
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: Comment::class)]
+    #[Groups(['bid_read'])]
     private Collection $comments;
 
     public function __construct()
