@@ -2,7 +2,8 @@ default:
   tags:
     - runner-alexis
   cache:
-    - client/.npm
+    paths:
+      - client/.npm
 
 stages:
   - test
