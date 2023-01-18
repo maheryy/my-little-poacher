@@ -102,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'holder', targetEntity: Ticket::class)]
     private Collection $tickets;
 
-    public function __construct()
+    public function __construct(array $roles, $email)
     {
         $this->bids = new ArrayCollection();
         $this->bidLogs = new ArrayCollection();
