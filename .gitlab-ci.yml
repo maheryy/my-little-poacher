@@ -14,7 +14,7 @@ build-front:
     - cd client
     - npm ci
     - npm run build
-    - mv client/dist public
+    - mv dist ../public
   artifacts:
     paths:
       - public
