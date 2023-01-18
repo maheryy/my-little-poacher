@@ -37,6 +37,8 @@ pages:
   cache:
     paths:
       - client/node_modules
+  dependencies:
+    - test-front
   artifacts:
     paths:
       - public
