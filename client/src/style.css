@@ -27,3 +27,15 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+.btn {
+  @apply text-white font-semibold bg-emerald-400 hover:bg-emerald-500 p-2 px-4 rounded-md transition-all duration-300 text-center;
+}
+
+.card {
+  @apply bg-slate-900 rounded-xl shadow-xl w-80 h-max;
+}
+
+.card-image {
+  @apply rounded-t-xl;
+}
