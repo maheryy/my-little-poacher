@@ -29,9 +29,13 @@ const actions = {
       throw e;
     }
   },
-  async attempt({ commit }, token, user = null) {
+  async attempt({ commit }, { token, user }) {
     if (!token) return;
-    if (user) return commit("setUser", user);
+    if (user) {
+      commit("setToken", token);
+      commit("setUser", user);
+      return;
+    }
     try {
       commit("setToken", token);
       const response = await axios.get("users/me");

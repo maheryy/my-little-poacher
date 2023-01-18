@@ -16,6 +16,19 @@ export const loginResolver = (to, from, next) => {
   next();
 };
 
+export const checkoutResolver = (to, from, next) => {
+  if (!store.getters["auth/authenticated"]) {
+    return next({ name: "login" });
+  }
+  if (!to.query.session_id) {
+    return next({
+      name: "not-found",
+      params: { pathMatch: to.path.slice(1) }, // TODO: fix urls with '/'
+    });
+  }
+  next();
+};
+
 /*
 export const adminResolver = (to, from, next) => {
   if (!store.getters["auth/authenticated"]) {

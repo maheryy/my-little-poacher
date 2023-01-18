@@ -5,6 +5,8 @@ import store from "./store";
 import "./style.css";
 import "./config/index.js";
 
-store.dispatch("auth/attempt", localStorage.getItem("token")).then(() => {
-  createApp(App).use(store).use(router).mount("#app");
-});
+store
+  .dispatch("auth/attempt", { token: localStorage.getItem("token") })
+  .then(() => {
+    createApp(App).use(store).use(router).mount("#app");
+  });

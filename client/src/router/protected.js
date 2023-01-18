@@ -1,7 +1,7 @@
-import { authResolver } from "./middlewares";
+import { authResolver, checkoutResolver } from "./middlewares";
 
 const options = {
-  // beforeEnter: authResolver,
+  beforeEnter: authResolver,
 };
 
 const routes = [
@@ -16,6 +16,13 @@ const routes = [
     name: "cart",
     component: () => import("../views/protected/Cart.vue"),
     ...options,
+  },
+  {
+    path: "/checkout/success",
+    name: "checkout-success",
+    component: () => import("../views/protected/CheckoutSuccess.vue"),
+    props: (route) => ({ sessionId: route.query.session_id }),
+    beforeEnter: checkoutResolver,
   },
 ];
 
