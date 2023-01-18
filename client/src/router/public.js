@@ -12,6 +12,17 @@ const routes = [
     component: () => import("../views/Login.vue"),
     beforeEnter: loginResolver,
   },
+  {
+    path: "/bids",
+    name: "bids",
+    component: () => import("../views/BidList.vue"),
+  },
+  {
+    path: "/bid/:slug",
+    name: "bid",
+    component: () => import("../views/Bid.vue"),
+    props: true,
+  },
 ];
 
 export default routes;
