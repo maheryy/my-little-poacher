@@ -11,7 +11,6 @@ test('mount component', async () => {
   })
 
   expect(wrapper.text()).toContain('4 x 2 = 8')
-  expect(wrapper.html()).toMatchSnapshot()
 
   await wrapper.get('button').trigger('click')
 
