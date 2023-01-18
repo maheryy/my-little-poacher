@@ -50,7 +50,7 @@ class BidLog
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?int $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'bidLogs')]
@@ -60,7 +60,7 @@ class BidLog
 
     #[ORM\ManyToOne(inversedBy: 'bidLogs')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?User $bidder = null;
 
     public function getId(): ?int
