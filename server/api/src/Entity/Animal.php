@@ -2,53 +2,88 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\AnimalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'name' => 'partial',
+        'scientificName' => 'partial',
+        'captureDate' => 'exact',
+        'country' => 'exact',
+])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['animal_read', 'animals_read']],
+    denormalizationContext: ['groups' => ['animal_write']],
+    paginationItemsPerPage: 12,
+    paginationMaximumItemsPerPage: 12,
+    paginationClientEnabled: true,
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['animals_read', 'animal_read']]
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['animal_read']]
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['animal_write']]
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['animal_write']]
+        ),
+        new Delete,
+    ]
+)]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
 class Animal
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read:Bid'])]
+    #[Groups(['animal_read','animals_read','read:Bid'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $scientificName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $image = null;
 
     #[ORM\Column]
-    #[Groups(['read:Bid'])]
+    #[Groups(['animal_read','animal_write','read:Bid'])]
     private ?\DateTimeImmutable $captureDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read:Bid'])]
+    #[Groups(['animal_read','animal_write','read:Bid'])]
     private ?string $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read:Bid'])]
+    #[Groups(['animal_read','animal_write','read:Bid'])]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'animal', targetEntity: Bid::class)]
+    #[Groups(['animal_read'])]
     private Collection $bids;
 
     public function __construct()

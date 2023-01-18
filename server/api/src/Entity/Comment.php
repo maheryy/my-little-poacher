@@ -8,20 +8,21 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['comments_read']],
+    normalizationContext: ['groups' => ['comments_read','comment_read']],
     denormalizationContext: ['groups' => ['comment_write']],
     paginationItemsPerPage: 20,
     paginationMaximumItemsPerPage: 20,
     paginationClientEnabled: true,
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['comments_read']]
+            normalizationContext: ['groups' => ['comments_read','comment_read']]
         ),
         new Get(
             normalizationContext: ['groups' => ['comment_read']]
@@ -34,6 +35,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             denormalizationContext: ['groups' => ['comment_write']]
         ),
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can delete comments.'
+        ),
+        new Patch(
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can patch comments.',
+            denormalizationContext: ['groups' => ['comment_patch']]
+        )
     ]
 )]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
@@ -45,7 +55,7 @@ class Comment
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write'])]
+    #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write', 'comment_patch'])]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
