@@ -11,7 +11,7 @@ const logout = () => {
 };
 </script>
 <template>
-  <nav class="shadow bg-gray-800">
+  <nav class="shadow bg-slate-900">
     <div
       class="flex items-center justify-center p-6 mx-autocapitalize text-gray-300"
     >
