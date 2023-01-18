@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
@@ -16,13 +18,20 @@ class Ticket
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 5, max: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?string $reference = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Type('date')]
     private ?\DateTimeImmutable $expireAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
