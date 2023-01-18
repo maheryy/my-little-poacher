@@ -7,14 +7,32 @@ stages:
   - build
   - deploy
 
+test-front:
+  image: node:lts
+  stage: test
+  script:
+    - cd client
+    - npm ci
+    - ls -lah
+    - npm run test
+  cache:
+    paths:
+      - client/node_modules
+
 pages:
   image: node:lts
   stage: build
+  only:
+    - dev
+    - main
   script:
     - cd client
     - npm ci
     - npm run build
     - mv dist ../public
+  cache:
+    paths:
+      - client/node_modules
   artifacts:
     paths:
       - public
