@@ -33,6 +33,7 @@ pages:
     - cd client
     - npm ci --cache .npm --prefer-offline
     - npm run build
+    - cp dist/index.html dist/404.html
     - mv dist ../public
   cache:
     paths:
