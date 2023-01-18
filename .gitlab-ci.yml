@@ -16,8 +16,6 @@ test-front:
   script:
     - cd client
     - npm ci --cache .npm --prefer-offline
-    - ls -lah
-    - ls -lah ..
     - npm run test
   cache:
     paths:
