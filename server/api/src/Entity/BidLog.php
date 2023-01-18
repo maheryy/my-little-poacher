@@ -2,29 +2,65 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\BidLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'price' => 'exact',
+        'bid.id' => 'exact',
+        'bidder.id' => 'exact',
+    ]
+)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['bidLogs_read', 'read:BidLog']],
+    denormalizationContext: ['groups' => ['bidLog_write']],
+    paginationItemsPerPage: 20,
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['bidLogs_read', 'bidLog_read']],
+        ),
+        new Get(
+            security: "is_granted('ROLE_ADMIN') or object.getBidder() == user",
+            normalizationContext: ['groups' => ['bidLog_read', 'read:BidLog']]
+        ),
+        new Put(),
+        new Post(
+            denormalizationContext: ['groups' => ['bidLog_write']]
+        ),
+        new Delete,
+    ]
+)]
 #[ORM\Entity(repositoryClass: BidLogRepository::class)]
 class BidLog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['bidLogs_post'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
     private ?int $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'bidLogs')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
     private ?Bid $bid = null;
 
     #[ORM\ManyToOne(inversedBy: 'bidLogs')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
     private ?User $bidder = null;
 
     public function getId(): ?int

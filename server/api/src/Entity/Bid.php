@@ -2,7 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,9 +17,36 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'title' => 'partial',
+        'startAt' => 'exact',
+        'endAt' => 'exact',
+        'status' => 'exact',
+        'animal.id' => 'exact',
+        'seller.id' => 'exact',
+])]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read:collection']],
-    denormalizationContext: ['groups' => ['write:collection']],
+    normalizationContext: ['groups' => ['bids_read']],
+    denormalizationContext: ['groups' => ['bid_write']],
+    paginationItemsPerPage: 12,
+    paginationMaximumItemsPerPage: 12,
+    paginationClientEnabled: true,
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['bids_read', 'bid_read', 'read:Bids']]
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['bid_read', 'read:Bid']]
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['bid_write']]
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['bid_write']]
+        ),
+        new Delete,
+    ]
 )]
 #[ORM\Entity(repositoryClass: BidRepository::class)]
 class Bid
@@ -20,38 +54,49 @@ class Bid
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read:collection'])]
+    #[Groups(['bids_read', 'read:BidLog'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:collection'])]
+    #[Groups(['bids_read', 'bid_write', 'read:BidLog'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:collection'])]
+    #[Groups(['bids_read', 'read:BidLog'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
     private ?int $initialPrice = null;
 
     #[ORM\Column]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
+    private ?int $currentPrice = null;
+
+    #[ORM\Column]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['bid_read'])]
     private ?int $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['bids_read','bid_read', 'read:BidLog'])]
     private ?Animal $animal = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['bids_read','bid_read', 'read:BidLog'])]
     private ?User $seller = null;
 
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: BidLog::class)]
@@ -59,9 +104,6 @@ class Bid
 
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: Comment::class)]
     private Collection $comments;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $currentPrice = null;
 
     public function __construct()
     {
@@ -118,6 +160,18 @@ class Bid
     public function setInitialPrice(int $initialPrice): self
     {
         $this->initialPrice = $initialPrice;
+
+        return $this;
+    }
+
+    public function getCurrentPrice(): ?int
+    {
+        return $this->currentPrice;
+    }
+
+    public function setCurrentPrice(int $currentPrice): self
+    {
+        $this->currentPrice = $currentPrice;
 
         return $this;
     }
@@ -238,18 +292,6 @@ class Bid
                 $comment->setBid(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCurrentPrice(): ?int
-    {
-        return $this->currentPrice;
-    }
-
-    public function setCurrentPrice(?int $currentPrice): self
-    {
-        $this->currentPrice = $currentPrice;
 
         return $this;
     }

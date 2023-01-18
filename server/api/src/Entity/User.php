@@ -24,6 +24,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['user_read']],
+    denormalizationContext: ['groups' => ['user_create', 'user_update']],
     operations: [
         new GetCollection(
             security: 'is_granted("ROLE_ADMIN")',
@@ -43,15 +45,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             securityMessage: 'Only admins can delete other users.',
         ),
     ],
-    normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:create', 'user:update']],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[Groups(['user:read'])]
+    #[Groups(['user_read'])]
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
@@ -59,28 +59,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 180)]
-    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLog'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $name = null;
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLog'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\NotBlank(groups: ['user:create'])]
-    #[Groups(['user:create', 'user:update'])]
+    #[Assert\NotBlank(groups: ['user_create'])]
+    #[Groups(['user_create', 'user_update'])]
     private ?string $plainPassword = null;
 
-    #[Groups(['user:read'])]
+    #[Groups(['user_read'])]
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    #[Groups(['user:read'])]
+    #[Groups(['user_read'])]
     #[ORM\Column(type: 'integer')]
     private int $status = 0;
 
@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'bidder', targetEntity: BidLog::class)]
     private Collection $bidLogs;
 
-    #[ORM\OneToMany(mappedBy: 'commentator', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'seller', targetEntity: UserSeller::class)]
