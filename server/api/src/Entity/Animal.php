@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
@@ -16,27 +17,35 @@ class Animal
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:Bid'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read:Bid', 'read:Bids'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read:Bid', 'read:Bids'])]
     private ?string $scientificName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read:Bid', 'read:Bids'])]
     private ?string $image = null;
 
     #[ORM\Column]
+    #[Groups(['read:Bid'])]
     private ?\DateTimeImmutable $captureDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read:Bid'])]
     private ?string $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read:Bid'])]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read:Bid', 'read:Bids'])]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'animal', targetEntity: Bid::class)]
