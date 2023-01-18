@@ -67,7 +67,7 @@ class CheckoutController extends AbstractController
         }
     }
 
-    #[Route('/checkout/success', name: 'checkout_session', methods: ['POST'])]
+    #[Route('/checkout/success', name: 'checkout_success', methods: ['POST'])]
     public function registerCheckout(Request $request, BidRepository $bidRepository): JsonResponse
     {
         ['session_id' => $sessionId] = $request->toArray();
@@ -75,7 +75,7 @@ class CheckoutController extends AbstractController
         try {
             Stripe::setApiKey($this->getParameter('stripe_secret'));
             $session = Session::retrieve($sessionId);
-            
+
             // TODO : handle payment registration after success
             $session->line_items;
             $session->customer;
