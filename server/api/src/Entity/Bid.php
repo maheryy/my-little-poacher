@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\OutBidController;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -45,6 +46,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new Post(
             denormalizationContext: ['groups' => ['bid_write']]
+        ),
+        new Post(
+            name: 'outbid',
+            uriTemplate: '/bids/{id}/outbid',
+            denormalizationContext: ['groups' => ['bid_write']],
+            normalizationContext: ['groups' => ['bid_read']],
+            controller: OutBidController::class,
         ),
         new Delete,
         new Patch(
