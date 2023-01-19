@@ -73,35 +73,35 @@ class Bid
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bid_read','bids_read', 'read:BidLog'])]
+    #[Groups(['bid_read','bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bid_read','bids_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read','bids_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bids_read', 'read:BidLog'])]
+    #[Groups(['bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write','bid_patch','read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write','bid_patch','read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?int $initialPrice = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write','bid_patch', 'read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write','bid_patch', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?int $currentPrice = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write', 'read:BidLog'])]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -109,21 +109,21 @@ class Bid
     private ?int $status = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(['bid_read','bids_read', 'read:BidLog'])]
+    #[Groups(['bid_read','bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(['bid_read','bids_read', 'read:BidLog'])]
+    #[Groups(['bid_read','bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['bids_read','bid_read', 'read:BidLog'])]
+    #[Groups(['bids_read','bid_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?Animal $animal = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['bids_read','bid_read', 'read:BidLog'])]
+    #[Groups(['bids_read','bid_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?User $seller = null;
 
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: BidLog::class)]
@@ -134,12 +134,16 @@ class Bid
     #[Groups(['bid_read'])]
     private Collection $comments;
 
+    #[ORM\OneToMany(mappedBy: 'bid', targetEntity: UserBid::class)]
+    private Collection $userBids;
+
     public function __construct()
     {
         $this->bidLogs = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->userBids = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -345,6 +349,36 @@ class Bid
             // set the owning side to null (unless already changed)
             if ($comment->getBid() === $this) {
                 $comment->setBid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserBid>
+     */
+    public function getUserBids(): Collection
+    {
+        return $this->userBids;
+    }
+
+    public function addUserBid(UserBid $userBid): self
+    {
+        if (!$this->userBids->contains($userBid)) {
+            $this->userBids->add($userBid);
+            $userBid->setBid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserBid(UserBid $userBid): self
+    {
+        if ($this->userBids->removeElement($userBid)) {
+            // set the owning side to null (unless already changed)
+            if ($userBid->getBid() === $this) {
+                $userBid->setBid(null);
             }
         }
 
