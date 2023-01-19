@@ -22,7 +22,7 @@ test-front:
       - client/node_modules
 
 build-docker:
-  image: docker:latest
+  image: docker:18:09
   stage: build
   variables:
     DOCKER_TLS_CERTDIR: ""
