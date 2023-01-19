@@ -23,6 +23,12 @@ class OutBidController extends AbstractController
     }
     public function __invoke(Bid $data, Request $request): Bid
     {
+        if(!$this->security->getUser()) {
+            throw new \Exception('User is not connected');
+        }
+        if($this->security->getUser() === $data->getSeller()) {
+            throw new \Exception('Seller cannot outbid');
+        }
         if($data->getCurrentPrice() < $request->get('price')) {
             $data->setCurrentPrice($request->get('price'));
             $bidLog = new BidLog();
