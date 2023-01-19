@@ -26,6 +26,7 @@ class Event
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Type('string')]
+    #[Groups(['ticket:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -35,21 +36,26 @@ class Event
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read:Ticket'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['read:Ticket'])]
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read:Ticket'])]
     private ?string $address = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['read:Ticket'])]
     private ?int $capacity = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $registered_users = null;
 
     #[ORM\Column]
+    #[Groups(['read:Ticket'])]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -57,6 +63,7 @@ class Event
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read:Ticket'])]
     private ?User $creator = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
