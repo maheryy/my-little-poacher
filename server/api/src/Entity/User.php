@@ -33,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(processor: UserPasswordHasher::class),
         new Get(
+            normalizationContext: ['groups' => ['user_read', 'read:User']],
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only admins can access other users.',
         ),
