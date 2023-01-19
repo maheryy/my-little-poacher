@@ -58,6 +58,10 @@ class Comment
     #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write', 'comment_patch'])]
     private ?string $content = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['comment_read', 'comments_read'])]
+    private ?\DateTimeInterface $createdAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['comment_read', 'comments_read', 'comment_write'])]
@@ -67,6 +71,11 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write'])]
     private ?User $author = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -81,6 +90,18 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

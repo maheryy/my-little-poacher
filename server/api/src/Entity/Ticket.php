@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Type;
@@ -54,6 +55,10 @@ class Ticket
     #[Groups(['ticket_read','ticket_write'])]
     private ?\DateTimeImmutable $expireAt = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['tickets_read', 'ticket_read','ticket_write'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
@@ -65,6 +70,11 @@ class Ticket
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['tickets_read', 'ticket_read','ticket_write', 'read:Event'])]
     private ?User $holder = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -95,6 +105,18 @@ class Ticket
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+    
     public function getEvent(): ?Event
     {
         return $this->event;

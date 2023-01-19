@@ -101,6 +101,14 @@ class Bid
     #[Groups(['bid_read'])]
     private ?int $status = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['bid_read','bids_read', 'read:BidLog'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['bid_read','bids_read', 'read:BidLog'])]
+    private ?\DateTimeImmutable $updatedAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['bids_read','bid_read', 'read:BidLog'])]
@@ -123,6 +131,8 @@ class Bid
     {
         $this->bidLogs = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -226,6 +236,30 @@ class Bid
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     public function getAnimal(): ?Animal
     {
         return $this->animal;
@@ -309,4 +343,5 @@ class Bid
 
         return $this;
     }
+
 }

@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 use App\Repository\BidLogRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -56,6 +57,10 @@ class BidLog
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?int $price = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
+    private ?\DateTimeInterface $createdAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'bidLogs', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
@@ -65,6 +70,11 @@ class BidLog
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?User $bidder = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -79,6 +89,18 @@ class BidLog
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
