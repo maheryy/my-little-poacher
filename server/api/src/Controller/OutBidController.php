@@ -42,8 +42,7 @@ class OutBidController extends AbstractController
             throw new \Exception('Price is lower or equal than current price');
         }
 
-        # get the userbid for the current user and the bid
-        $userBid = $this->userBidRepository->findOneBy(['user' => $this->security->getUser(), 'bid' => $bid]);
+        $userBid = $this->userBidRepository->findOneBy(['bidder' => $this->security->getUser(), 'bid' => $bid]);
         if(!$userBid) {
             $userBid = new UserBid();
             $userBid->setBid($bid);
