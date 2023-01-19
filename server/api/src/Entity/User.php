@@ -69,13 +69,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 180)]
-    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLog', 'read:Ticket', 'read:Event'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLogs', 'read:Ticket', 'read:Event', 'read:UserBid', 'read:UserBids'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $name = null;
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLog'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -112,6 +112,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'holder', targetEntity: Ticket::class)]
     private Collection $tickets;
 
+    #[ORM\OneToMany(mappedBy: 'bidder', targetEntity: UserBid::class)]
+    private Collection $userBids;
+
     public function __construct()
     {
         $this->bids = new ArrayCollection();
@@ -120,6 +123,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userSellers = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->tickets = new ArrayCollection();
+        $this->userBids = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -400,6 +404,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($ticket->getHolder() === $this) {
                 $ticket->setHolder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserBid>
+     */
+    public function getUserBids(): Collection
+    {
+        return $this->userBids;
+    }
+
+    public function addUserBid(UserBid $userBid): self
+    {
+        if (!$this->userBids->contains($userBid)) {
+            $this->userBids->add($userBid);
+            $userBid->setBidder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserBid(UserBid $userBid): self
+    {
+        if ($this->userBids->removeElement($userBid)) {
+            // set the owning side to null (unless already changed)
+            if ($userBid->getBidder() === $this) {
+                $userBid->setBidder(null);
             }
         }
 

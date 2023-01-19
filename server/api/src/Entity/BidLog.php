@@ -24,15 +24,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ]
 )]
 #[ApiResource(
-    normalizationContext: ['groups' => ['bidLogs_read', 'read:BidLog']],
+    normalizationContext: ['groups' => ['bidLogs_read', 'bidLog_read']],
     denormalizationContext: ['groups' => ['bidLog_write']],
     paginationItemsPerPage: 20,
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['bidLogs_read', 'bidLog_read']],
+            normalizationContext: ['groups' => ['bidLogs_read', 'bidLog_read', 'read:BidLogs']],
         ),
         new Get(
-            security: "is_granted('ROLE_ADMIN') or object.getBidder() == user",
             normalizationContext: ['groups' => ['bidLog_read', 'read:BidLog']]
         ),
         new Put(),
@@ -54,11 +53,11 @@ class BidLog
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid', 'read:Bids'])]
     private ?int $price = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid', 'read:Bids'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'bidLogs', cascade: ['persist'])]
@@ -68,7 +67,7 @@ class BidLog
 
     #[ORM\ManyToOne(inversedBy: 'bidLogs', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
+    #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid', 'read:Bids'])]
     private ?User $bidder = null;
 
     public function __construct()
