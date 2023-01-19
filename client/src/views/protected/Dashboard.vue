@@ -13,7 +13,7 @@ const logout = () => {
 
 <template>
   <h1>[PROTECTED] Dashboard page</h1>
-  <h3>Hello {{ user.username }}</h3>
+  <h3>Hello {{ user.name }}</h3>
   <button @click="logout" class="px-2 py-2 rounded-md bg-blue-500 text-white">
     Logout
   </button>

@@ -24,7 +24,7 @@ const actions = {
   async login({ dispatch }, credentials) {
     try {
       const response = await axios.post("auth", credentials);
-      return dispatch("attempt", response.data.token);
+      return dispatch("attempt", {token: response.data.token});
     } catch (e) {
       throw e;
     }
@@ -39,7 +39,7 @@ const actions = {
     try {
       commit("setToken", token);
       const response = await axios.get("users/me");
-      commit("setUser", response.data.user);
+      commit("setUser", response.data);
     } catch (e) {
       commit("setToken", null);
       commit("setUser", null);
