@@ -13,13 +13,19 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $dateFin = new \DateTimeImmutable();
-        $dateFin->add(new \DateInterval('P7D'));
-        $dateFin->format('Y-m-d H:i:s');
 
         $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur3']);
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'Marsupilami1']);
         for($i = 0; $i < 15; $i++){
+
+            $fin= mt_rand(1674764548,1676838148);
+            $dateFin = new \DateTimeImmutable();
+            $dateFin = $dateFin->setTimestamp($fin);
+
+            $debut= mt_rand(1674505348,1674764548);
+            $dateDebut = new \DateTimeImmutable();
+            $dateDebut = $dateDebut->setTimestamp($debut);
+            
             $bid = new Bid();
             $bid
                 ->setTitle('Marsupilami au plus offrant '.$i)
@@ -27,7 +33,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription('Marsupilami à vendre parlez pas chinois num-'.$i)
                 ->setInitialPrice(100)
                 ->setCurrentPrice(100)
-                ->setStartAt(new \DateTimeImmutable())
+                ->setStartAt($dateDebut)
                 ->setEndAt($dateFin)
                 ->setStatus('1')
                 ->setAnimal($animal)
@@ -40,6 +46,15 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur2']);
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'WinnieOurson1']);
         for($i = 0; $i < 15; $i++){
+
+            $fin= mt_rand(1674764548,1676838148);
+            $dateFin = new \DateTimeImmutable();
+            $dateFin = $dateFin->setTimestamp($fin);
+
+            $debut= mt_rand(1674505348,1674764548);
+            $dateDebut = new \DateTimeImmutable();
+            $dateDebut = $dateDebut->setTimestamp($debut);
+
             $bid = new Bid();
             $bid
                 ->setTitle('WinnieOurson pour le plus gourmand '.$i)
@@ -60,6 +75,15 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur1']);
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'PanthereRose1']);
         for($i = 0; $i < 15; $i++){
+
+            $fin= mt_rand(1674764548,1676838148);
+            $dateFin = new \DateTimeImmutable();
+            $dateFin = $dateFin->setTimestamp($fin);
+
+            $debut= mt_rand(1674505348,1674764548);
+            $dateDebut = new \DateTimeImmutable();
+            $dateDebut = $dateDebut->setTimestamp($debut);
+
             $bid = new Bid();
             $bid
                 ->setTitle('PanthereRose vous connaissez la chanson '.$i)

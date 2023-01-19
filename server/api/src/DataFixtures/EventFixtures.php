@@ -14,21 +14,26 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $date = new \DateTimeImmutable();
-        $date->add(new \DateInterval('P7D'));
-        $date->format('Y-m-d H:i:s');    
+        $debut= mt_rand(1674505348,1674764548);
+        $dateDebut = new \DateTimeImmutable();
+        $dateDebut = $dateDebut->setTimestamp($debut);  
 
         $creator = $manager->getRepository(User::class)->findOneBy(['name' => 'client0']);
         for($i = 0; $i < 25; $i++){
+            
+            $debut= mt_rand(1674505348,1674764548);
+            $dateDebut = new \DateTimeImmutable();
+            $dateDebut = $dateDebut->setTimestamp($debut);  
+
             $event = new Event();
             $event
-                ->setName('Bakalaye vend de Marsupilami'.$i)
+                ->setName('Bakalaye vend des Marsupilami'.$i)
                 ->setSlug('slug'.$i)
                 ->setDescription('Ici ça bicrave du marsu'.$i)
                 ->setPrice(100)
                 ->setAddress($i.' rue de la Jugnle')
                 ->setCapacity(16)
-                ->setDate($date)
+                ->setDate($dateDebut)
                 ->setCreator($creator)
             ;
 
