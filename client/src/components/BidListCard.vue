@@ -17,7 +17,7 @@ defineProps({
       <div class="flex flex-col basis-full p-4 justify-center">
         <span>{{ bid.title }}</span>
         <span>{{ bid.animal.name }}</span>
-        <span>Vendu par {{ bid.seller.username }}</span>
+        <span>Vendu par {{ bid.seller.name }}</span>
         <span>{{ bid.description.slice(0, 100) }}</span>
       </div>
       <div class="flex flex-col basis-1/3 p-4 items-center justify-center">
