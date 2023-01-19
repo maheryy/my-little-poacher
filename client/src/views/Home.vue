@@ -1,10 +1,23 @@
 <script setup>
-import bidList from "../../mock_data/models/bids.json";
+import axios from "axios";
 import BidCard from "../components/BidCard.vue";
+import { onMounted, ref } from "vue";
 
-const trendBids = bidList.slice(0, 10);
-const otherBids = bidList.slice(10, 20);
-
+const allBids = ref([]);
+const trendBids = ref([]);
+onMounted(() => {
+  axios
+    .get("bids", {
+      // params: {
+      //   "page": 1,
+      //   "order[id]": "desc",
+      // },
+    })
+    .then((res) => {
+      allBids.value = res.data;
+      trendBids.value = res.data;
+    });
+});
 </script>
 
 <template>
@@ -23,7 +36,7 @@ const otherBids = bidList.slice(10, 20);
     <h2 class="font-semibold text-2xl mb-10">Plus d'enchères</h2>
     <div class="m-auto w-fit">
       <ul class="flex flex-wrap items-center justify-center gap-8">
-        <li v-for="bid in otherBids" :key="bid.id">
+        <li v-for="bid in allBids" :key="bid.id">
           <BidCard :bid="bid" />
         </li>
       </ul>

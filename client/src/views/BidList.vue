@@ -1,8 +1,17 @@
 <script setup>
-import bidList from "../../mock_data/models/bids.json";
+import { ref, onMounted } from "vue";
 import BidListCard from "../components/BidListCard.vue";
+import axios from "axios";
 
-const bids = bidList;
+const bids = ref([]);
+onMounted(() => {
+  axios
+    .get("bids")
+    .then((res) => {
+      bids.value = res.data;
+    });
+});
+
 </script>
 
 <template>

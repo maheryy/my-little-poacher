@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Odm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -20,16 +21,20 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+//#[ApiFilter(DateFilter::class,
+//    properties: ['endAt']
+//)]
+#[ApiFilter(OrderFilter::class,
+    properties: ['endAt', 'createdAt', 'id'],
+    arguments: ['orderParameterName' => 'order']
+)]
 #[ApiFilter(SearchFilter::class,
     properties: [
         'title' => 'partial',
-        'startAt' => 'exact',
-        'endAt' => 'exact',
         'status' => 'exact',
         'animal.id' => 'exact',
         'seller.id' => 'exact',
 ])]
-#[ApiFilter(DateFilter::class, properties: ['endAt'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['bids_read', 'bid_read']],
     denormalizationContext: ['groups' => ['bid_write']],
