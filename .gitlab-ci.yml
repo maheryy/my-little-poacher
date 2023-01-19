@@ -22,7 +22,7 @@ test-front:
       - client/node_modules
 
 build-docker:
-  image: docker:latest
+  image: docker:20-dind
   stage: build
   script:
     - cd client
