@@ -10,8 +10,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Validator\Constraints\Type;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['tickets_read']],
