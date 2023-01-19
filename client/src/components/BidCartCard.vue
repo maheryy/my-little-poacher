@@ -20,7 +20,7 @@ defineProps({
         <span>Vendu par {{ bid.seller.username }}</span>
       </div>
       <div class="flex flex-col basis-1/3 p-4 items-center justify-center">
-        <span>{{ bid.price }} €</span>
+        <span>{{ bid.currentPrice }} €</span>
       </div>
     </div>
   </div>

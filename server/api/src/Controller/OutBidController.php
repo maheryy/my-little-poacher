@@ -21,25 +21,31 @@ class OutBidController extends AbstractController
         $this->bidLogRepository = $bidLogRepository;
         $this->security = $security;
     }
-    public function __invoke(Bid $data, Request $request): Bid
+    public function __invoke(Bid $bid, Request $request): Bid
     {
+        ['price' => $price] = $request->toArray();
+
         if(!$this->security->getUser()) {
             throw new \Exception('User is not connected');
         }
-        if($this->security->getUser() === $data->getSeller()) {
+        if (!$price) {
+            throw new \Exception('price is required');
+        }
+        if($this->security->getUser() === $bid->getSeller()) {
             throw new \Exception('Seller cannot outbid');
         }
-        if($data->getCurrentPrice() < $request->get('price')) {
-            $data->setCurrentPrice($request->get('price'));
-            $bidLog = new BidLog();
-            $bidLog->setBid($data);
-            $bidLog->setBidder($this->security->getUser());
-            $bidLog->setPrice($request->get('price'));
-            $this->bidLogRepository->save($bidLog);
-        } else {
-            throw new \Exception('Price is lower than current price');
+        //dd($request->get('price'), $bid->getCurrentPrice());
+        if($price <= $bid->getCurrentPrice()) {
+            throw new \Exception('Price is lower or equal than current price');
         }
 
-        return $data;
+        $bid->setCurrentPrice($price);
+        $bidLog = new BidLog();
+        $bidLog->setBid($bid);
+        $bidLog->setBidder($this->security->getUser());
+        $bidLog->setPrice($price);
+        $this->bidLogRepository->save($bidLog);
+
+        return $bid;
     }
 }

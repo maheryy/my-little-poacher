@@ -57,7 +57,7 @@ class BidLog
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?int $price = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -73,7 +73,7 @@ class BidLog
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

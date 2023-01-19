@@ -18,7 +18,7 @@ const routes = [
     component: () => import("../views/BidList.vue"),
   },
   {
-    path: "/bid/:slug",
+    path: "/bid/:id",
     name: "bid",
     component: () => import("../views/Bid.vue"),
     props: true,

@@ -22,10 +22,10 @@ defineProps({
       </div>
       <div class="flex flex-col basis-1/3 p-4 items-center justify-center">
         <span>Départ : {{ bid.initialPrice }} €</span>
-        <span>Actuel : {{ bid.price }} €</span>
+        <span>Actuel : {{ bid.currentPrice }} €</span>
         <RouterLink
           class="bg-teal-600 p-2 rounded-md w-fit"
-          :to="{ name: 'bid', params: { slug: bid.slug } }"
+          :to="{ name: 'bid', params: { id: bid.id } }"
         >
           Consulter
         </RouterLink>
