@@ -7,13 +7,36 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-#[ApiResource]
+#[ApiResource (
+    normalizationContext: ['groups' => ['events_read']],
+    denormalizationContext: ['groups' => ['event_write']],
+    operations : [
+        new GetCollection(
+            normalizationContext : ['groups' => ['event_read', 'events_read', 'read:Events']],
+        ),
+        new Get(
+            normalizationContext : ['groups' => ['event_read', 'read:Event']]
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['event_write']]
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['event_write']]
+        ),
+    ]
+
+)]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
@@ -26,47 +49,50 @@ class Event
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Type('string')]
-    #[Groups(['ticket:read'])]
+    #[Groups(['ticket:read', 'events_read','event_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[Groups(['user:read', 'user:create', 'user:update', 'read:Ticket','event_read','event_write'])]
     #[Assert\NotBlank]
     #[Assert\Length(min: 5)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['read:Ticket'])]
+    #[Groups(['read:Ticket','events_read','event_write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Groups(['read:Ticket'])]
+    #[Groups(['read:Ticket', 'event_read','event_write'])]
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Ticket'])]
+    #[Groups(['read:Ticket', 'event_read','event_write'])]
     private ?string $address = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read:Ticket'])]
+    #[Groups(['read:Ticket','event_read','event_write'])]
     private ?int $capacity = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['read:Ticket','event_read','event_write'])]
     private ?int $registered_users = null;
 
     #[ORM\Column]
-    #[Groups(['read:Ticket'])]
+    #[Groups(['read:Ticket', 'event_read','event_write'])]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['event_read','event_write'])]
     private ?int $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read:Ticket'])]
+    #[Groups(['read:Ticket', 'events_read','event_write'])]
     private ?User $creator = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
+    #[Groups(['events_read','event_write'])]
     private Collection $tickets;
 
     public function __construct()
