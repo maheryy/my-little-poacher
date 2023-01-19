@@ -37,3 +37,7 @@ h1 {
 .card-image {
   @apply rounded-t-xl;
 }
+
+.w-content-view {
+  width: calc(100vw - 80px)
+}

@@ -3,8 +3,10 @@ import Nav from "./components/Nav.vue";
 </script>
 
 <template>
-  <Nav />
-  <main class="m-auto w-full px-14 py-10">
-    <RouterView />
-  </main>
+  <div class="flex">
+    <Nav />
+    <main class="m-auto ml-20 w-content-view flex-1 overflow-y-hidden">
+      <RouterView />
+    </main>
+  </div>
 </template>

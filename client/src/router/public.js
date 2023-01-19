@@ -23,6 +23,11 @@ const routes = [
     component: () => import("../views/Bid.vue"),
     props: true,
   },
+  {
+    path: "/map",
+    name: "map",
+    component: () => import("../views/Map.vue")
+  },
 ];
 
 export default routes;
