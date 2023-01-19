@@ -13,18 +13,22 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'client0']);
-        for($i = 0; $i < 4; $i++){
-            $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'animal0']);
+        $dateFin = new \DateTimeImmutable();
+        $dateFin->add(new \DateInterval('P7D'));
+        $dateFin->format('Y-m-d H:i:s');
+
+        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur3']);
+        $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'Marsupilami1']);
+        for($i = 0; $i < 15; $i++){
             $bid = new Bid();
             $bid
-                ->setTitle('title'.$i)
-                ->setSlug('slug'.$i)
-                ->setDescription('description'.$i)
+                ->setTitle('Marsupilami au plus offrant '.$i)
+                ->setSlug('marsu-slug'.$i)
+                ->setDescription('Marsupilami à vendre parlez pas chinois num-'.$i)
                 ->setInitialPrice(100)
                 ->setCurrentPrice(100)
                 ->setStartAt(new \DateTimeImmutable())
-                ->setEndAt(new \DateTimeImmutable())
+                ->setEndAt($dateFin)
                 ->setStatus('1')
                 ->setAnimal($animal)
                 ->setSeller($seller)
@@ -32,6 +36,47 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($bid);
         }
+
+        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur2']);
+        $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'WinnieOurson1']);
+        for($i = 0; $i < 15; $i++){
+            $bid = new Bid();
+            $bid
+                ->setTitle('WinnieOurson pour le plus gourmand '.$i)
+                ->setSlug('winnie-slug'.$i)
+                ->setDescription('Winnizi ourson gourmand chantant num-'.$i)
+                ->setInitialPrice(100)
+                ->setCurrentPrice(100)
+                ->setStartAt(new \DateTimeImmutable())
+                ->setEndAt($dateFin)
+                ->setStatus('1')
+                ->setAnimal($animal)
+                ->setSeller($seller)
+            ;
+
+            $manager->persist($bid);
+        }
+
+        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur1']);
+        $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'PanthereRose1']);
+        for($i = 0; $i < 15; $i++){
+            $bid = new Bid();
+            $bid
+                ->setTitle('PanthereRose vous connaissez la chanson '.$i)
+                ->setSlug('panthere-rose-slug'.$i)
+                ->setDescription('Panthere ROSE discrète et malicieuse num-'.$i)
+                ->setInitialPrice(100)
+                ->setCurrentPrice(100)
+                ->setStartAt(new \DateTimeImmutable())
+                ->setEndAt($dateFin)
+                ->setStatus('1')
+                ->setAnimal($animal)
+                ->setSeller($seller)
+            ;
+
+            $manager->persist($bid);
+        }
+
         $manager->flush();
     }
 

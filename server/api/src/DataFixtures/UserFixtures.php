@@ -29,13 +29,25 @@ class UserFixtures extends Fixture
         ;
         $manager->persist($object);
 
-        for($i = 0; $i < 4; $i++) {
+        for($i = 0; $i < 15; $i++) {
             $object = new User();
             $object
                 ->setName('client'.$i)
                 ->setEmail('client'.$i.'@gmail.com')
                 ->setPassword($this->passwordHasher->hashPassword($object, 'password'))
                 ->setRoles(['ROLE_USER'])
+                ->setStatus('1')
+            ;
+            $manager->persist($object);
+        }
+
+        for($i = 0; $i < 10; $i++) {
+            $object = new User();
+            $object
+                ->setName('vendeur'.$i)
+                ->setEmail('vendeur'.$i.'@gmail.com')
+                ->setPassword($this->passwordHasher->hashPassword($object, 'password'))
+                ->setRoles(['ROLE_VENDEUR'])
                 ->setStatus('1')
             ;
             $manager->persist($object);

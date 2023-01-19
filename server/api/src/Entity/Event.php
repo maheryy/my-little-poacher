@@ -64,7 +64,7 @@ class Event
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Groups(['read:Ticket', 'event_read','event_write'])]
-    private ?float $price = null;
+    private ?float $price;
 
     #[ORM\Column(length: 255)]
     #[Groups(['read:Ticket', 'event_read','event_write'])]
