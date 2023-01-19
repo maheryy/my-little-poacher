@@ -3,8 +3,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -12,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\MeController;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,28 +23,38 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['user_read']],
-    denormalizationContext: ['groups' => ['user_create', 'user_update']],
     operations: [
         new GetCollection(
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can access the list of users.',
         ),
-        new Post(processor: UserPasswordHasher::class),
+        new Get(
+            uriTemplate: '/users/me',
+            controller: MeController::class,
+            security: 'is_granted("ROLE_USER")',
+            read: false,
+            name: 'me'
+        ),
         new Get(
             normalizationContext: ['groups' => ['user_read', 'read:User']],
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only admins can access other users.',
         ),
-        new Put(processor: UserPasswordHasher::class,
+        new Post(processor: UserPasswordHasher::class),
+        new Put(
             security: 'is_granted("ROLE_ADMIN") or object == user',
-            securityMessage: 'Only admins can edit other users.',),
+            securityMessage: 'Only admins can edit other users.',
+            processor: UserPasswordHasher::class,
+        ),
         new Patch(processor: UserPasswordHasher::class),
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only admins can delete other users.',
         ),
     ],
+    normalizationContext: ['groups' => ['user_read']],
+    denormalizationContext: ['groups' => ['user_create', 'user_update']],
+
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
