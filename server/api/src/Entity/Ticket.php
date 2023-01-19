@@ -45,25 +45,25 @@ class Ticket
     #[Assert\Length(min: 5, max: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(['tickets_read', 'ticket_write'])]
+    #[Groups(['tickets_read', 'ticket_read','ticket_write', 'read:Event'])]
     private ?string $reference = null;
 
     #[ORM\Column]
     #[Assert\NotNull]
     #[Type('date')]
-    #[Groups(['tickets_read','ticket_write'])]
+    #[Groups(['ticket_read','ticket_write'])]
     private ?\DateTimeImmutable $expireAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(['tickets_read','ticket_write'])]
+    #[Groups(['tickets_read', 'ticket_read','ticket_write'])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['tickets_read','ticket_write'])]
+    #[Groups(['tickets_read', 'ticket_read','ticket_write', 'read:Event'])]
     private ?User $holder = null;
 
     public function getId(): ?int

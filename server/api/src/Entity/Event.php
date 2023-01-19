@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ApiResource (
-    normalizationContext: ['groups' => ['events_read']],
+    normalizationContext: ['groups' => ['events_read', 'event_read']],
     denormalizationContext: ['groups' => ['event_write']],
     operations : [
         new GetCollection(
@@ -43,23 +43,24 @@ class Event
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['events_read','event_write', 'read:Ticket'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[Assert\Type('string')]
-    #[Groups(['ticket:read', 'events_read','event_write'])]
+    #[Groups(['read:Ticket','events_read','event_read','event_write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:create', 'user:update', 'read:Ticket','event_read','event_write'])]
+    #[Groups(['read:Ticket','events_read','event_read','event_write'])]
     #[Assert\NotBlank]
     #[Assert\Length(min: 5)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['read:Ticket','events_read','event_write'])]
+    #[Groups(['read:Ticket','events_read','event_read','event_write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
@@ -88,11 +89,11 @@ class Event
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read:Ticket', 'events_read','event_write'])]
+    #[Groups(['read:Ticket', 'events_read','event_read','event_write'])]
     private ?User $creator = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]
-    #[Groups(['events_read','event_write'])]
+    #[Groups(['event_read','event_write'])]
     private Collection $tickets;
 
     public function __construct()
