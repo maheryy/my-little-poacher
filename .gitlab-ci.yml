@@ -31,8 +31,8 @@ build-docker:
     - docker:19.03.0-dind
   script:
     - cd client
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t 'alexislours/my-little-poacher-front:latest' .
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
     - docker push 'alexislours/my-little-poacher-front:latest'
   dependencies:
     - test-front
