@@ -21,6 +21,16 @@ test-front:
     paths:
       - client/node_modules
 
+build-docker:
+  image: docker:latest
+  stage: build
+  script:
+    - docker build -t registry.gitlab.com/challengers-g22/my-little-poacher-front:latest .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker push registry.gitlab.com/challengers-g22/my-little-poacher-front:latest
+  dependencies:
+    - test-front
+
 pages:
   image: node:lts
   stage: build
