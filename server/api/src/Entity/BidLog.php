@@ -56,12 +56,12 @@ class BidLog
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?int $price = null;
 
-    #[ORM\ManyToOne(inversedBy: 'bidLogs')]
+    #[ORM\ManyToOne(inversedBy: 'bidLogs', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write'])]
     private ?Bid $bid = null;
 
-    #[ORM\ManyToOne(inversedBy: 'bidLogs')]
+    #[ORM\ManyToOne(inversedBy: 'bidLogs', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid'])]
     private ?User $bidder = null;
