@@ -29,12 +29,11 @@ build-docker:
     DOCKER_DRIVER: overlay2
   services:
     - docker:19.03.0-dind
-  before_script:
-    - docker info
   script:
     - cd client
     - docker build -t 'alexislours/my-little-poacher-front:latest' .
-    - docker info
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker push 'alexislours/my-little-poacher-front:latest'
   dependencies:
     - test-front
 
