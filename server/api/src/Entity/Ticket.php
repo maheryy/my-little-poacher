@@ -39,6 +39,7 @@ class Ticket
     #[Assert\Length(min: 5, max: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
+    #[Groups(['tickets_read'])]
     private ?string $reference = null;
 
     #[ORM\Column]
