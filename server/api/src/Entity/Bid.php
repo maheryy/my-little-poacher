@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -28,6 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'animal.id' => 'exact',
         'seller.id' => 'exact',
 ])]
+#[ApiFilter(DateFilter::class, properties: ['endAt'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['bids_read', 'bid_read']],
     denormalizationContext: ['groups' => ['bid_write']],
