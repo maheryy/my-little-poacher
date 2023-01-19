@@ -6,6 +6,7 @@ use App\Repository\BidRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
@@ -13,7 +14,7 @@ use Stripe\Stripe;
 class CheckoutController extends AbstractController
 {
     #[Route('/checkout/session', name: 'checkout_session', methods: ['POST'])]
-    public function createCheckoutSession(Request $request, BidRepository $bidRepository): JsonResponse
+    public function createCheckoutSession(Request $request, BidRepository $bidRepository): Response
     {
         try {
             ['bids' => $bidIds] = $request->toArray();
@@ -59,7 +60,7 @@ class CheckoutController extends AbstractController
                 'success_url' => $this->getParameter('app_front_url') . "/checkout/success?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => $this->getParameter('app_front_url') . "/cart",
             ]);
-            return new JsonResponse(["session_id" => $session->id]);
+            return new JsonResponse(["redirect_url" => $session->url]);
         } catch (\Exception $e) {
             return new JsonResponse(["error" => [
                 "message" => $e->getMessage()
