@@ -22,10 +22,13 @@ test-front:
       - client/node_modules
 
 build-docker:
-  image: docker:20-dind
+  image: docker:latest
   stage: build
+  services:
+    - docker:dind
   script:
     - cd client
+    - docker build -t 'alexislours/my-little-poacher-front:latest' .
     - docker info
   dependencies:
     - test-front
