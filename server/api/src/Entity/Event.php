@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\BuyTicketController;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Length;
@@ -33,6 +34,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             denormalizationContext: ['groups' => ['event_write']]
+        ),
+        new Post(
+            name: 'buy_ticket',
+            uriTemplate: '/events/{id}/buy_ticket',
+            denormalizationContext: ['groups' => ['event_write']],
+            normalizationContext: ['groups' => ['event_read']],
+            controller: BuyTicketController::class,
         ),
     ]
 
