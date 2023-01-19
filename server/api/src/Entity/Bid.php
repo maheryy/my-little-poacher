@@ -134,6 +134,7 @@ class Bid
     #[Groups(['bid_read'])]
     private Collection $comments;
 
+    #[Groups(['bid_read'])]
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: UserBid::class)]
     private Collection $userBids;
 

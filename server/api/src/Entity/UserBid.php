@@ -44,21 +44,21 @@ class UserBid
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['userBid_read', 'userBids_read', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['userBid_read', 'userBids_read', 'read:Bid', 'read:Bids'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['userBid_read', 'userBids_read', 'userBid_write', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['userBid_read', 'userBids_read', 'userBid_write', 'read:Bid', 'read:Bids'])]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'userBids')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userBid_read', 'userBids_read', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['userBid_read', 'userBids_read', 'read:Bid', 'read:Bids'])]
     private ?User $bidder = null;
 
     #[ORM\ManyToOne(inversedBy: 'userBids')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['userBid_read', 'userBids_read', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['userBid_read', 'userBids_read', 'read:Bid', 'read:Bids'])]
     private ?Bid $bid = null;
 
     public function getId(): ?int
