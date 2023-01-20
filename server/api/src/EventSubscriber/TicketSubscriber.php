@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
 
-final class CreateTicketSubscriber implements EventSubscriberInterface
+final class TicketSubscriber implements EventSubscriberInterface
 {
     private $ticketRepository;
     private $security;
@@ -32,6 +32,7 @@ final class CreateTicketSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::VIEW => ['createTicket', EventPriorities::PRE_VALIDATE],
+            KernelEvents::VIEW => ['validateTicket', EventPriorities::PRE_WRITE]
         ];
     }
 
@@ -57,8 +58,23 @@ final class CreateTicketSubscriber implements EventSubscriberInterface
         $ticket->setReference($reference);
         $ticket->setHolder($this->security->getUser());
         $ticket->setExpireAt(new \DateTimeImmutable('+1 hour'));
+    }
 
-        $event->setControllerResult($ticket);
+    public function validateTicket(ViewEvent $event): void
+    {
+        $ticket = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+
+        if (!$ticket instanceof Ticket || Request::METHOD_PATCH !== $method) {
+            return;
+        }
+
+        $user = $this->security->getUser();
+
+        $this->checkUser($user);
+        $this->checkDate($ticket);
+
+        $ticket->setExpireAt(null);
     }
 
     private function checkUser($user)
@@ -88,6 +104,14 @@ final class CreateTicketSubscriber implements EventSubscriberInterface
         return;
     }
 
+    private function checkDate($ticket)
+    {
+        if ($ticket->getExpireAt() < new \DateTimeImmutable()) {
+            throw new \Exception('Ticket is expired');
+        }
+        return;
+    }
+
     private function generateReference()
     {
         $reference = '';
@@ -97,4 +121,6 @@ final class CreateTicketSubscriber implements EventSubscriberInterface
         }
         return $reference;
     }
+
+
 }

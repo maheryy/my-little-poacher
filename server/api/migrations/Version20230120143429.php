@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230119225140 extends AbstractMigration
+final class Version20230120143429 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -49,7 +49,7 @@ final class Version20230119225140 extends AbstractMigration
         $this->addSql('CREATE TABLE event (id INT NOT NULL, creator_id INT NOT NULL, name VARCHAR(255) NOT NULL, slug VARCHAR(255) NOT NULL, description TEXT NOT NULL, price NUMERIC(10, 2) NOT NULL, address VARCHAR(255) NOT NULL, capacity INT DEFAULT NULL, registered_users INT DEFAULT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, status SMALLINT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_3BAE0AA761220EA6 ON event (creator_id)');
         $this->addSql('COMMENT ON COLUMN event.date IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE ticket (id INT NOT NULL, event_id INT NOT NULL, holder_id INT NOT NULL, reference VARCHAR(255) NOT NULL, expire_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE ticket (id INT NOT NULL, event_id INT NOT NULL, holder_id INT NOT NULL, reference VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, expire_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_97A0ADA371F7E88B ON ticket (event_id)');
         $this->addSql('CREATE INDEX IDX_97A0ADA3DEEE62D0 ON ticket (holder_id)');
         $this->addSql('COMMENT ON COLUMN ticket.expire_at IS \'(DC2Type:datetime_immutable)\'');
