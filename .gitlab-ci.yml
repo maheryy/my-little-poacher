@@ -21,6 +21,26 @@ test-front:
     paths:
       - client/node_modules
 
+build-docker-front:
+  image: docker:19.03.0
+  stage: build
+  only:
+    - dev
+    - main
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:19.03.0-dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd client
+    - docker build -t 'alexislours/my-little-poacher-front:latest' .
+    - docker push 'alexislours/my-little-poacher-front:latest'
+  dependencies:
+    - test-front
+
 pages:
   image: node:lts
   stage: build
