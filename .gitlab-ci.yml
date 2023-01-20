@@ -21,9 +21,12 @@ test-front:
     paths:
       - client/node_modules
 
-build-docker:
+build-docker-front:
   image: docker:19.03.0
   stage: build
+  only:
+    - dev
+    - main
   variables:
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
