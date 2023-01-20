@@ -63,7 +63,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new Delete,
         new Patch(
-            denormalizationContext: ['groups' => ['bid_patch']]
+            denormalizationContext: ['groups' => ['bid_patch']],
+            inputFormats: ['json' => ['application/json']]
         )
     ]
 )]
@@ -89,7 +90,7 @@ class Bid
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write','bid_patch','read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bid_write','read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?int $initialPrice = null;
 
     #[ORM\Column]
