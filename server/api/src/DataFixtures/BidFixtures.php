@@ -18,19 +18,19 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'Marsupilami1']);
         for($i = 0; $i < 15; $i++){
 
-            $fin= mt_rand(1675595044,1678014244);
+            $fin= mt_rand(1675595044,1678014244); // 5 février à 5 mars
             $dateFin = new \DateTimeImmutable();
             $dateFin = $dateFin->setTimestamp($fin);
 
-            $debut= mt_rand(1674126244,1675595044);
+            $debut= mt_rand(1674126244,1675595044);//19 janv à 5 février
             $dateDebut = new \DateTimeImmutable();
             if($i<5){
                 $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
                 $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
 
             }else{
-                $dateDebut = $dateDebut->setTimestamp($debut);
-                $dateFin = $dateFin->setTimestamp($fin);
+                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P8D'));
+                $dateFin = $dateFin->setTimestamp($fin)->add(new \DateInterval('P5D'));
             }
             
             $bid = new Bid();
