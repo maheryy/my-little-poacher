@@ -45,6 +45,11 @@ const logout = () => {
             <img :src="Map" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
+        <div class="h-20 w-20 flex justify-center items-center">
+          <RouterLink :to="{ name: 'events' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'events' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
+            <img :src="Auctions" class="hover:scale-105 transition-all duration-200" />
+          </RouterLink>
+        </div>
         <div class="h-20 w-20 flex justify-center items-center" v-if="isLogged">
           <RouterLink :to="{ name: 'cart' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'cart' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
             <img :src="MyBids" class="hover:scale-105 transition-all duration-200" />

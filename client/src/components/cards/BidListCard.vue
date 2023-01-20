@@ -27,7 +27,7 @@ defineProps({
           class="bg-teal-600 p-2 rounded-md w-fit"
           :to="{ name: 'bid', params: { id: bid.id } }"
         >
-          Consulter
+          Voir
         </RouterLink>
       </div>
     </div>

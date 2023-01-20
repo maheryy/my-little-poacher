@@ -1,11 +1,9 @@
 <script setup>
-import { useRouter } from "vue-router";
 import bidList from "../../../mock_data/models/bids.json";
-import BidCartCard from "../../components/BidCartCard.vue";
+import BidCartCard from "../../components/cards/BidCartCard.vue";
 import axios from "axios";
 
 const bids = bidList.slice(0, 2);
-const router = useRouter();
 
 const selectedBids = bids.map((bid) => bid.id);
 

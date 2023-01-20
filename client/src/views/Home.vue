@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import BidCard from "../components/BidCard.vue";
+import BidCard from "../components/cards/BidCard.vue";
 import { onMounted, ref } from "vue";
 
 const allBids = ref([]);
