@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,7 +26,10 @@ use Symfony\Component\Validator\Constraints\Type;
         ),
         new Post(
             denormalizationContext: ['groups' => ['ticket_write']],
-
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['ticket_patch']],
+            inputFormats: ['json' => ['application/json']]
         )
     ]
 
@@ -47,7 +49,10 @@ class Ticket
     #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
     private ?string $reference = null;
 
-    #[Assert\NotNull]
+    #[ORM\Column(length: 255)]
+    #[Groups(['tickets_read', 'ticket_read', 'read:Event','ticket_patch'])]
+    private ?string $status = null;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['ticket_read', 'tickets_read'])]
     private ?\DateTimeImmutable $expireAt = null;
@@ -71,6 +76,7 @@ class Ticket
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->status = 'pending';
     }
 
     public function getId(): ?int
@@ -90,12 +96,24 @@ class Ticket
         return $this;
     }
 
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function getExpireAt(): ?\DateTimeImmutable
     {
         return $this->expireAt;
     }
 
-    public function setExpireAt(\DateTimeImmutable $expireAt): self
+    public function setExpireAt(?\DateTimeImmutable $expireAt): self
     {
         $this->expireAt = $expireAt;
 
