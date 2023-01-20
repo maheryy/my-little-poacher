@@ -12,7 +12,6 @@ use ApiPlatform\Metadata\Patch;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\Type;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['tickets_read']],
@@ -32,7 +31,6 @@ use Symfony\Component\Validator\Constraints\Type;
             inputFormats: ['json' => ['application/json']]
         )
     ]
-
 )]
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 class Ticket

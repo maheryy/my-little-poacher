@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Odm\Filter\DateFilter;
-use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -20,12 +20,18 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-//#[ApiFilter(DateFilter::class,
-//    properties: ['endAt']
-//)]
-#[ApiFilter(OrderFilter::class,
-    properties: ['endAt', 'createdAt', 'id'],
-    arguments: ['orderParameterName' => 'order']
+#[ApiFilter(DateFilter::class,
+    properties:[
+        'endAt',
+        'createdAt'
+    ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'endAt',
+        'createdAt',
+    ]
 )]
 #[ApiFilter(SearchFilter::class,
     properties: [
