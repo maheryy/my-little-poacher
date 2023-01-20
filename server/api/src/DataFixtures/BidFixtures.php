@@ -18,13 +18,20 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'Marsupilami1']);
         for($i = 0; $i < 15; $i++){
 
-            $fin= mt_rand(1674764548,1676838148);
+            $fin= mt_rand(1675595044,1678014244);
             $dateFin = new \DateTimeImmutable();
             $dateFin = $dateFin->setTimestamp($fin);
 
-            $debut= mt_rand(1674505348,1674764548);
+            $debut= mt_rand(1674126244,1675595044);
             $dateDebut = new \DateTimeImmutable();
-            $dateDebut = $dateDebut->setTimestamp($debut);
+            if($i<5){
+                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
+                $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
+
+            }else{
+                $dateDebut = $dateDebut->setTimestamp($debut);
+                $dateFin = $dateFin->setTimestamp($fin);
+            }
             
             $bid = new Bid();
             $bid
@@ -47,13 +54,21 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'WinnieOurson1']);
         for($i = 0; $i < 15; $i++){
 
-            $fin= mt_rand(1674764548,1676838148);
+            
+            $fin= mt_rand(1675595044,1678014244);
             $dateFin = new \DateTimeImmutable();
             $dateFin = $dateFin->setTimestamp($fin);
 
-            $debut= mt_rand(1674505348,1674764548);
+            $debut= mt_rand(1674126244,1675595044);
             $dateDebut = new \DateTimeImmutable();
-            $dateDebut = $dateDebut->setTimestamp($debut);
+            if($i<5){
+                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
+                $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
+
+            }else{
+                $dateDebut = $dateDebut->setTimestamp($debut);
+                $dateFin = $dateFin->setTimestamp($fin);
+            }
 
             $bid = new Bid();
             $bid
@@ -62,7 +77,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription('Winnizi ourson gourmand chantant num-'.$i)
                 ->setInitialPrice(100)
                 ->setCurrentPrice(100)
-                ->setStartAt(new \DateTimeImmutable())
+                ->setStartAt($dateDebut)
                 ->setEndAt($dateFin)
                 ->setStatus('1')
                 ->setAnimal($animal)
@@ -76,13 +91,20 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'PanthereRose1']);
         for($i = 0; $i < 15; $i++){
 
-            $fin= mt_rand(1674764548,1676838148);
+            $fin= mt_rand(1675595044,1678014244);
             $dateFin = new \DateTimeImmutable();
             $dateFin = $dateFin->setTimestamp($fin);
 
-            $debut= mt_rand(1674505348,1674764548);
+            $debut= mt_rand(1674126244,1675595044);
             $dateDebut = new \DateTimeImmutable();
-            $dateDebut = $dateDebut->setTimestamp($debut);
+            if($i<5){
+                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
+                $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
+
+            }else{
+                $dateDebut = $dateDebut->setTimestamp($debut);
+                $dateFin = $dateFin->setTimestamp($fin);
+            }
 
             $bid = new Bid();
             $bid
@@ -91,7 +113,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription('Panthere ROSE discrète et malicieuse num-'.$i)
                 ->setInitialPrice(100)
                 ->setCurrentPrice(100)
-                ->setStartAt(new \DateTimeImmutable())
+                ->setStartAt($dateDebut)
                 ->setEndAt($dateFin)
                 ->setStatus('1')
                 ->setAnimal($animal)
