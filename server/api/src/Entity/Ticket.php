@@ -25,11 +25,9 @@ use Symfony\Component\Validator\Constraints\Type;
         new Get(
             normalizationContext : ['groups' => ['ticket_read', 'read:Ticket']]
         ),
-        new Put(
-            denormalizationContext: ['groups' => ['ticket_write']]
-        ),
         new Post(
-            denormalizationContext: ['groups' => ['ticket_write']]
+            denormalizationContext: ['groups' => ['ticket_write']],
+
         )
     ]
 
@@ -46,17 +44,16 @@ class Ticket
     #[Assert\Length(min: 5, max: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(['tickets_read', 'ticket_read','ticket_write', 'read:Event'])]
+    #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
     private ?string $reference = null;
 
-    #[ORM\Column]
     #[Assert\NotNull]
-    #[Type('date')]
-    #[Groups(['ticket_read','ticket_write'])]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['ticket_read', 'tickets_read'])]
     private ?\DateTimeImmutable $expireAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(['tickets_read', 'ticket_read','ticket_write'])]
+    #[Groups(['tickets_read', 'ticket_read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
@@ -68,7 +65,7 @@ class Ticket
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['tickets_read', 'ticket_read','ticket_write', 'read:Event'])]
+    #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
     private ?User $holder = null;
 
     public function __construct()
