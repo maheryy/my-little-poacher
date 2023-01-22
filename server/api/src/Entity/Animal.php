@@ -18,9 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiFilter(SearchFilter::class,
     properties: [
+        'id' => 'exact',
         'name' => 'partial',
         'scientificName' => 'partial',
         'captureDate' => 'exact',
+        'latitude' => 'exact',
+        'longitude' => 'exact',
         'country' => 'exact',
 ])]
 #[ApiResource(

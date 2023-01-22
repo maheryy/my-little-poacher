@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
@@ -14,6 +17,18 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'id' => 'exact',
+        'bid' => 'exact',
+        'author' => 'exact',
+    ]
+)]
+#[ApiFilter(OrderFilter::class,
+    properties: [
+        'createdAt',
+    ]
+)]
 #[ApiResource(
     normalizationContext: ['groups' => ['comments_read','comment_read']],
     denormalizationContext: ['groups' => ['comment_write']],
