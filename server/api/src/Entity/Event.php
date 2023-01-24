@@ -2,6 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,7 +22,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
+#[ApiFilter(DateFilter::class,
+    properties: [
+        'date',
+    ]
+)]
+#[ApiFilter(OrderFilter::class,
+    properties: [
+        'date',
+    ]
+)]
+#[ApiFilter(NumericFilter::class,
+    properties: [
+        'price',
+    ]
+)]
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'id' => 'exact',
+        'name' => 'partial',
+        'price' => 'exact',
+        'status' => 'exact',
+    ]
+)]
 #[ApiResource (
     normalizationContext: ['groups' => ['events_read', 'event_read']],
     denormalizationContext: ['groups' => ['event_write']],
