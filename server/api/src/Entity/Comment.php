@@ -16,6 +16,7 @@ use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(SearchFilter::class,
     properties: [
@@ -48,17 +49,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
             denormalizationContext: ['groups' => ['comment_write']]
         ),
         new Post(
-            denormalizationContext: ['groups' => ['comment_write']]
+            denormalizationContext: ['groups' => ['comment_write']],
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can create comments.'
         ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can delete comments.'
         ),
-        new Patch(
-            security: 'is_granted("ROLE_ADMIN")',
-            securityMessage: 'Only admins can patch comments.',
-            denormalizationContext: ['groups' => ['comment_patch']]
-        )
     ]
 )]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
@@ -71,6 +69,13 @@ class Comment
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write', 'comment_patch'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 5,
+        max: 1000,
+        minMessage: 'Your comment must be at least 10 characters long',
+        maxMessage: 'Your comment cannot be longer than 1000 characters'
+    )]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]

@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(SearchFilter::class,
     properties: [
@@ -40,12 +41,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['animal_read']]
         ),
         new Put(
-            denormalizationContext: ['groups' => ['animal_write']]
+            denormalizationContext: ['groups' => ['animal_write']],
+            security: 'is_granted("ROLE_ADMIN")'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['animal_write']]
+            denormalizationContext: ['groups' => ['animal_write']],
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can create animals.'
         ),
-        new Delete,
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can delete animals.'
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
@@ -58,10 +65,28 @@ class Animal
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'The name of the animal is required'
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'The name of the animal must be at least 3 characters long',
+        maxMessage: 'The name of the animal cannot be longer than 255 characters'
+    )]
     #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'The scientific name of the animal is required'
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'The scientific name of the animal must be at least 3 characters long',
+        maxMessage: 'The scientific name of the animal cannot be longer than 255 characters'
+    )]
     #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $scientificName = null;
 
@@ -75,14 +100,25 @@ class Animal
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['animal_read','animal_write','read:Bid'])]
+    #[Assert\NotBlank]
+    #[Assert\Type(type: 'float', message: 'The longitude must be a float')]
     private ?string $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['animal_read','animal_write','read:Bid'])]
+    #[Assert\NotBlank]
+    #[Assert\Type(type: 'float', message: 'The latitude must be a float')]
+    #[Assert\Range(
+        min: -90, max: 90,
+        notInRangeMessage: 'The latitude must be between -90 and 90',
+    )]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['animal_read','animal_write','read:Bid', 'read:Bids'])]
+    #[Assert\NotBlank(
+        message: 'The country of the animal is required'
+    )]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'animal', targetEntity: Bid::class)]

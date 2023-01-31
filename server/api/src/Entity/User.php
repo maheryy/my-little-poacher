@@ -71,7 +71,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity('email')]
+#[UniqueEntity('email', message: 'This email is already used.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[Groups(['user_read'])]
@@ -97,6 +97,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank(groups: ['user_create'])]
     #[Groups(['user_create', 'user_update'])]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Your password should be at least {{ limit }} characters',
+        max: 4096,
+        maxMessage: 'Your password cannot be longer than {{ limit }} characters'
+    )]
     private ?string $plainPassword = null;
 
     #[Groups(['user_read'])]

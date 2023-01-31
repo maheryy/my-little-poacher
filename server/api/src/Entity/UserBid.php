@@ -30,16 +30,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientEnabled: true,
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['userBids_read', 'userBid_read', 'read:UserBids']]
+            normalizationContext: ['groups' => ['userBids_read', 'userBid_read', 'read:UserBids']],
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only authenticated users can view their userbids.'
         ),
         new Get(
-            normalizationContext: ['groups' => ['userBid_read', 'read:UserBid']]
+            normalizationContext: ['groups' => ['userBid_read', 'read:UserBid']],
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only authenticated users can view their userbids.'
         ),
         new Put(
-            denormalizationContext: ['groups' => ['userBid_write']]
+            denormalizationContext: ['groups' => ['userBid_write']],
+            security: 'is_granted("ROLE_ADMIN") or object.getBidder() == user',
+            securityMessage: 'Only admins can edit userbids.'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['userBid_write']]
+            denormalizationContext: ['groups' => ['userBid_write']],
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can create userbids.'
         ),
     ]
 )]

@@ -18,6 +18,7 @@ use App\Repository\BidLogRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(SearchFilter::class,
     properties: [
@@ -50,16 +51,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(
             normalizationContext: ['groups' => ['bidLogs_read', 'bidLog_read', 'read:BidLogs']],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')",
+            securityMessage: 'Only authenticated users can view bid logs.'
         ),
         new Get(
-            normalizationContext: ['groups' => ['bidLog_read', 'read:BidLog']]
+            normalizationContext: ['groups' => ['bidLog_read', 'read:BidLog']],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')",
+            securityMessage: 'Only authenticated users can view bid logs.'
         ),
-        new Put(),
+        new Put(
+            denormalizationContext: ['groups' => ['bidLog_write']],
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: 'Only admins can edit bid logs.'
+        ),
         new Post(
-            denormalizationContext: ['groups' => ['bidLog_write']]
+            denormalizationContext: ['groups' => ['bidLog_write']],
         ),
         new Delete(
             security: "is_granted('ROLE_ADMIN')",
+            securityMessage: 'Only admins can delete bid logs.'
         ),
     ]
 )]
@@ -74,6 +84,12 @@ class BidLog
 
     #[ORM\Column]
     #[Groups(['bidLogs_read', 'bidLog_read', 'bidLog_write', 'read:Bid', 'read:Bids'])]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: 'The price must be positive')]
+    #[Assert\Range(
+        min: 5, max: 1000000,
+        notInRangeMessage: 'The price must be between 0 and 1000000',
+    )]
     private ?int $price = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
