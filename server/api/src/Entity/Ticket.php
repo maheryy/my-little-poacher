@@ -20,8 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(DateFilter::class,
     properties: [
-        'createdAt',
-        'expireAt'
+        'createdAt' => DateFilter::EXCLUDE_NULL,
+        'expireAt' => DateFilter::EXCLUDE_NULL,
     ]
 )]
 #[ApiFilter(OrderFilter::class,
@@ -67,10 +67,8 @@ class Ticket
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(min: 5, max: 255)]
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
+    #[Assert\NotBlank]
     private ?string $reference = null;
 
     #[ORM\Column(length: 255)]

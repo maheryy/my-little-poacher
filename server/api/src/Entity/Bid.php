@@ -20,12 +20,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(DateFilter::class,
     properties:[
-        'startAt',
-        'endAt',
-        'createdAt'
+        'startAt' => DateFilter::EXCLUDE_NULL,
+        'endAt' => DateFilter::EXCLUDE_NULL,
+        'createdAt' => DateFilter::EXCLUDE_NULL,
     ]
 )]
 #[ApiFilter(OrderFilter::class,
@@ -61,15 +62,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['bid_read', 'read:Bid']]
         ),
         new Put(
-            denormalizationContext: ['groups' => ['bid_write']]
+            denormalizationContext: ['groups' => ['bid_write']],
+            security: 'is_granted("ROLE_ADMIN") or object.getSeller() == user',
+            securityMessage: 'Only the seller can edit the bid.'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['bid_write']]
+            denormalizationContext: ['groups' => ['bid_write']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_USER")',
+            securityMessage: 'Only the seller can create the bid.'
         ),
-        new Delete,
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only the admin can delete the bid.'
+        ),
         new Patch(
             denormalizationContext: ['groups' => ['bid_patch']],
-            inputFormats: ['json' => ['application/json']]
+            inputFormats: ['json' => ['application/json']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_USER")',
+            securityMessage: 'Only the seller can edit the bid.'
         )
     ]
 )]
@@ -84,6 +94,15 @@ class Bid
 
     #[ORM\Column(length: 255)]
     #[Groups(['bid_read','bids_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3, minMessage: 'The title must be at least 3 characters long',
+        max: 255, maxMessage: 'The title cannot be longer than 255 characters'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z ]+$/',
+        message: 'The title can only contain letters and spaces'
+    )]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -92,14 +111,31 @@ class Bid
 
     #[ORM\Column(length: 255)]
     #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3, minMessage: 'The description must be at least 3 characters long',
+        max: 600, maxMessage: 'The description cannot be longer than 600 characters'
+    )]
     private ?string $description = null;
 
     #[ORM\Column]
     #[Groups(['bid_read', 'bid_write','read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: 'The price must be positive')]
+    #[Assert\Range(
+        min: 5, max: 1000000,
+        notInRangeMessage: 'The initial price must be between 0 and 1000000',
+    )]
     private ?int $initialPrice = null;
 
     #[ORM\Column]
     #[Groups(['bid_read', 'bid_write','bid_patch', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: 'The price must be positive')]
+    #[Assert\Range(
+        min: 5, max: 1000000,
+        notInRangeMessage: 'The current price must be between 0 and 1000000',
+    )]
     private ?int $currentPrice = null;
 
     #[ORM\Column]

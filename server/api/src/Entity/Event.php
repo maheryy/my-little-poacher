@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(DateFilter::class,
     properties: [
-        'date',
+        'date' => DateFilter::EXCLUDE_NULL,
     ]
 )]
 #[ApiFilter(OrderFilter::class,
@@ -56,10 +56,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext : ['groups' => ['event_read', 'read:Event']]
         ),
         new Put(
-            denormalizationContext: ['groups' => ['event_write']]
+            denormalizationContext: ['groups' => ['event_write']],
+            security: "is_granted('ROLE_ADMIN') or object.getCreator() == user",
+            securityMessage: 'Only the creator of the event can edit it.'
         ),
         new Post(
-            denormalizationContext: ['groups' => ['event_write']]
+            denormalizationContext: ['groups' => ['event_write']],
+            security: "is_granted('ROLE_USER')",
+            securityMessage: 'Only authenticated users can create events.'
         ),
     ]
 
@@ -74,10 +78,17 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[Groups(['read:Ticket','events_read','event_read','event_write'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3, minMessage: 'The name must be at least 3 characters long',
+        max: 255, maxMessage: 'The name cannot be longer than 255 characters'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z ]+$/',
+        message: 'The name can only contain letters and spaces'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -88,10 +99,21 @@ class Event
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['read:Ticket','events_read','event_read','event_write'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3, minMessage: 'The description must be at least 3 characters long',
+        max: 600, maxMessage: 'The description cannot be longer than 600 characters'
+    )]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Groups(['read:Ticket', 'event_read','event_write'])]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: 'The price must be positive')]
+    #[Assert\Range(
+        min: 5, max: 1000000,
+        notInRangeMessage: 'The price must be between 5 and 1000000',
+    )]
     private ?float $price;
 
     #[ORM\Column(length: 255)]
@@ -100,6 +122,12 @@ class Event
 
     #[ORM\Column(nullable: true)]
     #[Groups(['read:Ticket','event_read','event_write'])]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: 'The capacity must be positive')]
+    #[Assert\Range(
+        min: 1, max: 1000000,
+        notInRangeMessage: 'The capacity must be between 1 and 1000000',
+    )]
     private ?int $capacity = null;
 
     #[ORM\Column(nullable: true)]
