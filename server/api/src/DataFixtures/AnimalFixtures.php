@@ -21,6 +21,8 @@ class AnimalFixtures extends Fixture
                 ->setName('Marsupilami'.$i)
                 ->setScientificName('Marsupilamus fantasii'.$i)
                 ->setCaptureDate($captureDate)
+                ->setLatitude('48.856614')
+                ->setLongitude('2.352222')
                 ->setCountry('ESGI Jungle'.$i);
 
             $manager->persist($object);
@@ -32,6 +34,8 @@ class AnimalFixtures extends Fixture
                 ->setName('WinnieOurson'.$i)
                 ->setScientificName('Oursum'.$i)
                 ->setCaptureDate($captureDate)
+                ->setLatitude('48.856614')
+                ->setLongitude('2.352222')
                 ->setCountry('ESGI Forest'.$i);
 
             $manager->persist($object);
@@ -43,6 +47,8 @@ class AnimalFixtures extends Fixture
                 ->setName('PanthereRose'.$i)
                 ->setScientificName('ChatMiaou'.$i)
                 ->setCaptureDate($captureDate)
+                ->setLatitude('48.856614')
+                ->setLongitude('2.352222')
                 ->setCountry('ESGI Savane'.$i);
 
             $manager->persist($object);
