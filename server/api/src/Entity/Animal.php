@@ -44,15 +44,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => ['animal_write']],
             security: 'is_granted("ROLE_ADMIN")'
         ),
-        new Post(
-            denormalizationContext: ['groups' => ['animal_write']],
-            security: 'is_granted("ROLE_USER")',
-            securityMessage: 'Only authenticated users can create animals.'
-        ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can delete animals.'
-        ),
+        )
     ]
 )]
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
@@ -90,10 +85,6 @@ class Animal
     #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
     private ?string $scientificName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
-    private ?string $image = null;
-
     #[ORM\Column]
     #[Groups(['animal_read','animal_write','read:Bid'])]
     private ?\DateTimeImmutable $captureDate = null;
@@ -101,13 +92,11 @@ class Animal
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['animal_read','animal_write','read:Bid'])]
     #[Assert\NotBlank]
-    #[Assert\Type(type: 'float', message: 'The longitude must be a float')]
     private ?string $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['animal_read','animal_write','read:Bid'])]
     #[Assert\NotBlank]
-    #[Assert\Type(type: 'float', message: 'The latitude must be a float')]
     #[Assert\Range(
         min: -90, max: 90,
         notInRangeMessage: 'The latitude must be between -90 and 90',
@@ -125,9 +114,13 @@ class Animal
     #[Groups(['animal_read'])]
     private Collection $bids;
 
+    #[ORM\OneToMany(mappedBy: 'animal', targetEntity: Image::class)]
+    private Collection $images;
+
     public function __construct()
     {
         $this->bids = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,18 +148,6 @@ class Animal
     public function setScientificName(string $scientificName): self
     {
         $this->scientificName = $scientificName;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -243,6 +224,36 @@ class Animal
             // set the owning side to null (unless already changed)
             if ($bid->getAnimal() === $this) {
                 $bid->setAnimal(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setAnimal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getAnimal() === $this) {
+                $image->setAnimal(null);
             }
         }
 
