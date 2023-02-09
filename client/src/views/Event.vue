@@ -2,12 +2,25 @@
 import { ref, onMounted } from "vue";
 import eventList from "../../mock_data/models/events.json";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 const { id } = defineProps({
   id: String,
 });
 
 const event = eventList[Math.floor(Math.random() * eventList.length)];
+
+const router = useRouter();
+
+const bookTicket = async () => {
+  // try {
+  //   await axios.post("tickets", { event: `/events/${id}` });
+  // } catch (error) {
+  //   console.error(error.message);
+  // }
+
+  router.push({ name: "tickets" });
+};
 
 // const event = ref({});
 // onMounted(() => {
@@ -36,9 +49,7 @@ const event = eventList[Math.floor(Math.random() * eventList.length)];
         <span>L'événement se déroule le {{ event.date }}</span>
         <span>Organisé par {{ event.creator?.name }}</span>
       </div>
-      <RouterLink class="btn" :to="{ name: 'book-event', params: { id: event.id } }">
-        Réserver
-      </RouterLink>
+      <button class="btn" @click="bookTicket">Réserver</button>
     </div>
   </section>
 </template>

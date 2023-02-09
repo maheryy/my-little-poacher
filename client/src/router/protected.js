@@ -1,7 +1,7 @@
 import { authResolver, checkoutResolver } from "./middlewares";
 
 const options = {
-  beforeEnter: authResolver,
+  // beforeEnter: authResolver,
 };
 
 const routes = [
@@ -23,6 +23,13 @@ const routes = [
     component: () => import("../views/protected/CheckoutSuccess.vue"),
     props: (route) => ({ sessionId: route.query.session_id }),
     beforeEnter: checkoutResolver,
+  },
+  {
+    path: "/tickets",
+    name: "tickets",
+    component: () => import("../views/protected/TicketList.vue"),
+    props: true,
+    ...options,
   },
 ];
 

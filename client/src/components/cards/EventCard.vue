@@ -23,7 +23,7 @@ defineProps({
           class="btn"
           :to="{ name: 'event', params: { id: event.id } }"
         >
-          Réserver
+          Voir
         </RouterLink>
       </div>
     </div>
