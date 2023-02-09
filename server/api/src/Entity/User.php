@@ -113,6 +113,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private int $status = 0;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
     #[ORM\OneToMany(mappedBy: 'seller', targetEntity: Bid::class)]
     private Collection $bids;
 
@@ -231,6 +234,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getIsVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
     /**
      * A visual identifier that represents this user.
      *
