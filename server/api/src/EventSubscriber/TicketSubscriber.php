@@ -6,6 +6,7 @@ use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Event;
 use App\Entity\Ticket;
 use App\Entity\User;
+use App\Enum\TicketStatus;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -54,8 +55,9 @@ final class TicketSubscriber implements EventSubscriberInterface
         do {
             $reference = $this->generateReference();
         } while ($this->ticketRepository->findOneBy(['reference' => $reference]));
-        
+
         $ticket->setReference($reference);
+        $ticket->setStatus(TicketStatus::PENDING);
         $ticket->setHolder($this->security->getUser());
         $ticket->setExpireAt(new \DateTimeImmutable('+1 hour'));
     }
@@ -73,13 +75,12 @@ final class TicketSubscriber implements EventSubscriberInterface
 
         $this->checkUser($user);
         $this->checkDate($ticket);
-
-        $ticket->setExpireAt(null);
+        $ticket->setStatus(TicketStatus::CONFIRMED);
     }
 
     private function checkUser($user)
     {
-        if(!$this->security->getUser()) {
+        if (!$this->security->getUser()) {
             throw new \Exception('User is not connected');
         }
         if (!$user instanceof User) {
@@ -96,7 +97,7 @@ final class TicketSubscriber implements EventSubscriberInterface
         if ($event_entity->getTickets()->count() >= $event_entity->getCapacity()) {
             throw new \Exception('Event is full');
         }
-        foreach($event_entity->getTickets() as $ticket) {
+        foreach ($event_entity->getTickets() as $ticket) {
             if ($ticket->getHolder() === $user) {
                 throw new \Exception('User already has a ticket for this event');
             }
@@ -121,6 +122,4 @@ final class TicketSubscriber implements EventSubscriberInterface
         }
         return $reference;
     }
-
-
 }

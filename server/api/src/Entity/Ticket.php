@@ -14,23 +14,27 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use App\Enum\TicketStatus;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiFilter(DateFilter::class,
+#[ApiFilter(
+    DateFilter::class,
     properties: [
         'createdAt' => DateFilter::EXCLUDE_NULL,
         'expireAt' => DateFilter::EXCLUDE_NULL,
     ]
 )]
-#[ApiFilter(OrderFilter::class,
+#[ApiFilter(
+    OrderFilter::class,
     properties: [
         'createdAt',
         'expireAt'
     ]
 )]
-#[ApiFilter(SearchFilter::class,
+#[ApiFilter(
+    SearchFilter::class,
     properties: [
         'id' => 'exact',
         'reference' => 'exact',
@@ -42,12 +46,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => ['tickets_read']],
     denormalizationContext: ['groups' => ['ticket_write']],
-    operations : [
+    operations: [
         new GetCollection(
-            normalizationContext : ['groups' => ['ticket_read', 'tickets_read', 'read:Tickets']],
+            normalizationContext: ['groups' => ['ticket_read', 'tickets_read', 'read:Tickets']],
         ),
         new Get(
-            normalizationContext : ['groups' => ['ticket_read', 'read:Ticket']]
+            normalizationContext: ['groups' => ['ticket_read', 'read:Ticket']]
         ),
         new Post(
             denormalizationContext: ['groups' => ['ticket_write']],
@@ -64,49 +68,46 @@ class Ticket
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
     #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
     #[Assert\NotBlank]
-    private ?string $reference = null;
+    private string $reference;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['tickets_read', 'ticket_read', 'read:Event','ticket_patch'])]
-    private ?string $status = null;
+    #[ORM\Column(length: 255, type: "string", enumType: TicketStatus::class)]
+    #[Groups(['tickets_read', 'ticket_read', 'read:Event', 'ticket_patch'])]
+    private TicketStatus $status;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['ticket_read', 'tickets_read'])]
-    private ?\DateTimeImmutable $expireAt = null;
+    private \DateTimeImmutable $expireAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['tickets_read', 'ticket_read'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
-    #[Groups(['tickets_read', 'ticket_read','ticket_write'])]
-    private ?Event $event = null;
+    #[Groups(['tickets_read', 'ticket_read', 'ticket_write'])]
+    private Event $event;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
-    private ?User $holder = null;
+    private User $holder;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->status = 'pending';
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getReference(): ?string
+    public function getReference(): string
     {
         return $this->reference;
     }
@@ -118,31 +119,31 @@ class Ticket
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): TicketStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(TicketStatus $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getExpireAt(): ?\DateTimeImmutable
+    public function getExpireAt(): \DateTimeImmutable
     {
         return $this->expireAt;
     }
 
-    public function setExpireAt(?\DateTimeImmutable $expireAt): self
+    public function setExpireAt(\DateTimeImmutable $expireAt): self
     {
         $this->expireAt = $expireAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -153,25 +154,25 @@ class Ticket
 
         return $this;
     }
-    
-    public function getEvent(): ?Event
+
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(?Event $event): self
+    public function setEvent(Event $event): self
     {
         $this->event = $event;
 
         return $this;
     }
 
-    public function getHolder(): ?User
+    public function getHolder(): User
     {
         return $this->holder;
     }
 
-    public function setHolder(?User $holder): self
+    public function setHolder(User $holder): self
     {
         $this->holder = $holder;
 

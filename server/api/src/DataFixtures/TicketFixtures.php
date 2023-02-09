@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use App\Entity\Ticket;
 use App\Entity\Event;
+use App\Enum\TicketStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,34 +23,34 @@ class TicketFixtures extends Fixture implements DependentFixtureInterface
         $date->add(new \DateInterval('P7D'));
         $date->format('Y-m-d H:i:s');
 
-        
 
-        for($j = 0; $j <25; $j++){
-        $nbTicketPaid = mt_rand(0,15);
-        $event = $manager->getRepository(Event::class)->findOneBy(['name' => 'Bakalaye vend des Marsupilami'.$j]);      
-        for($i = 0; $i < $nbTicketPaid; $i++){
-            $nbTicketPaid = mt_rand(0,15);
 
-            $holder = $manager->getRepository(User::class)->findOneBy(['name' => 'client'.$i]);
-    
+        for ($j = 0; $j < 25; $j++) {
+            $nbTicketPaid = mt_rand(0, 15);
+            $event = $manager->getRepository(Event::class)->findOneBy(['name' => 'Bakalaye vend des Marsupilami' . $j]);
+            for ($i = 0; $i < $nbTicketPaid; $i++) {
+                $nbTicketPaid = mt_rand(0, 15);
+
+                $holder = $manager->getRepository(User::class)->findOneBy(['name' => 'client' . $i]);
+
                 $uuid = $this->generateUuid();
                 $object = new Ticket();
                 $object
                     ->setReference($uuid)
-                    ->setExpireAt( $date )
+                    ->setExpireAt($date)
                     ->setEvent($event)
                     ->setHolder($holder)
-                    ;
+                    ->setStatus([TicketStatus::PENDING, TicketStatus::CONFIRMED, TicketStatus::CANCELLED, TicketStatus::EXPIRED][mt_rand(0, 3)]);
                 $manager->persist($object);
-            
             }
             $manager->flush();
         }
-        }
+    }
 
-        
 
-    public function generateUuid(){
+
+    public function generateUuid()
+    {
         $data = random_bytes(16);
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
         $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
