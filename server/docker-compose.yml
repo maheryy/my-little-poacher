@@ -61,6 +61,13 @@ services:
         published: ${HTTP3_PORT:-443}
         protocol: udp
 
+  mailer:
+    image: schickling/mailcatcher
+    restart: unless-stopped
+    ports:
+      - 1025:1025
+      - 1080:1080
+      
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
