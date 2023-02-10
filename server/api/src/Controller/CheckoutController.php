@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Enum\TicketStatus;
 use App\Repository\BidRepository;
+use App\Repository\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,8 +15,8 @@ use Stripe\Stripe;
 
 class CheckoutController extends AbstractController
 {
-    #[Route('/checkout/session', name: 'checkout_session', methods: ['POST'])]
-    public function createCheckoutSession(Request $request, BidRepository $bidRepository): Response
+    #[Route('/checkout/bids/session', name: 'checkout_session_bids', methods: ['POST'])]
+    public function createBidCheckoutSession(Request $request, BidRepository $bidRepository): Response
     {
         try {
             ['bids' => $bidIds] = $request->toArray();
@@ -57,19 +59,19 @@ class CheckoutController extends AbstractController
             $session = Session::create([
                 'line_items' => $items,
                 'mode' => 'payment',
-                'success_url' => $this->getParameter('app_front_url') . "/checkout/success?session_id={CHECKOUT_SESSION_ID}",
+                'success_url' => $this->getParameter('app_front_url') . "/checkout/bids?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => $this->getParameter('app_front_url') . "/cart",
             ]);
             return new JsonResponse(["redirect_url" => $session->url]);
         } catch (\Exception $e) {
             return new JsonResponse(["error" => [
                 "message" => $e->getMessage()
-            ]]);
+            ]], 400);
         }
     }
 
-    #[Route('/checkout/success', name: 'checkout_success', methods: ['POST'])]
-    public function registerCheckout(Request $request, BidRepository $bidRepository): JsonResponse
+    #[Route('/checkout/bids/success', name: 'checkout_success_bids', methods: ['POST'])]
+    public function saveBidCheckout(Request $request, BidRepository $bidRepository): JsonResponse
     {
         ['session_id' => $sessionId] = $request->toArray();
 
@@ -88,7 +90,81 @@ class CheckoutController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(["error" => [
                 "message" => $e->getMessage()
-            ]]);
+            ]], 400);
+        }
+    }
+
+    #[Route('/checkout/tickets/session', name: 'checkout_session_tickets', methods: ['POST'])]
+    public function createTicketCheckoutSession(Request $request, TicketRepository $ticketRepository): Response
+    {
+        try {
+            ['ticket' => $ticketId] = $request->toArray();
+
+
+            if (!$ticketId || !($ticket = $ticketRepository->find($ticketId))) {
+                throw new \Exception("No item to purchase");
+            }
+
+            if ($ticket->getStatus() !== TicketStatus::PENDING) {
+                throw new \Exception("This ticket has expired");
+            }
+
+            $items = [
+                [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => $ticket->getEvent()->getName(),
+                        ],
+                        'unit_amount' => $ticket->getEvent()->getPrice() * 100,
+                    ],
+                    'quantity' => 1,
+                ]
+            ];
+
+            Stripe::setApiKey($this->getParameter('stripe_secret'));
+            $session = Session::create([
+                'line_items' => $items,
+                'mode' => 'payment',
+                'success_url' => $this->getParameter('app_front_url') . "/checkout/tickets?session_id={CHECKOUT_SESSION_ID}&ticket={$ticket->getId()}",
+                'cancel_url' => $this->getParameter('app_front_url') . "/tickets",
+            ]);
+            return new JsonResponse(["redirect_url" => $session->url]);
+        } catch (\Exception $e) {
+            return new JsonResponse(["error" => [
+                "message" => $e->getMessage()
+            ]], 400);
+        }
+    }
+
+    #[Route('/checkout/tickets/success', name: 'checkout_success_tickets', methods: ['POST'])]
+    public function saveTicketCheckout(Request $request, TicketRepository $ticketRepository): JsonResponse
+    {
+        ['session_id' => $sessionId, 'ticket' => $ticketId] = $request->toArray();
+
+        try {
+            $ticket = $ticketRepository->find($ticketId);
+
+            if (!$ticket) {
+                throw new \Exception("Ticket not found");
+            }
+
+            if ($ticket->getStatus() === TicketStatus::CONFIRMED) {
+                throw new \Exception("This ticket has already been confirmed");
+            }
+
+            // Quick check if the session is valid
+            Stripe::setApiKey($this->getParameter('stripe_secret'));
+            Session::retrieve($sessionId);
+
+            $ticket->setStatus(TicketStatus::CONFIRMED);
+            $ticketRepository->save($ticket, true);
+
+            return new JsonResponse(["success" => true]);
+        } catch (\Exception $e) {
+            return new JsonResponse(["error" => [
+                "message" => $e->getMessage()
+            ]], 400);
         }
     }
 }

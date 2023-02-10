@@ -9,7 +9,7 @@ const selectedBids = bids.map((bid) => bid.id);
 
 const checkout = async () => {
   try {
-    const req = await axios.post("checkout/session", { bids: selectedBids });
+    const req = await axios.post("checkout/bids/session", { bids: selectedBids });
     if (!req.data.redirect_url) {
       throw new Error("No redirect url returned from server.");
     }

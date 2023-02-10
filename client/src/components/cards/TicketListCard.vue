@@ -1,11 +1,22 @@
 <script setup>
+import axios from "axios";
 import { TICKET_STATUS } from "../../config/constants";
 
 defineProps({
   ticket: Object,
 });
 
-const confirmTicket = () => {};
+const confirmTicket = async (id) => {
+  try {
+    const req = await axios.post("checkout/tickets/session", { ticket: id });
+    if (!req.data.redirect_url) {
+      throw new Error("No redirect url returned from server.");
+    }
+    window.location.assign(req.data.redirect_url);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 </script>
 
 <template>
@@ -21,7 +32,7 @@ const confirmTicket = () => {};
         <button
           v-if="ticket.status === TICKET_STATUS.PENDING"
           class="btn"
-          @click="confirmTicket"
+          @click="confirmTicket(ticket.id)"
         >
           Payer
         </button>
