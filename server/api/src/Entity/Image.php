@@ -45,6 +45,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             securityMessage: 'Only admins can delete images.'
         ),
         new Post(
+            uriTemplate: '/upload',
+            name: 'upload',
+            denormalizationContext: ['groups' => ['image_write']],
             controller: UploadImageController::class,
             input: 'App\Entity\Image',
             output: 'App\Entity\Image',
@@ -82,7 +85,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         )
     ]
 )]
-
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
 {
