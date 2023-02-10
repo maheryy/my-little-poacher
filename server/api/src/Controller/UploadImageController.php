@@ -13,6 +13,7 @@ final class UploadImageController extends AbstractController
 {
     public function __invoke(Request $request): Image
     {
+        throw new BadRequestHttpException('Calvin');
         $uploadedFile = $request->files->get('image');
         if (!$uploadedFile) {
             throw new BadRequestHttpException('Missing image');
