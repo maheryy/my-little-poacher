@@ -78,22 +78,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private ?int $id = null;
+    private int $id;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 180)]
     #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLogs', 'read:Ticket', 'read:Event', 'read:UserBid', 'read:UserBids'])]
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $name = null;
+    private string $name;
 
     #[Assert\NotBlank]
     #[Assert\Email]
     #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     #[Assert\NotBlank(groups: ['user_create'])]
     #[Groups(['user_create', 'user_update'])]
@@ -103,15 +103,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 4096,
         maxMessage: 'Your password cannot be longer than {{ limit }} characters'
     )]
-    private ?string $plainPassword = null;
+    private ?string $plainPassword;
 
-    #[Groups(['user_read'])]
+    #[Groups(['user_read', 'user_create'])]
     #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER'];
 
     #[Groups(['user_read'])]
     #[ORM\Column(type: 'integer')]
-    private int $status = 0;
+    private int $status = 1;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
