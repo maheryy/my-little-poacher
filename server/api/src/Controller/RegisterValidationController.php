@@ -26,7 +26,7 @@ class RegisterValidationController extends AbstractController
         $entity = $request->attributes->get('data');
 
         if(get_class($entity) === self::ENTITY) {
-            if($entity->isActive()) {
+            if($entity->getActive()) {
                 return $this->json(['message' => 'Token already used']);
             }
 
