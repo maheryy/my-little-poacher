@@ -26,6 +26,7 @@ class UserFixtures extends Fixture
             ->setPassword($this->passwordHasher->hashPassword($object, 'password'))
             ->setRoles(['ROLE_ADMIN'])
             ->setStatus('1')
+            ->setIsVerified(true)
         ;
         $manager->persist($object);
 
@@ -37,6 +38,7 @@ class UserFixtures extends Fixture
                 ->setPassword($this->passwordHasher->hashPassword($object, 'password'))
                 ->setRoles(['ROLE_USER'])
                 ->setStatus('1')
+                ->setIsVerified(true)
             ;
             $manager->persist($object);
         }
@@ -49,6 +51,7 @@ class UserFixtures extends Fixture
                 ->setPassword($this->passwordHasher->hashPassword($object, 'password'))
                 ->setRoles(['ROLE_VENDEUR'])
                 ->setStatus('1')
+                ->setIsVerified(true)
             ;
             $manager->persist($object);
         }
