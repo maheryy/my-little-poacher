@@ -8,10 +8,8 @@ use App\Entity\Ticket;
 use App\Entity\User;
 use App\Enum\TicketStatus;
 use App\Repository\TicketRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
@@ -20,20 +18,17 @@ final class TicketSubscriber implements EventSubscriberInterface
 {
     private $ticketRepository;
     private $security;
-    private $entityManager;
 
-    public function __construct(TicketRepository $ticketRepository, Security $security, EntityManagerInterface $entityManager)
+    public function __construct(TicketRepository $ticketRepository, Security $security)
     {
         $this->ticketRepository = $ticketRepository;
         $this->security = $security;
-        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::VIEW => ['createTicket', EventPriorities::PRE_VALIDATE],
-            KernelEvents::VIEW => ['validateTicket', EventPriorities::PRE_WRITE]
         ];
     }
 
@@ -58,24 +53,8 @@ final class TicketSubscriber implements EventSubscriberInterface
 
         $ticket->setReference($reference);
         $ticket->setStatus(TicketStatus::PENDING);
-        $ticket->setHolder($this->security->getUser());
+        $ticket->setHolder($user);
         $ticket->setExpireAt(new \DateTimeImmutable('+1 hour'));
-    }
-
-    public function validateTicket(ViewEvent $event): void
-    {
-        $ticket = $event->getControllerResult();
-        $method = $event->getRequest()->getMethod();
-
-        if (!$ticket instanceof Ticket || Request::METHOD_PATCH !== $method) {
-            return;
-        }
-
-        $user = $this->security->getUser();
-
-        $this->checkUser($user);
-        $this->checkDate($ticket);
-        $ticket->setStatus(TicketStatus::CONFIRMED);
     }
 
     private function checkUser($user)
@@ -101,14 +80,6 @@ final class TicketSubscriber implements EventSubscriberInterface
             if ($ticket->getHolder() === $user) {
                 throw new \Exception('User already has a ticket for this event');
             }
-        }
-        return;
-    }
-
-    private function checkDate($ticket)
-    {
-        if ($ticket->getExpireAt() < new \DateTimeImmutable()) {
-            throw new \Exception('Ticket is expired');
         }
         return;
     }

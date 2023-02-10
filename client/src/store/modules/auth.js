@@ -9,6 +9,9 @@ const getters = {
   authenticated(state) {
     return state.token && state.user;
   },
+  user(state) {
+    return state.user;
+  }
 };
 
 const mutations = {

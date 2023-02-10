@@ -74,12 +74,12 @@ class Event
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['events_read','event_write', 'read:Ticket'])]
+    #[Groups(['events_read','event_write', 'read:Ticket', 'read:Tickets'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]
-    #[Groups(['read:Ticket','events_read','event_read','event_write'])]
+    #[Groups(['read:Ticket','events_read','event_read','event_write', 'read:Tickets'])]
     #[Assert\NotBlank]
     #[Assert\Length(
         min: 3, minMessage: 'The name must be at least 3 characters long',
@@ -98,7 +98,7 @@ class Event
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['read:Ticket','events_read','event_read','event_write'])]
+    #[Groups(['read:Ticket','events_read','event_read','event_write', 'read:Tickets'])]
     #[Assert\NotBlank]
     #[Assert\Length(
         min: 3, minMessage: 'The description must be at least 3 characters long',
@@ -107,7 +107,7 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Groups(['read:Ticket', 'event_read','event_write'])]
+    #[Groups(['read:Ticket', 'event_read','event_write', 'read:Tickets'])]
     #[Assert\NotBlank]
     #[Assert\Positive(message: 'The price must be positive')]
     #[Assert\Range(
@@ -117,11 +117,11 @@ class Event
     private ?float $price;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:Ticket', 'event_read','event_write'])]
+    #[Groups(['read:Ticket', 'event_read','event_write', 'read:Tickets'])]
     private ?string $address = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read:Ticket','event_read','event_write'])]
+    #[Groups(['read:Ticket','event_read','event_write', 'read:Tickets'])]
     #[Assert\NotBlank]
     #[Assert\Positive(message: 'The capacity must be positive')]
     #[Assert\Range(
@@ -131,20 +131,20 @@ class Event
     private ?int $capacity = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read:Ticket','event_read','event_write'])]
+    #[Groups(['read:Ticket','event_read','event_write', 'read:Tickets'])]
     private ?int $registered_users = null;
 
     #[ORM\Column]
-    #[Groups(['read:Ticket', 'event_read','event_write'])]
+    #[Groups(['read:Ticket', 'event_read','event_write', 'read:Tickets'])]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
-    #[Groups(['event_read','event_write'])]
+    #[Groups(['event_read','event_write', 'read:Tickets'])]
     private ?int $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read:Ticket', 'events_read','event_read','event_write'])]
+    #[Groups(['read:Ticket', 'events_read','event_read','event_write', 'read:Tickets'])]
     private ?User $creator = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Ticket::class)]

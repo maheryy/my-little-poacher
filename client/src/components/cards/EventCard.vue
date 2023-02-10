@@ -12,7 +12,7 @@ defineProps({
       class="w-full h-44 object-cover card-image"
     />
     <div class="flex flex-col p-4">
-      <span class="text-lg font-semibold">{{ event.title }}</span>
+      <span class="text-lg font-semibold">{{ event.name }}</span>
       <span class="mt-2 h-20">{{
         event.description.length > 80
           ? event.description.slice(0, 80) + "..."

@@ -11,7 +11,7 @@ import Account from '../assets/icons/account.svg'
 
 const store = useStore();
 const router = useRouter();
-const isLogged = computed(() => store.getters["auth/isLogged"]);
+const isLogged = computed(() => store.getters["auth/authenticated"]);
 
 const currentRoute = computed(() => router?.currentRoute.value.name)
 
@@ -45,7 +45,7 @@ const logout = () => {
             <img :src="Map" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
-        <div class="h-20 w-20 flex justify-center items-center">
+        <div class="h-20 w-20 flex justify-center items-center" v-if="isLogged">
           <RouterLink :to="{ name: 'cart' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'cart' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
             <img :src="MyBids" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
@@ -55,7 +55,7 @@ const logout = () => {
             <img :src="Auctions" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
-        <div class="h-20 w-20 flex justify-center items-center">
+        <div class="h-20 w-20 flex justify-center items-center" v-if="isLogged">
           <RouterLink :to="{ name: 'tickets' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'tickets' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
             <img :src="MyBids" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>

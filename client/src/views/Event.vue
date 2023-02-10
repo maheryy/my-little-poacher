@@ -1,33 +1,50 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import eventList from "../../mock_data/models/events.json";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { toDateDisplayFormat } from "../../utils";
+import { useStore } from "vuex";
 
 const { id } = defineProps({
   id: String,
 });
 
-const event = eventList[Math.floor(Math.random() * eventList.length)];
-
 const router = useRouter();
+const event = ref({});
+const store = useStore();
 
 const bookTicket = async () => {
-  // try {
-  //   await axios.post("tickets", { event: `/events/${id}` });
-  // } catch (error) {
-  //   console.error(error.message);
-  // }
+  if (!store.getters["auth/authenticated"]) {
+    return router.push({ name: "login" });
+  }
 
-  router.push({ name: "tickets" });
+  const hasConfirmed = confirm(
+    "Voulez-vous réserver un ticket pour cet événement ?"
+  );
+
+  if (!hasConfirmed) {
+    return;
+  }
+
+  try {
+    await axios.post("tickets", { event: `/events/${id}` });
+    router.push({ name: "tickets" });
+  } catch (error) {
+    alert(error.response.data.detail);
+    console.error(error.response.data.detail);
+  }
 };
 
-// const event = ref({});
-// onMounted(() => {
-//   axios.get(`events/${id}`).then((res) => {
-//     event.value = res.data;
-//   });
-// });
+onMounted(() => {
+  axios
+    .get(`events/${id}`)
+    .then((res) => {
+      event.value = res.data;
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+});
 </script>
 
 <template>
@@ -46,7 +63,9 @@ const bookTicket = async () => {
         <span>Prix unitaire : {{ event.price }} €</span>
       </div>
       <div class="flex flex-col">
-        <span>L'événement se déroule le {{ event.date }}</span>
+        <span
+          >L'événement se déroule le {{ toDateDisplayFormat(event.date) }}</span
+        >
         <span>Organisé par {{ event.creator?.name }}</span>
       </div>
       <button class="btn" @click="bookTicket">Réserver</button>

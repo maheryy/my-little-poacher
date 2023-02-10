@@ -2,20 +2,19 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import EventCard from "../components/cards/EventCard.vue";
-import eventList from "../../mock_data/models/events.json";
 
+const events = ref([]);
 
-const events = eventList.slice(0, 10);
-
-// const events = ref([]);
-// onMounted(() => {
-//   axios
-//     .get("events")
-//     .then((res) => {
-//       events.value = res.data;
-//     });
-// });
-
+onMounted(() => {
+  axios
+    .get("events")
+    .then((res) => {
+      events.value = res.data;
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+});
 </script>
 
 <template>

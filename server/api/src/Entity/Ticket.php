@@ -44,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiResource(
-    normalizationContext: ['groups' => ['tickets_read']],
+    normalizationContext: ['groups' => ['tickets_read', 'read:Tickets']],
     denormalizationContext: ['groups' => ['ticket_write']],
     operations: [
         new GetCollection(
@@ -68,6 +68,7 @@ class Ticket
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['tickets_read', 'ticket_read'])]
     private int $id;
 
     #[ORM\Column(length: 255)]

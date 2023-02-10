@@ -34,7 +34,7 @@ const confirmTicket = async (id) => {
           class="btn"
           @click="confirmTicket(ticket.id)"
         >
-          Payer
+          Payer {{ ticket.event.price }} €
         </button>
       </div>
     </div>
