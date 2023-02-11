@@ -26,8 +26,8 @@ class RegisterValidationController extends AbstractController
         $entity = $request->attributes->get('data');
 
         if(get_class($entity) === self::ENTITY) {
-            if($entity->getActive()) {
-                return $this->json(['message' => 'Token already used']);
+            if(!$entity->getActive()) {
+                return $this->json(['message' => 'Token already used'], 400);
             }
 
             if($entity->getCreatedAt()->getTimestamp() + self::VALIDATE_TIME < time()) {

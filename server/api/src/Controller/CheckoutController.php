@@ -59,8 +59,8 @@ class CheckoutController extends AbstractController
             $session = Session::create([
                 'line_items' => $items,
                 'mode' => 'payment',
-                'success_url' => $this->getParameter('app_front_url') . "/checkout/bids?session_id={CHECKOUT_SESSION_ID}",
-                'cancel_url' => $this->getParameter('app_front_url') . "/cart",
+                'success_url' => $this->getParameter('app_client_url') . "/checkout/bids?session_id={CHECKOUT_SESSION_ID}",
+                'cancel_url' => $this->getParameter('app_client_url') . "/cart",
             ]);
             return new JsonResponse(["redirect_url" => $session->url]);
         } catch (\Exception $e) {
@@ -126,8 +126,8 @@ class CheckoutController extends AbstractController
             $session = Session::create([
                 'line_items' => $items,
                 'mode' => 'payment',
-                'success_url' => $this->getParameter('app_front_url') . "/checkout/tickets?session_id={CHECKOUT_SESSION_ID}&ticket={$ticket->getId()}",
-                'cancel_url' => $this->getParameter('app_front_url') . "/tickets",
+                'success_url' => $this->getParameter('app_client_url') . "/checkout/tickets?session_id={CHECKOUT_SESSION_ID}&ticket={$ticket->getId()}",
+                'cancel_url' => $this->getParameter('app_client_url') . "/tickets",
             ]);
             return new JsonResponse(["redirect_url" => $session->url]);
         } catch (\Exception $e) {

@@ -1,10 +1,12 @@
 <script setup>
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
-import { reactive, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { reactive, ref, onMounted } from "vue";
+import axios from "axios";
 
 const store = useStore();
 const router = useRouter();
+const route = useRoute();
 
 const form = reactive({
   email: "",
@@ -12,6 +14,7 @@ const form = reactive({
 });
 
 const error = ref("");
+const success = ref("");
 
 const onSubmit = async () => {
   try {
@@ -25,6 +28,21 @@ const onSubmit = async () => {
     }
   }
 };
+
+onMounted(() => {
+  if (route.query.token) {
+    axios
+      .get(`auth/verify-email/${route.query.token}`)
+      .then(() => {
+        success.value = "Votre email a bien été vérifié";
+      })
+      .catch((e) => {
+        if (e.response.status === 400) {
+          error.value = e.response.data.message;
+        }
+      });
+  }
+});
 </script>
 
 <template>
@@ -33,6 +51,7 @@ const onSubmit = async () => {
     <div class="form-wrapper w-80">
       <form @submit.prevent="onSubmit" class="flex flex-col gap-4 py-8">
         <p v-if="error" class="text-red-500 text-center">{{ error }}</p>
+        <p v-else-if="success" class="text-green-500 text-center">{{ success }}</p>
         <input
           type="email"
           placeholder="Email"

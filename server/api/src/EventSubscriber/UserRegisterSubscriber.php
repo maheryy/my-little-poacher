@@ -12,10 +12,11 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Mailer\MailerInterface;
 use ApiPlatform\Symfony\EventListener\EventPriorities;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class UserRegisterSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager, private MailerInterface $mailer)
+    public function __construct(private EntityManagerInterface $entityManager, private MailerInterface $mailer, private ParameterBagInterface $params)
     {
 
     }
@@ -50,7 +51,7 @@ final class UserRegisterSubscriber implements EventSubscriberInterface
                 ->htmlTemplate('emails/registration.html.twig')
                 ->context([
                     'user' => $user,
-                    'token' => $token
+                    'url' => "{$this->params->get('app_client_url')}/login?token={$token}"
                 ]);
             $this->mailer->send($email);
         } catch(\Exception $e) {
@@ -63,6 +64,7 @@ final class UserRegisterSubscriber implements EventSubscriberInterface
         try {
             $userRegisterToken = new UserRegisterToken();
             $userRegisterToken->setToken($token);
+            $userRegisterToken->setActive(true);
             $userRegisterToken->setAccount($user);
 
             $this->entityManager->persist($userRegisterToken);

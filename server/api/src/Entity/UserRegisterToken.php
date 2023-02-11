@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
                 'tags' => ['Register'],
                 'description' => 'Validate registration token',
             ],
-            uriTemplate: '/register/{token}',
+            uriTemplate: '/auth/verify-email/{token}',
             controller: RegisterValidationController::class,
         ),
     ]
