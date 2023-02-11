@@ -17,7 +17,6 @@ onMounted(() => {
     .get(`tickets/${reference}`)
     .then((res) => {
       ticket.value = res.data;
-      ticket.value.qrCodeContent = `www.google.com`;
     })
     .catch((e) => {
       error.value = e.response.data.message || "Une erreur est survenue";
@@ -54,7 +53,7 @@ onMounted(() => {
         <div class="flex flex-col w-full gap-8">
           <p>Présentez le QR Code ci-dessous à votre arrivé</p>
           <div class="flex items-center justify-center">
-            <QrcodeVue :value="ticket.qrCodeContent" size="200" level="H" />
+            <QrcodeVue :value="ticket.reference" :size="200" level="H" />
           </div>
         </div>
       </div>

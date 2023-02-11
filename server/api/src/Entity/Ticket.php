@@ -57,7 +57,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             securityMessage: "Only the ticket holder can access this resource."
         ),
         new Get(
-            uriTemplate: '/tokens/verify/{reference}',
+            uriTemplate: '/tickets/verify/{reference}',
             controller: TicketVerificationController::class,
             security: 'is_granted("ROLE_USER") and is_granted("ROLE_SELLER")',
             read: false,

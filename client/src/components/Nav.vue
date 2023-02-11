@@ -12,6 +12,7 @@ import Account from '../assets/icons/account.svg'
 const store = useStore();
 const router = useRouter();
 const isLogged = computed(() => store.getters["auth/authenticated"]);
+const isPro = computed(() => store.getters["auth/isPro"]);
 
 const currentRoute = computed(() => router?.currentRoute.value.name)
 
@@ -58,6 +59,11 @@ const logout = () => {
         <div class="h-20 w-20 flex justify-center items-center" v-if="isLogged">
           <RouterLink :to="{ name: 'tickets' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'tickets' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
             <img :src="MyBids" class="hover:scale-105 transition-all duration-200" />
+          </RouterLink>
+        </div>
+        <div class="h-20 w-20 flex justify-center items-center" v-if="isPro">
+          <RouterLink :to="{ name: 'scanner' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'scanner' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
+            <img :src="Map" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
       </div>
