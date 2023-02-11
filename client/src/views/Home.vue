@@ -2,9 +2,12 @@
 import axios from "axios";
 import BidCard from "../components/cards/BidCard.vue";
 import { onMounted, ref } from "vue";
+import { useStore } from "vuex";
 
 const allBids = ref([]);
 const trendBids = ref([]);
+const store = useStore();
+
 onMounted(() => {
   axios
     .get("bids", {
@@ -21,7 +24,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1 class="md:mx-14 mt-14">Enchères en cours !</h1>
+  <div class="flex items-center justify-between p-14">
+    <h1 class="">Enchères en cours !</h1>
+    <button class="btn" v-if="!store.getters['auth/isPro']">
+      <RouterLink :to="{ name: 'register-pro' }"> Deviens pro ! </RouterLink>
+    </button>
+  </div>
   <section class="my-12 md:mx-14">
     <h2 class="font-semibold text-2xl mb-10">Enchères du moment</h2>
     <div class="overflow-x-auto">

@@ -11,6 +11,9 @@ const getters = {
   },
   user(state) {
     return state.user;
+  },
+  isPro(state) {
+    return state.user?.roles.includes("ROLE_SELLER");
   }
 };
 

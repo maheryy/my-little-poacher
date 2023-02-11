@@ -2,7 +2,7 @@
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
-import { getErrorMessagesFromResponse } from "../../utils";
+import { getErrorMessagesFromResponse } from "../utils";
 const router = useRouter();
 
 const form = reactive({
@@ -95,7 +95,7 @@ const onSubmit = async () => {
       </form>
       <p>
         Déjà un compte ?
-        <RouterLink :to="{name: 'login'}">Se connecter</RouterLink>
+        <RouterLink :to="{ name: 'login' }">Se connecter</RouterLink>
       </p>
     </div>
   </div>
