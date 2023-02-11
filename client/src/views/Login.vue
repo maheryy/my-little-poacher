@@ -1,7 +1,7 @@
 <script setup>
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 
 const store = useStore();
 const router = useRouter();
@@ -11,15 +11,17 @@ const form = reactive({
   password: "",
 });
 
+const error = ref("");
+
 const onSubmit = async () => {
   try {
     await store.dispatch("auth/login", form);
     router.push({ name: "dashboard" });
-  } catch (error) {
-    if (error.response?.status === 401) {
-      alert("Invalid credentials");
+  } catch (e) {
+    if (e.response?.status === 401) {
+      error.value = e.response.data.message;
     } else {
-      alert("Something went wrong");
+      error.value = "Something went wrong";
     }
   }
 };
@@ -30,8 +32,9 @@ const onSubmit = async () => {
     <h1>Connexion</h1>
     <div class="form-wrapper w-80">
       <form @submit.prevent="onSubmit" class="flex flex-col gap-4 py-8">
+        <p v-if="error" class="text-red-500 text-center">{{ error }}</p>
         <input
-          type="text"
+          type="email"
           placeholder="Email"
           name="email"
           class="px-2 py-2 rounded-md text-black"
@@ -55,7 +58,7 @@ const onSubmit = async () => {
       </form>
       <p>
         Pas encore de compte ?
-        <RouterLink :to="{name: 'register'}">S'inscrire</RouterLink>
+        <RouterLink :to="{ name: 'register' }">S'inscrire</RouterLink>
       </p>
     </div>
   </div>
