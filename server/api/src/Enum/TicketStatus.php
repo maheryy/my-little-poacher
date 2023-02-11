@@ -8,4 +8,5 @@ enum TicketStatus: string
     case CANCELLED = "cancelled";
     case CONFIRMED = "confirmed";
     case EXPIRED = "expired";
+    case USED = "used";
 }

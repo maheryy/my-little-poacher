@@ -10,7 +10,7 @@ const user = store.getters["auth/user"];
 
 onMounted(() => {
   axios
-    .get("tickets", { params: { holder: user.id } })
+    .get("tickets", { params: { holder: user.id, "order[createdAt]": "desc", "order[status]": "asc" } })
     .then((res) => {
       tickets.value = res.data;
     })
@@ -23,7 +23,7 @@ onMounted(() => {
 <template>
   <h1>Mes tickets</h1>
   <section class="my-12">
-    <div class="m-auto w-fit">
+    <div class="m-auto w-2/5">
       <ul class="flex flex-col gap-8">
         <li v-for="ticket in tickets" :key="ticket.id">
           <TicketListCard :ticket="ticket" />

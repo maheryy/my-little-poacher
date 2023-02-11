@@ -30,7 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     OrderFilter::class,
     properties: [
         'createdAt',
-        'expireAt'
+        'expireAt',
+        'status'
     ]
 )]
 #[ApiFilter(
@@ -73,14 +74,17 @@ class Ticket
     #[Groups(['tickets_read', 'ticket_read'])]
     private int $id;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['tickets_read', 'ticket_read', 'read:Event'])]
-    #[Assert\NotBlank]
+    #[ORM\Column(length: 10, unique: true)]
+    #[Groups(['tickets_read', 'ticket_read'])]
     private string $reference;
 
     #[ORM\Column(length: 255, type: "string", enumType: TicketStatus::class)]
     #[Groups(['tickets_read', 'ticket_read', 'read:Event', 'ticket_patch'])]
     private TicketStatus $status;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['ticket_read'])]
+    private ?string $token = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['ticket_read', 'tickets_read'])]
@@ -89,6 +93,10 @@ class Ticket
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['tickets_read', 'ticket_read'])]
     private \DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['tickets_read', 'ticket_read'])]
+    private ?\DateTimeImmutable $paidAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
@@ -134,6 +142,18 @@ class Ticket
         return $this;
     }
 
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
     public function getExpireAt(): \DateTimeImmutable
     {
         return $this->expireAt;
@@ -154,6 +174,18 @@ class Ticket
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getPaidAt(): ?\DateTimeImmutable
+    {
+        return $this->paidAt;
+    }
+
+    public function setPaidAt(?\DateTimeImmutable $paidAt): self
+    {
+        $this->paidAt = $paidAt;
 
         return $this;
     }

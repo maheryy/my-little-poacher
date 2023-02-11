@@ -3,4 +3,5 @@ export const TICKET_STATUS = {
   CANCELLED: "cancelled",
   CONFIRMED: "confirmed",
   EXPIRED: "expired",
+  USED: "used",
 };
