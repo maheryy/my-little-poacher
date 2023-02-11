@@ -47,33 +47,37 @@ class UserSeller
     #[Groups(['userSeller_read', 'userSellers_read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
-    #[Assert\Type('string')]
-    #[Groups(['userSeller_read', 'userSellers_read', 'userSeller_write', 'read:User'])]
-    private ?string $address = null;
+    // #[ORM\Column(length: 255)]
+    // #[Assert\NotNull]
+    // #[Assert\NotBlank]
+    // #[Assert\Type('string')]
+    // #[Groups(['userSeller_read', 'userSellers_read', 'userSeller_write', 'read:User'])]
+    // private ?string $address = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userSellers')]
+    #[ORM\OneToOne(inversedBy: 'userSellers')]
     #[Groups(['userSeller_read', 'userSellers_read'])]
     private ?User $seller = null;
+
+    #[ORM\Column(type: 'boolean')]
+    #[Groups(['userSeller_read', 'userSellers_read', 'userSeller_write', 'read:User'])]
+    private ?bool $pendingRequest = false;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
+    // public function getAddress(): ?string
+    // {
+    //     return $this->address;
+    // }
 
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
+    // public function setAddress(string $address): self
+    // {
+    //     $this->address = $address;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getSeller(): ?User
     {
@@ -86,4 +90,17 @@ class UserSeller
 
         return $this;
     }
+
+    public function getPendingRequest(): ?bool
+    {
+        return $this->pendingRequest;
+    }
+
+    public function setPendingRequest(bool $pendingRequest): self
+    {
+        $this->pendingRequest = $pendingRequest;
+
+        return $this;
+    }
+    
 }
