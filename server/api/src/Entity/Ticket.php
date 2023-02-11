@@ -60,7 +60,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Patch(
             denormalizationContext: ['groups' => ['ticket_patch']],
-            inputFormats: ['json' => ['application/json']]
+            inputFormats: ['json' => ['application/json']],
         )
     ]
 )]
