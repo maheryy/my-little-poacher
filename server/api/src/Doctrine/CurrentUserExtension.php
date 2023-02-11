@@ -10,7 +10,7 @@ use App\Entity\Ticket;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
-final class TicketExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     private $security;
 
@@ -26,17 +26,15 @@ final class TicketExtension implements QueryCollectionExtensionInterface, QueryI
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
     {
-        //$this->addWhere($queryBuilder, $resourceClass);
+        $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if(Ticket::class !== $resourceClass || !$this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
+        if(Ticket::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
             return;
         }
-
         $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder->andWhere(sprintf('%s.holder = :current_user', $rootAlias));
-        $queryBuilder->setParameter('current_user', $user);
+        $queryBuilder->andWhere(sprintf('%s.holder = :current_user', $rootAlias))->setParameter('current_user', $this->security->getUser());
     }
 }

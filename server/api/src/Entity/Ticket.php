@@ -51,7 +51,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['ticket_read', 'tickets_read', 'read:Tickets']],
         ),
         new Get(
-            normalizationContext: ['groups' => ['ticket_read', 'read:Ticket']]
+            normalizationContext: ['groups' => ['ticket_read', 'read:Ticket']],
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') and object.getHolder() == user",
+            securityMessage: "Only the ticket holder can access this resource."
         ),
         new Post(
             denormalizationContext: ['groups' => ['ticket_write']],
