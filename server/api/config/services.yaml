@@ -6,7 +6,7 @@
 parameters:
     stripe_key: '%env(STRIPE_KEY)%'
     stripe_secret: '%env(STRIPE_SECRET)%'
-    app_front_url: '%env(APP_FRONT_URL)%'
+    app_client_url: '%env(APP_CLIENT_URL)%'
 services:
     # default configuration for services in *this* file
     _defaults:

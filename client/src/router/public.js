@@ -13,6 +13,11 @@ const routes = [
     beforeEnter: loginResolver,
   },
   {
+    path: "/register",
+    name: "register",
+    component: () => import("../views/Register.vue"),
+  },
+  {
     path: "/bids",
     name: "bids",
     component: () => import("../views/BidList.vue"),
