@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\UserSellerRoleController;
 use App\Repository\UserSellerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -32,6 +33,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => ['userSeller_write']],
             security: 'is_granted("ROLE_ADMIN") or object.getSeller() == user',
             securityMessage: 'Only admins or the seller can edit a user seller.'
+        ),
+        
+        new Patch(
+            denormalizationContext: ['groups' => ['userSeller_patch']],
+            inputFormats: ['json' => ['application/json']],
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can edit the role of users.'
         ),
         new Post(
             denormalizationContext: ['groups' => ['userSeller_write']]
@@ -60,7 +68,7 @@ class UserSeller
     private ?User $seller = null;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['userSeller_read','userSeller_write', 'read:User'])]
+    #[Groups(['userSeller_read','userSeller_write','userSeller_patch', 'read:User'])]
     private ?bool $pendingRequest = false;
 
     public function getId(): ?int
