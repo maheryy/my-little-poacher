@@ -60,6 +60,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: UserPasswordHasher::class,
         ),
         new Patch(processor: UserPasswordHasher::class),
+
+        new Patch(
+            denormalizationContext: ['groups' => ['user_patch']],
+            inputFormats: ['json' => ['application/json']],
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Only admins can edit the role of users.'
+        ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only admins can delete other users.',
@@ -105,7 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $plainPassword;
 
-    #[Groups(['user_read'])]
+    #[Groups(['user_read','userSeller_read','userSeller_patch', 'userSeller_write'])]
     #[ORM\Column(type: 'json')]
     private array $roles = ['ROLE_USER'];
 

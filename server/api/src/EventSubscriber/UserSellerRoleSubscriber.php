@@ -1,5 +1,4 @@
 <?php
-//créer un subscriber sur UserSeller qui set un User juste avant un POST
 
 namespace App\EventSubscriber;
 
@@ -15,10 +14,9 @@ use ApiPlatform\Symfony\EventListener\EventPriorities;
 use Symfony\Component\Security\Core\Security;
 
 
-final class UserSellerCreateSubscriber implements EventSubscriberInterface
+final class UserSellerRoleSubscriber implements EventSubscriberInterface
 {
     private $security;
-
 
     public function __construct(private MailerInterface $mailer, Security $security)
     {
@@ -28,22 +26,24 @@ final class UserSellerCreateSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['userSellerCreate', EventPriorities::PRE_WRITE]
+            KernelEvents::VIEW => ['userSellerPatch', EventPriorities::POST_VALIDATE]
         ];
     }
 
-    public function userSellerCreate(ViewEvent $event): void
+    public function userSellerPatch(ViewEvent $event): void
     {
         $userSeller = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if($userSeller instanceof UserSeller && $method === Request::METHOD_POST) {
-            //fonctions de verification sur les infos formulaire quand il y en aura 
-            // si user deja dans la table et si il a deja le statut role_seller
-            $user = $this->security->getUser();
-            $this->checkUser($user);
-            $userSeller->setSeller($user);
+        if($userSeller instanceof UserSeller && $method === Request::METHOD_PATCH) {
             
+            $user = $userSeller->getSeller();
+            $this->checkUser($user);
+            //$userSeller->getSeller()->setRoles(['ROLE_SELLER']);    
+            $roles = $userSeller->getSeller()->getRoles();
+            $roles[] = 'ROLE_SELLER'; 
+            $userSeller->getSeller()->setRoles($roles);
+
         }
     }
 
@@ -57,4 +57,7 @@ final class UserSellerCreateSubscriber implements EventSubscriberInterface
         }
         return;
     }
+
 }
+
+
