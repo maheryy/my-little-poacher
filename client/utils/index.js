@@ -6,3 +6,13 @@ export const toDateDisplayFormat = (date) => {
     day: "numeric",
   });
 };
+
+export const getErrorMessagesFromResponse = (error) => {
+  return error.response.data.violations.reduce(
+    (acc, violation) => ({
+      ...acc,
+      [violation.propertyPath]: violation.message,
+    }),
+    {}
+  );
+};
