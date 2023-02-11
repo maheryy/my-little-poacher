@@ -15,11 +15,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['userSellers_read', 'userSeller_read']],
+    normalizationContext: ['groups' => [ 'userSeller_read']],
     denormalizationContext: ['groups' => ['userSeller_write']],
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['userSeller_read', 'userSellers_read']],
+            normalizationContext: ['groups' => ['userSeller_read']],
             security: 'is_granted("ROLE_ADMIN")',
             securityMessage: 'Only admins can list user sellers.'
         ),
@@ -44,22 +44,23 @@ class UserSeller
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['userSeller_read', 'userSellers_read'])]
+    #[Groups(['userSeller_read'])]
     private ?int $id = null;
 
     // #[ORM\Column(length: 255)]
     // #[Assert\NotNull]
     // #[Assert\NotBlank]
     // #[Assert\Type('string')]
-    // #[Groups(['userSeller_read', 'userSellers_read', 'userSeller_write', 'read:User'])]
+    // #[Groups(['userSeller_read', 'userSeller_read', 'userSeller_write', 'read:User'])]
     // private ?string $address = null;
 
-    #[ORM\OneToOne(inversedBy: 'userSellers')]
-    #[Groups(['userSeller_read', 'userSellers_read'])]
+    #[ORM\OneToOne(inversedBy: 'userSeller', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['userSeller_read'])]
     private ?User $seller = null;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['userSeller_read', 'userSellers_read', 'userSeller_write', 'read:User'])]
+    #[Groups(['userSeller_read','userSeller_write', 'read:User'])]
     private ?bool $pendingRequest = false;
 
     public function getId(): ?int
