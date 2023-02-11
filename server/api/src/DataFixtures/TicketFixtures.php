@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Ticket;
 use App\Entity\Event;
 use App\Enum\TicketStatus;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,39 +23,56 @@ class TicketFixtures extends Fixture implements DependentFixtureInterface
         $date = new \DateTimeImmutable();
         $date->add(new \DateInterval('P7D'));
         $date->format('Y-m-d H:i:s');
+        $users = $manager->getRepository(User::class)->findAll();
+        $events = $manager->getRepository(Event::class)->findAll();
 
+        foreach ($users as $user) {
+            if (!in_array("ROLE_USER", $user->getRoles())) {
+                continue;
+            }
 
+            $eventIds = [];
+            $nbTickets = mt_rand(1, 10);
 
-        for ($j = 0; $j < 25; $j++) {
-            $nbTicketPaid = mt_rand(0, 15);
-            $event = $manager->getRepository(Event::class)->findOneBy(['name' => 'Bakalaye vend des Marsupilami' . $j]);
-            for ($i = 0; $i < $nbTicketPaid; $i++) {
-                $nbTicketPaid = mt_rand(0, 15);
+            for ($i = 0; $i < $nbTickets; $i++) {
+                $event = $events[mt_rand(0, count($events) - 1)];
 
-                $holder = $manager->getRepository(User::class)->findOneBy(['name' => 'client' . $i]);
+                if (in_array($event->getId(), $eventIds)) {
+                    $i--;
+                    continue;
+                }
 
-                $uuid = $this->generateUuid();
+                $eventIds[] = $event->getId();
+
+                $status = [TicketStatus::PENDING, TicketStatus::CONFIRMED, TicketStatus::CANCELLED, TicketStatus::EXPIRED, TicketStatus::USED][mt_rand(0, 4)];
                 $object = new Ticket();
+
+                if (in_array($status, [TicketStatus::CONFIRMED, TicketStatus::USED])) {
+                    $object->setPaidAt(new DateTimeImmutable());
+                }
+
                 $object
-                    ->setReference($uuid)
+                    ->setReference($this->generateReference())
                     ->setExpireAt($date)
                     ->setEvent($event)
-                    ->setHolder($holder)
-                    ->setStatus([TicketStatus::PENDING, TicketStatus::CONFIRMED, TicketStatus::CANCELLED, TicketStatus::EXPIRED][mt_rand(0, 3)]);
+                    ->setHolder($user)
+                    ->setStatus($status);
+
                 $manager->persist($object);
             }
+
             $manager->flush();
         }
     }
 
-
-
-    public function generateUuid()
+    private function generateReference()
     {
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+        $reference = '';
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for ($i = 0; $i < 10; $i++) {
+            $reference .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $reference;
     }
 
     public function getDependencies()

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Enum\TicketStatus;
 use App\Repository\BidRepository;
 use App\Repository\TicketRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -158,6 +159,7 @@ class CheckoutController extends AbstractController
             Session::retrieve($sessionId);
 
             $ticket->setStatus(TicketStatus::CONFIRMED);
+            $ticket->setPaidAt(new DateTimeImmutable());
             $ticketRepository->save($ticket, true);
 
             return new JsonResponse(["success" => true]);

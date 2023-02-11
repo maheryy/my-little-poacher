@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { toDateDisplayFormat } from "../../utils";
+import { toDateDisplayFormat } from "../utils";
 import { useStore } from "vuex";
 
 const { id } = defineProps({

@@ -27,7 +27,7 @@ onMounted(() => {
   <div class="flex items-center justify-between p-14">
     <h1 class="">Enchères en cours !</h1>
     <button class="btn" v-if="!store.getters['auth/isPro']">
-      <RouterLink :to="{ name: 'register-pro' }"> Deviens pro ! </RouterLink>
+      <RouterLink :to="{ name: 'register-pro' }"> Deviens vendeur ! </RouterLink>
     </button>
   </div>
   <section class="my-12 md:mx-14">

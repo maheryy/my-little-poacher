@@ -34,6 +34,12 @@ const routes = [
     path: "/tickets",
     name: "tickets",
     component: () => import("../views/protected/TicketList.vue"),
+    ...options,
+  },
+  {
+    path: "/tickets/:reference",
+    name: "ticket",
+    component: () => import("../views/protected/Ticket.vue"),
     props: true,
     ...options,
   },
