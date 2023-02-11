@@ -44,7 +44,7 @@ const actions = {
     }
     try {
       commit("setToken", token);
-      const response = await axios.get("users/me");
+      const response = await axios.get("profile");
       commit("setUser", response.data);
     } catch (e) {
       commit("setToken", null);

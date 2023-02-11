@@ -49,7 +49,7 @@ class UserFixtures extends Fixture
                 ->setName('vendeur'.$i)
                 ->setEmail('vendeur'.$i.'@gmail.com')
                 ->setPassword($this->passwordHasher->hashPassword($object, 'password'))
-                ->setRoles(['ROLE_VENDEUR'])
+                ->setRoles(['ROLE_USER', 'ROLE_SELLER'])
                 ->setStatus('1')
                 ->setIsVerified(true)
             ;

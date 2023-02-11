@@ -159,7 +159,6 @@ class CheckoutController extends AbstractController
             Session::retrieve($sessionId);
 
             $ticket->setStatus(TicketStatus::CONFIRMED);
-            $ticket->setToken($this->generateToken());
             $ticket->setPaidAt(new DateTimeImmutable());
             $ticketRepository->save($ticket, true);
 
@@ -169,10 +168,5 @@ class CheckoutController extends AbstractController
                 "message" => $e->getMessage()
             ]], 400);
         }
-    }
-
-    private function generateToken()
-    {
-        return uniqid() . bin2hex(random_bytes(5));
     }
 }

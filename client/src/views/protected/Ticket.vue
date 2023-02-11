@@ -4,8 +4,8 @@ import axios from "axios";
 import { toDateDisplayFormat } from "../../utils";
 import QrcodeVue from "qrcode.vue";
 
-const { id } = defineProps({
-  id: String,
+const { reference } = defineProps({
+  reference: String,
 });
 
 const ticket = ref({});
@@ -14,13 +14,13 @@ const error = ref("");
 
 onMounted(() => {
   axios
-    .get(`tickets/${id}`)
+    .get(`tickets/${reference}`)
     .then((res) => {
       ticket.value = res.data;
       ticket.value.qrCodeContent = `www.google.com`;
     })
-    .catch((error) => {
-      error.value = error.message;
+    .catch((e) => {
+      error.value = e.response.data.message || "Une erreur est survenue";
     })
     .finally(() => {
       loading.value = false;
@@ -43,8 +43,7 @@ onMounted(() => {
               :to="{ name: 'event', params: { id: ticket.event.id } }"
             >
               {{ ticket.event.name }}
-              </RouterLink
-            >
+            </RouterLink>
           </p>
         </div>
         <div class="flex flex-col">

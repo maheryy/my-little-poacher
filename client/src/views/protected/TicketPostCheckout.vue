@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { onMounted,onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const { sessionId, ticket } = defineProps({
@@ -19,7 +19,7 @@ onMounted(() => {
     .post("checkout/tickets/success", { ticket, session_id: sessionId })
     .then((res) => {
       timeout = setTimeout(() => {
-        router.push({ name: "ticket", params: { id: ticket } });
+        router.push({ name: "tickets"});
       }, 2000);
     })
     .catch((err) => {
@@ -43,7 +43,7 @@ onUnmounted(() => {
   </p>
   <div v-else>
     <p>Votre paiement a été confirmé</p>
-    <p>Vous allez être redirigé vers votre ticket...</p>
+    <p>Vous allez être redirigé vers vos tickets...</p>
   </div>
   <p></p>
 </template>

@@ -42,16 +42,20 @@ use Symfony\Component\Validator\Constraints as Assert;
             securityMessage: 'Only admins can access the list of users.',
         ),
         new Get(
-            uriTemplate: '/users/me',
-            controller: MeController::class,
-            security: 'is_granted("ROLE_USER")',
-            read: false,
-            name: 'me'
-        ),
-        new Get(
             normalizationContext: ['groups' => ['user_read', 'read:User']],
             security: 'is_granted("ROLE_ADMIN") or object == user',
             securityMessage: 'Only admins can access other users.',
+        ),
+        new Get(
+            uriTemplate: '/profile',
+            controller: MeController::class,
+            security: 'is_granted("ROLE_USER") or is_granted("ROLE_ADMIN")',
+            read: false,
+            openapiContext: [
+                'summary' => 'Get the current user',
+                'tags' => ['User'],
+                'description' => 'Get the current user profile data',
+            ],
         ),
         new Post(processor: UserPasswordHasher::class),
         new Put(

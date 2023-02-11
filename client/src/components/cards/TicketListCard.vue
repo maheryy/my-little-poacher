@@ -39,7 +39,7 @@ const confirmTicket = async (id) => {
         <RouterLink
           v-else-if="ticket.status === TICKET_STATUS.CONFIRMED"
           class="bg-cyan-500 text-white rounded-md p-2"
-          :to="{ name: 'ticket', params: { id: ticket.id } }"
+          :to="{ name: 'ticket', params: { reference: ticket.reference } }"
           >Voir mon ticket</RouterLink
         >
       </div>

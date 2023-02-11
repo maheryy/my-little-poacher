@@ -37,7 +37,7 @@ const routes = [
     ...options,
   },
   {
-    path: "/tickets/:id",
+    path: "/tickets/:reference",
     name: "ticket",
     component: () => import("../views/protected/Ticket.vue"),
     props: true,

@@ -49,7 +49,6 @@ class TicketFixtures extends Fixture implements DependentFixtureInterface
 
                 if (in_array($status, [TicketStatus::CONFIRMED, TicketStatus::USED])) {
                     $object->setPaidAt(new DateTimeImmutable());
-                    $object->setToken($this->generateToken());
                 }
 
                 $object
@@ -64,11 +63,6 @@ class TicketFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->flush();
         }
-    }
-
-    private function generateToken()
-    {
-        return uniqid() . bin2hex(random_bytes(5));
     }
 
     private function generateReference()
