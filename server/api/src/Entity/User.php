@@ -125,8 +125,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'seller', targetEntity: UserSeller::class)]
-    private Collection $userSellers;
+    #[ORM\OneToOne(mappedBy: 'seller', cascade: ['persist', 'remove'])]
+    private ?UserSeller $userSeller = null;
 
     #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Event::class)]
     private Collection $events;
@@ -142,7 +142,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bids = new ArrayCollection();
         $this->bidLogs = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->userSellers = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->tickets = new ArrayCollection();
         $this->userBids = new ArrayCollection();
@@ -355,35 +354,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserSeller>
-     */
-    public function getUserSellers(): Collection
+    public function getUserSeller(): ?UserSeller
     {
-        return $this->userSellers;
+        return $this->userSeller;
     }
 
-    public function addUserSeller(UserSeller $userSeller): self
+    public function setUserSeller(UserSeller $userSeller): self
     {
-        if (!$this->userSellers->contains($userSeller)) {
-            $this->userSellers->add($userSeller);
+        // set the owning side of the relation if necessary
+        if ($userSeller->getSeller() !== $this) {
             $userSeller->setSeller($this);
         }
 
-        return $this;
-    }
-
-    public function removeUserSeller(UserSeller $userSeller): self
-    {
-        if ($this->userSellers->removeElement($userSeller)) {
-            // set the owning side to null (unless already changed)
-            if ($userSeller->getSeller() === $this) {
-                $userSeller->setSeller(null);
-            }
-        }
+        $this->userSeller = $userSeller;
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Event>
