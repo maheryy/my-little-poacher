@@ -94,14 +94,9 @@ class Bid
 
     #[ORM\Column(length: 255)]
     #[Groups(['bid_read','bids_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
-    #[Assert\NotBlank]
     #[Assert\Length(
         min: 3, minMessage: 'The title must be at least 3 characters long',
         max: 255, maxMessage: 'The title cannot be longer than 255 characters'
-    )]
-    #[Assert\Regex(
-        pattern: '/^[a-zA-Z ]+$/',
-        message: 'The title can only contain letters and spaces'
     )]
     private ?string $title = null;
 
@@ -111,7 +106,6 @@ class Bid
 
     #[ORM\Column(length: 255)]
     #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
-    #[Assert\NotBlank]
     #[Assert\Length(
         min: 3, minMessage: 'The description must be at least 3 characters long',
         max: 600, maxMessage: 'The description cannot be longer than 600 characters'

@@ -6,11 +6,12 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use App\Entity\Bid;
+use App\Entity\BidLog;
+use App\Entity\Ticket;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
-final class BidExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     private $security;
 
@@ -31,13 +32,17 @@ final class BidExtension implements QueryCollectionExtensionInterface, QueryItem
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if(Bid::class !== $resourceClass || !$this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
+        if($this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
             return;
         }
-
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-
-        $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-        $queryBuilder->setParameter('current_user', $user->getId());
+        if(Ticket::class == $resourceClass) {
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.holder = :current_user', $rootAlias))->setParameter('current_user', $this->security->getUser());
+        }
+        if(BidLog::class == $resourceClass) {
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.bidder = :current_user', $rootAlias))->setParameter('current_user', $this->security->getUser());
+        }
+        
     }
 }

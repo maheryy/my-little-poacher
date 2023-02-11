@@ -37,8 +37,8 @@ services:
     App\State\UserPasswordHasher:
         bind:
             $processor: '@api_platform.doctrine.orm.state.persist_processor'
-
-    'App\Doctrine\BidExtension':
+    
+    App\Doctrine\CurrentUserExtension:
         tags:
-            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.collection, priority: 9 }
             - { name: api_platform.doctrine.orm.query_extension.item }
