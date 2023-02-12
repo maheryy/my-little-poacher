@@ -1,7 +1,7 @@
 <script setup>
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, computed } from "vue";
 import axios from "axios";
 
 const store = useStore();
@@ -16,10 +16,13 @@ const form = reactive({
 const error = ref("");
 const success = ref("");
 
+const isAdmin = computed(() => store.getters["auth/isAdmin"]);
+
 const onSubmit = async () => {
   try {
     await store.dispatch("auth/login", form);
-    router.push({ name: "dashboard" });
+    if (isAdmin.value) router.push({ name: "admin" });
+    else router.push({ name: "dashboard" });
   } catch (e) {
     if (e.response?.status === 401) {
       error.value = e.response.data.message;

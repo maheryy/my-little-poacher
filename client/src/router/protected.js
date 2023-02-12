@@ -12,6 +12,12 @@ const routes = [
     ...options,
   },
   {
+    path: "/admin",
+    name: "admin",
+    component: () => import("../views/protected/admin/Admin.vue"),
+    ...options,
+  },
+  {
     path: "/register-pro",
     name: "register-pro",
     component: () => import("../views/protected/pro/RegisterPro.vue"),
