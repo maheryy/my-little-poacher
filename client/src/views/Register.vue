@@ -35,13 +35,13 @@ const onSubmit = async () => {
 
 <template>
   <div class="w-full h-screen flex flex-col items-center justify-center">
-    <h1>Inscription</h1>
+    <h1>Register</h1>
     <div class="form-wrapper w-80">
       <form @submit.prevent="onSubmit" class="flex flex-col gap-4 py-8">
         <div class="flex flex-col w-full">
           <input
             type="text"
-            placeholder="Nom d'utilisateur"
+            placeholder="Username"
             name="name"
             class="px-2 py-2 rounded-md text-black"
             v-model="form.name"
@@ -63,7 +63,7 @@ const onSubmit = async () => {
         <div class="flex flex-col w-full">
           <input
             type="password"
-            placeholder="Mot de passse"
+            placeholder="Password"
             name="password"
             class="px-2 py-2 rounded-md text-black"
             v-model="form.plainPassword"
@@ -76,7 +76,7 @@ const onSubmit = async () => {
         <div class="flex flex-col w-full">
           <input
             type="password"
-            placeholder="Confirmation du mot de passe"
+            placeholder="Password confirmation"
             name="password-confirm"
             class="px-2 py-2 rounded-md text-black"
             v-model="confirmPassword"
@@ -90,12 +90,12 @@ const onSubmit = async () => {
           type="submit"
           class="px-2 py-2 rounded-md bg-blue-500 text-white"
         >
-          S'inscrire
+          Submit
         </button>
       </form>
-      <p>
-        Déjà un compte ?
-        <RouterLink :to="{ name: 'login' }">Se connecter</RouterLink>
+      <p class="text-center">
+        Already have an account?
+        <RouterLink :to="{ name: 'login' }"><span class="font-bold underline">Login</span></RouterLink>
       </p>
     </div>
   </div>

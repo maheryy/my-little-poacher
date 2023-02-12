@@ -24,7 +24,7 @@ const confirmTicket = async (id) => {
     <div class="flex gap-2 basis-full">
       <div class="flex flex-col basis-full p-4 justify-center gap-3">
         <span>{{ ticket.event.name }}</span>
-        <span>Limité à {{ ticket.event.capacity }} personnes</span>
+        <span>Up to {{ ticket.event.capacity }} attendees</span>
       </div>
       <div class="flex flex-col basis-1/3 p-4 justify-center gap-2">
         <span class="font-semibold">{{ ticket.reference }}</span>
@@ -34,13 +34,13 @@ const confirmTicket = async (id) => {
           class="btn"
           @click="confirmTicket(ticket.id)"
         >
-          Payer {{ ticket.event.price }} €
+          Pay {{ ticket.event.price }} €
         </button>
         <RouterLink
           v-else-if="ticket.status === TICKET_STATUS.CONFIRMED"
           class="bg-cyan-500 text-white rounded-md p-2"
           :to="{ name: 'ticket', params: { reference: ticket.reference } }"
-          >Voir mon ticket</RouterLink
+          >View my ticket</RouterLink
         >
       </div>
     </div>

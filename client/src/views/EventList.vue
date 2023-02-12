@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Prochain évènements</h1>
+  <h1>Upcoming events</h1>
   <section class="my-12">
     <div class="m-auto w-fit">
       <ul class="flex flex-wrap gap-8">

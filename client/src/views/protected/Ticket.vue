@@ -28,7 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="loading">Chargement...</div>
+  <div v-if="loading">Loading...</div>
   <div v-else-if="error">{{ error }}</div>
   <div v-else>
     <h1 class="text-center">Ticket n°{{ ticket.reference }}</h1>
@@ -36,7 +36,7 @@ onMounted(() => {
       <div class="w-full flex flex-col gap-4 p-6">
         <div class="flex flex-col">
           <p>
-            1 place acheté pour l'événement
+            1 ticket bought for the event:
             <RouterLink
               class="underline"
               :to="{ name: 'event', params: { id: ticket.event.id } }"
@@ -46,12 +46,12 @@ onMounted(() => {
           </p>
         </div>
         <div class="flex flex-col">
-          <p>Pour le {{ toDateDisplayFormat(ticket.event.date) }}</p>
-          <p>Rendez vous au : {{ ticket.event.address }}</p>
+          <p>On {{ toDateDisplayFormat(ticket.event.date) }}</p>
+          <p>At: {{ ticket.event.address }}</p>
         </div>
 
         <div class="flex flex-col w-full gap-8">
-          <p>Présentez le QR Code ci-dessous à votre arrivé</p>
+          <p>Show the following QR Code upon arrival</p>
           <div class="flex items-center justify-center">
             <QrcodeVue :value="ticket.reference" :size="200" level="H" />
           </div>

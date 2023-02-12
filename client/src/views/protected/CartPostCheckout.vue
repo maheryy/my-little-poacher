@@ -6,5 +6,5 @@ const { sessionId } = defineProps({
 </script>
 
 <template>
-  <h1>Confirmation de paiement</h1>
+  <h1>Payment confirmation</h1>
 </template>

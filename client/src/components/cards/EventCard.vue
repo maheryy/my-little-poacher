@@ -8,7 +8,7 @@ defineProps({
   <div class="card">
     <img
       src="http://dummyimage.com/143x100.png/5fa2dd/ffffff"
-      alt="Photo de l'évènement"
+      alt="Picture of the event"
       class="w-full h-44 object-cover card-image"
     />
     <div class="flex flex-col p-4">
@@ -23,7 +23,7 @@ defineProps({
           class="btn"
           :to="{ name: 'event', params: { id: event.id } }"
         >
-          Voir
+          View
         </RouterLink>
       </div>
     </div>

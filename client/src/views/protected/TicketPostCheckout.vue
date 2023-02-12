@@ -36,14 +36,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <h1>Confirmation de paiement</h1>
-  <p v-if="isLoading">Vérification du paiement en cours...</p>
+  <h1>Payment confirmation</h1>
+  <p v-if="isLoading">Payment verification in progress...</p>
   <p v-else-if="error">
-    Une erreur est survenue lors du paiement : {{ error }}
+    An error occured during payment: {{ error }}
   </p>
   <div v-else>
-    <p>Votre paiement a été confirmé</p>
-    <p>Vous allez être redirigé vers vos tickets...</p>
+    <p>Your payment has been confirmed</p>
+    <p>You will be redirected to your tickets...</p>
   </div>
   <p></p>
 </template>

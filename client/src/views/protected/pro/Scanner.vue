@@ -15,10 +15,10 @@ const verify = async (reference) => {
   if (loading.value) return;
 
   if (!reference) {
-    return (error.value = "Aucune référence");
+    return (error.value = "No reference provided");
   }
   if (reference.length !== 10) {
-    return (error.value = "La référence doit faire 10 caractères");
+    return (error.value = "The reference must be 10 characters long");
   }
 
   loading.value = true;
@@ -71,12 +71,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <h1 class="text-center">Vérification des tickets</h1>
+  <h1 class="text-center">Ticket verification</h1>
   <section class="w-1/2 m-auto">
     <article class="w-full border border-slate-300 rounded-md my-8 p-8">
-      <h2 class="text-center text-xl">Valider un ticket manuellement</h2>
+      <h2 class="text-center text-xl">Manually confirm a ticket</h2>
       <p class="italic text-center">
-        Entrer manuellement la référence du ticket
+        Type the reference of the ticket you want to confirm
       </p>
       <div class="m-auto flex gap-4 items-center w-fit py-4">
         <input
@@ -85,7 +85,7 @@ onUnmounted(() => {
           v-model="inputText"
           type="text"
         />
-        <button class="btn" @click="verify(inputText)">Vérifier</button>
+        <button class="btn" @click="verify(inputText)">Confirm</button>
       </div>
     </article>
     <p

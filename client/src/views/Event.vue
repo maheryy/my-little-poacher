@@ -60,15 +60,15 @@ onMounted(() => {
     <div class="w-1/2 flex flex-col gap-4 p-6">
       <div class="flex flex-col">
         <span>{{ event.description }}</span>
-        <span>Prix unitaire : {{ event.price }} €</span>
+        <span>Ticket price: {{ event.price }} €</span>
       </div>
       <div class="flex flex-col">
         <span
-          >L'événement se déroule le {{ toDateDisplayFormat(event.date) }}</span
+          >The event will happen on {{ toDateDisplayFormat(event.date) }}</span
         >
-        <span>Organisé par {{ event.creator?.name }}</span>
+        <span>Organized by {{ event.creator?.name }}</span>
       </div>
-      <button class="btn" @click="bookTicket">Réserver</button>
+      <button class="btn" @click="bookTicket">Book</button>
     </div>
   </section>
 </template>

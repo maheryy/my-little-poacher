@@ -47,7 +47,7 @@ onMounted(() => {
 
 <template>
   <div class="w-full h-screen flex flex-col items-center justify-center">
-    <h1>Connexion</h1>
+    <h1>Login</h1>
     <div class="form-wrapper w-80">
       <form @submit.prevent="onSubmit" class="flex flex-col gap-4 py-8">
         <p v-if="error" class="text-red-500 text-center">{{ error }}</p>
@@ -72,12 +72,12 @@ onMounted(() => {
           type="submit"
           class="px-2 py-2 rounded-md bg-blue-500 text-white"
         >
-          Se connecter
+          Submit
         </button>
       </form>
-      <p>
-        Pas encore de compte ?
-        <RouterLink :to="{ name: 'register' }">S'inscrire</RouterLink>
+      <p class="text-center">
+        Don't have an account?
+        <RouterLink :to="{ name: 'register' }"><span class="font-bold underline">Register</span></RouterLink>
       </p>
     </div>
   </div>

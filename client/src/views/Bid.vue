@@ -72,7 +72,7 @@ const outbid = () => {
         <span>{{ bid.description }}</span>
       </div>
       <div class="flex flex-col">
-        <span>Actuel : {{ bid.currentPrice }} €</span>
+        <span>Current price: {{ bid.currentPrice }} €</span>
         <form @submit.prevent="outbid" class="flex gap-2">
           <input
             class="border text-sm rounded-lg focus:ring-blue-500 block w-32 p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white darkring-blue-500 focus:border-blue-500"
@@ -84,17 +84,17 @@ const outbid = () => {
         </form>
       </div>
       <div class="flex flex-col">
-        <span>Départ : {{ bid.initialPrice }} €</span>
-        <span>Début de l'enchère : {{ bid.startAt }}</span>
-        <span>Fin de l'enchère : {{ bid.endAt }}</span>
+        <span>Stating bid: {{ bid.initialPrice }} €</span>
+        <span>Auction start: {{ bid.startAt }}</span>
+        <span>Auction end: {{ bid.endAt }}</span>
       </div>
       <div class="flex flex-col">
-        <span>Vendu par {{ bid.seller?.name }}</span>
+        <span>Sold by {{ bid.seller?.name }}</span>
       </div>
     </div>
   </section>
   <section>
-    <h2 class="font-semibold text-2xl">Commentaires</h2>
+    <h2 class="font-semibold text-2xl">Comments</h2>
     <ul class="flex flex-col gap-3 my-8">
       <li v-for="comment in bid.comments" :key="comment.id">
         <BidComment :comment="comment" />
@@ -108,7 +108,7 @@ const outbid = () => {
           placeholder="Votre commentaire"
           v-model="comment"
         />
-        <button class="bg-teal-600 p-2 rounded-md w-fit">Envoyer</button>
+        <button class="bg-teal-600 p-2 rounded-md w-fit">Submit</button>
       </form>
     </div>
   </section>
