@@ -1,14 +1,13 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import EventCard from "../components/cards/EventCard.vue";
+import EventListCard from "../components/cards/EventListCard.vue";
 
 const events = ref([]);
-
 onMounted(() => {
   axios
-    .get("events")
-    .then((res) => {
+  .get("events")
+  .then((res) => {
       events.value = res.data;
     })
     .catch((error) => {
@@ -23,7 +22,7 @@ onMounted(() => {
     <div class="m-auto w-fit">
       <ul class="flex flex-wrap gap-8">
         <li v-for="event in events" :key="event.id">
-          <EventCard :event="event" />
+          <EventListCard :event="event" />
         </li>
       </ul>
     </div>
