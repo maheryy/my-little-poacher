@@ -16,6 +16,7 @@ test-front:
   script:
     - cd client
     - npm ci --cache .npm --prefer-offline
+    - npm rebuild canvas --update-binary
     - npm run test
   cache:
     paths:
