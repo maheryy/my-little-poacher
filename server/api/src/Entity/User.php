@@ -93,13 +93,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 180)]
-    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLogs', 'read:Ticket', 'read:Event', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLogs', 'read:Ticket', 'read:Event', 'read:UserBid', 'read:UserBids','read:UserSeller', 'read:UserSellers'])]
     #[ORM\Column(length: 180, unique: true)]
     private string $name;
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLogs', 'read:UserBid', 'read:UserBids','read:UserSeller', 'read:UserSellers'])]
     #[ORM\Column(length: 180, unique: true)]
     private string $email;
 

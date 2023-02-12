@@ -40,12 +40,10 @@ final class UserSellerCreateSubscriber implements EventSubscriberInterface
 
         if($userSeller instanceof UserSeller && $method === Request::METHOD_POST) {
             //fonctions de verification sur les infos formulaire quand il y en aura 
-            //$this->AlreadyExist($userSeller);
             $user = $this->security->getUser();
             $this->checkUser($user);
-            $this->AlreadyExist($user, $userSeller);
-            $userSeller->setSeller($user);
-            
+            $this->AlreadyExist($user, $userSeller); 
+            $userSeller->setSeller($user);           
         }
     }
 
@@ -55,9 +53,10 @@ final class UserSellerCreateSubscriber implements EventSubscriberInterface
         if(in_array('ROLE_SELLER', $user->getRoles())) {
             throw new BadRequestHttpException('User already has a seller role', null, 400);
         }
-        else if($user->getUserSeller()->getPendingRequest() === false) {
+        else if( $user->getUserSeller() && $user->getUserSeller()->getStatus() === 'pending') {
             throw new BadRequestHttpException('User already has a pending request', null, 400);
         }
+
         
     }
 
