@@ -52,28 +52,27 @@ onMounted(() => {
     v-if="isPro"
     class="w-full h-screen flex flex-col items-center justify-center"
   >
-    <h1>Devenir vendeur</h1>
-    <p>Vous êtes déjà vendeur</p>
+    <h1>Become a seller</h1>
+    <p>You are already a seller</p>
   </div>
   <div
     v-else-if="proRequest.status === 'pending'"
     class="w-full h-screen flex flex-col items-center justify-center"
   >
-    <h1>Devenir vendeur</h1>
+    <h1>Become a seller</h1>
     <p>
-      Votre demande est en cours de traitement. Vous recevrez un email de
-      confirmation dès que votre demande aura été traitée.
+      Your request has been sent. You'll receive a confirmation email when it will be processed.
     </p>
   </div>
   <div v-else class="w-full h-screen flex flex-col items-center justify-center">
-    <h1>Deviens vendeur !</h1>
-    <p>Pour devenir vendeur, il te suffit d'envoyer une demande</p>
+    <h1>Become a seller!</h1>
+    <p>To become a seller, you only need to send a request</p>
     <div class="form-wrapper w-80">
       <form @submit.prevent="onSubmit" class="flex flex-col gap-4 py-8">
         <div class="flex flex-col w-full">
           <input
             type="text"
-            placeholder="address"
+            placeholder="Address"
             name="name"
             class="px-2 py-2 rounded-md text-black"
             v-model="form.address"
@@ -85,7 +84,7 @@ onMounted(() => {
           type="submit"
           class="px-2 py-2 rounded-md bg-blue-500 text-white"
         >
-          Envoyer
+          Submit
         </button>
       </form>
     </div>

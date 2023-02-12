@@ -1,6 +1,6 @@
 export const toDateDisplayFormat = (date) => {
   const dateObj = new Date(date);
-  return dateObj.toLocaleDateString("fr-FR", {
+  return dateObj.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",

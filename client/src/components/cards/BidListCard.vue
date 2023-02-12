@@ -9,7 +9,7 @@ defineProps({
     <div>
       <img
         :src="bid.animal.image"
-        alt="Photo de l'animal"
+        alt="Picture of the animal"
         class="h-full w-80"
       />
     </div>
@@ -17,17 +17,17 @@ defineProps({
       <div class="flex flex-col basis-full p-4 justify-center">
         <span>{{ bid.title }}</span>
         <span>{{ bid.animal.name }}</span>
-        <span>Vendu par {{ bid.seller.name }}</span>
+        <span>Sold by {{ bid.seller.name }}</span>
         <span>{{ bid.description.slice(0, 100) }}</span>
       </div>
       <div class="flex flex-col basis-1/3 p-4 items-center justify-center">
-        <span>Départ : {{ bid.initialPrice }} €</span>
-        <span>Actuel : {{ bid.currentPrice }} €</span>
+        <span>Starting bid: {{ bid.initialPrice }} €</span>
+        <span>Current bid: {{ bid.currentPrice }} €</span>
         <RouterLink
           class="bg-teal-600 p-2 rounded-md w-fit"
           :to="{ name: 'bid', params: { id: bid.id } }"
         >
-          Voir
+          View
         </RouterLink>
       </div>
     </div>

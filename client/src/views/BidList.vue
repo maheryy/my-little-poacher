@@ -15,7 +15,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Les enchères actives</h1>
+  <h1>Active auctions</h1>
   <section class="my-12">
     <div class="m-auto w-fit">
       <ul class="flex flex-col gap-8">
