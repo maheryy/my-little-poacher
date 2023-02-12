@@ -5,7 +5,7 @@ import { computed } from "@vue/reactivity";
 import Burger from '../assets/icons/burger.svg'
 import Home from '../assets/icons/home.svg'
 import Auctions from '../assets/icons/auctions.svg'
-import Map from '../assets/icons/map.svg'
+import Scanner from '../assets/icons/scanner.svg'
 import MyBids from '../assets/icons/my-bids.svg'
 import Account from '../assets/icons/account.svg'
 
@@ -41,11 +41,6 @@ const logout = () => {
             <img :src="Auctions" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
-        <div class="h-20 w-20 flex justify-center items-center">
-          <RouterLink :to="{ name: 'map' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'map' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
-            <img :src="Map" class="hover:scale-105 transition-all duration-200" />
-          </RouterLink>
-        </div>
         <div class="h-20 w-20 flex justify-center items-center" v-if="isLogged">
           <RouterLink :to="{ name: 'cart' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'cart' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
             <img :src="MyBids" class="hover:scale-105 transition-all duration-200" />
@@ -63,7 +58,7 @@ const logout = () => {
         </div>
         <div class="h-20 w-20 flex justify-center items-center" v-if="isPro">
           <RouterLink :to="{ name: 'scanner' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'scanner' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
-            <img :src="Map" class="hover:scale-105 transition-all duration-200" />
+            <img :src="Scanner" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
       </div>

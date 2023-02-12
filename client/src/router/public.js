@@ -38,12 +38,7 @@ const routes = [
     name: "event",
     component: () => import("../views/Event.vue"),
     props: true,
-  },
-  {
-    path: "/map",
-    name: "map",
-    component: () => import("../views/Map.vue")
-  },
+  }
 ];
 
 export default routes;

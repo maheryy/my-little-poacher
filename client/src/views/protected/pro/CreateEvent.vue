@@ -53,7 +53,7 @@ onMounted(() => {
     v-if="isPro"
     class="w-full h-screen flex flex-col items-center justify-center"
   >
-    <h1>Become a seller</h1>
+    <h1>Create an event</h1>
     <p>You are already a seller</p>
   </div>
   <div
