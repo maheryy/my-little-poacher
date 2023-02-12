@@ -30,13 +30,13 @@ class TicketVerificationController extends AbstractController
             || $ticket->getStatus() !== TicketStatus::CONFIRMED
             || $ticket->getEvent()->getCreator() !== $user
         ) {
-            return new JsonResponse(['message' => 'Ticket non valide'], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['message' => 'Invalid ticket'], Response::HTTP_BAD_REQUEST);
         }
 
 
         $ticket->setStatus(TicketStatus::USED);
         $this->ticketRepository->save($ticket, true);
 
-        return new JsonResponse(['success' => true, 'message' => 'Ticket validé'], Response::HTTP_OK);
+        return new JsonResponse(['success' => true, 'message' => 'Ticket successfully validated'], Response::HTTP_OK);
     }
 }

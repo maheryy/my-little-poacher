@@ -17,11 +17,9 @@ const bookTicket = async () => {
   if (!store.getters["auth/authenticated"]) {
     return router.push({ name: "login" });
   }
-
   const hasConfirmed = confirm(
-    "Voulez-vous réserver un ticket pour cet événement ?"
+    "Do you really want to book a ticket for this event ?"
   );
-
   if (!hasConfirmed) {
     return;
   }
@@ -50,25 +48,16 @@ onMounted(() => {
 <template>
   <h1>{{ event.name }}</h1>
   <section class="my-12 flex">
-    <div class="w-1/2">
-      <img
-        class="w-full h-auto"
-        src="http://dummyimage.com/143x100.png/5fa2dd/ffffff"
-        alt="Image de l'event"
-      />
-    </div>
     <div class="w-1/2 flex flex-col gap-4 p-6">
       <div class="flex flex-col">
         <span>{{ event.description }}</span>
-        <span>Ticket price: {{ event.price }} €</span>
+        <span>Price : {{ event.price }} €</span>
       </div>
       <div class="flex flex-col">
-        <span
-          >The event will happen on {{ toDateDisplayFormat(event.date) }}</span
-        >
+        <span>{{ toDateDisplayFormat(event.date) }}</span>
         <span>Organized by {{ event.creator?.name }}</span>
       </div>
-      <button class="btn" @click="bookTicket">Book</button>
+      <button class="btn" @click="bookTicket">Book this event</button>
     </div>
   </section>
 </template>

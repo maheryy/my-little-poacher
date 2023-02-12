@@ -80,12 +80,13 @@ onUnmounted(() => {
       </p>
       <div class="m-auto flex gap-4 items-center w-fit py-4">
         <input
+          aria-label="Reference"
           class="p-2 rounded-md text-gray-900"
           placeholder="ex: ADF8D5A6E2"
           v-model="inputText"
           type="text"
         />
-        <button class="btn" @click="verify(inputText)">Confirm</button>
+        <button class="btn" @click="verify(inputText)">Verify</button>
       </div>
     </article>
     <p
@@ -99,10 +100,10 @@ onUnmounted(() => {
     <article class="w-full border border-slate-300 rounded-md my-8">
       <div class="m-auto flex gap-4 items-center w-fit py-4">
         <button class="btn" @click="switchScanner">
-          {{ scannerOpen ? "Fermer le scanner" : "Utiliser le scanner" }}
+          {{ scannerOpen ? "Close" : "Use the scanner" }}
         </button>
       </div>
-      <div id="reader" v-if="scannerOpen">
+      <div id="reader" v-if="scannerOpen" data-testId="reader">
         <QrcodeStream @detect="onDetect" @init="onInit" />
       </div>
     </article>

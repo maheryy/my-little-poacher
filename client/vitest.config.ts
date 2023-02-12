@@ -5,6 +5,7 @@ export default defineConfig({
     plugins: [Vue()],
     test: {
         globals: true,
-        environment: 'jsdom'
+        environment: 'jsdom',
+        setupFiles: 'src/setupTests.js'
     },
 })
