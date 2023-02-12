@@ -7,7 +7,7 @@ import jest from "jest-mock";
 
 window.confirm = jest.fn(() => true);
 
-describe("Event page", () => {
+describe("the event page", () => {
   const event = events[0];
 
   it("should display the main event title", async () => {

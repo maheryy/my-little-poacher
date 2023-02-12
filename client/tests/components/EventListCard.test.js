@@ -6,7 +6,7 @@ import { defaultRenderOptions } from "../config";
 describe("EventListCard component", () => {
   const event = events[0];
 
-  it("should display the event's name, description and a button link", async () => {
+  it("should display the event's name, description and a button link", () => {
     render(EventListCard, {
       props: { event: event },
       ...defaultRenderOptions,

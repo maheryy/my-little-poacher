@@ -164,9 +164,9 @@ class CheckoutController extends AbstractController
 
             return new JsonResponse(["success" => true]);
         } catch (\Exception $e) {
-            return new JsonResponse(["error" => [
-                "message" => $e->getMessage()
-            ]], 400);
+            return new JsonResponse([
+                "success" => false, "message" => $e->getMessage()
+            ], 400);
         }
     }
 }

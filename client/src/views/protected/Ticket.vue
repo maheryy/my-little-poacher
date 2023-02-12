@@ -36,7 +36,7 @@ onMounted(() => {
       <div class="w-full flex flex-col gap-4 p-6">
         <div class="flex flex-col">
           <p>
-            1 ticket bought for the event:
+            Event :
             <RouterLink
               class="underline"
               :to="{ name: 'event', params: { id: ticket.event.id } }"
@@ -53,7 +53,7 @@ onMounted(() => {
         <div class="flex flex-col w-full gap-8">
           <p>Show the following QR Code upon arrival</p>
           <div class="flex items-center justify-center">
-            <QrcodeVue :value="ticket.reference" :size="200" level="H" />
+            <QrcodeVue role="img" :value="ticket.reference" :size="200" level="H" />
           </div>
         </div>
       </div>

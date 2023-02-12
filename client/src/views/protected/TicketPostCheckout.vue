@@ -19,11 +19,11 @@ onMounted(() => {
     .post("checkout/tickets/success", { ticket, session_id: sessionId })
     .then((res) => {
       timeout = setTimeout(() => {
-        router.push({ name: "tickets"});
+        router.push({ name: "tickets" });
       }, 2000);
     })
     .catch((err) => {
-      error.value = err.response.data.error.message;
+      error.value = err.response.data.message;
     })
     .finally(() => {
       isLoading.value = false;
@@ -38,9 +38,7 @@ onUnmounted(() => {
 <template>
   <h1>Payment confirmation</h1>
   <p v-if="isLoading">Payment verification in progress...</p>
-  <p v-else-if="error">
-    An error occured during payment: {{ error }}
-  </p>
+  <p v-else-if="error">An error occured during payment: {{ error }}</p>
   <div v-else>
     <p>Your payment has been confirmed</p>
     <p>You will be redirected to your tickets...</p>
