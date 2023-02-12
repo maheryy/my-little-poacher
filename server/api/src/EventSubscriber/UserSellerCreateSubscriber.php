@@ -13,6 +13,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 final class UserSellerCreateSubscriber implements EventSubscriberInterface
@@ -39,12 +40,25 @@ final class UserSellerCreateSubscriber implements EventSubscriberInterface
 
         if($userSeller instanceof UserSeller && $method === Request::METHOD_POST) {
             //fonctions de verification sur les infos formulaire quand il y en aura 
-            // si user deja dans la table et si il a deja le statut role_seller
+            //$this->AlreadyExist($userSeller);
             $user = $this->security->getUser();
             $this->checkUser($user);
+            $this->AlreadyExist($user, $userSeller);
             $userSeller->setSeller($user);
             
         }
+    }
+
+    private function AlreadyExist($user, $userSeller)
+    {
+        
+        if(in_array('ROLE_SELLER', $user->getRoles())) {
+            throw new BadRequestHttpException('User already has a seller role', null, 400);
+        }
+        else if($user->getUserSeller()->getPendingRequest() === false) {
+            throw new BadRequestHttpException('User already has a pending request', null, 400);
+        }
+        
     }
 
     private function checkUser($user)

@@ -39,10 +39,10 @@ final class UserSellerRoleSubscriber implements EventSubscriberInterface
             
             $user = $userSeller->getSeller();
             $this->checkUser($user);
-            //$userSeller->getSeller()->setRoles(['ROLE_SELLER']);    
             $roles = $userSeller->getSeller()->getRoles();
             $roles[] = 'ROLE_SELLER'; 
             $userSeller->getSeller()->setRoles($roles);
+            $this->sendEmailSeller($userSeller->getSeller());
 
         }
     }
@@ -56,6 +56,23 @@ final class UserSellerRoleSubscriber implements EventSubscriberInterface
             throw new \Exception('User not found');
         }
         return;
+    }
+
+    private function sendEmailSeller(User $user): void
+    {
+        try {
+            $email = (new TemplatedEmail())
+                ->from("no-reply@mlp.com")
+                ->to($user->getEmail())
+                ->subject('My Little Poacher - Du nouveau concernant votre demande')
+                ->htmlTemplate('emails/welcomeSeller.html.twig')
+                ->context([
+                    'user' => $user,
+                ]);
+            $this->mailer->send($email);
+        } catch(\Exception $e) {
+            throw new \Exception('Error sending email');
+        }
     }
 
 }
