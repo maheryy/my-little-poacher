@@ -31,14 +31,11 @@ const errors = ref({});
 
 const onSubmit = async () => {
     try {
-        const res = await axios.post("animals", animal).then(async (response) => {
-            bid.animal_id = response.data.id;
-            bid.currentPrice = bid.initialPrice;
-            await axios.post("bids", bid).then((response) => {
-                console.log(response);
-                router.push({ name: "dashboard" });
-            });
-        });
+        await axios.post("animals", animal)
+        bid.animal_id = res.data.id;
+        bid.currentPrice = bid.initialPrice;
+        await axios.post("bids", bid)
+        router.push({ name: "dashboard" });
     } catch (error) {
         if (error.response.status === 422) {
             errors.value = getErrorMessagesFromResponse(error);
@@ -64,21 +61,21 @@ const onSubmit = async () => {
                 </div>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Animal scientific name</span>
-                    <input type="text" placeholder="Erithacus rubecula" name="name" class="px-2 py-2 rounded-md text-black"
-                        v-model="animal.scientificName" required />
+                    <input type="text" placeholder="Erithacus rubecula" name="name"
+                        class="px-2 py-2 rounded-md text-black" v-model="animal.scientificName" required />
                     <p v-if="errors.scientificName" class="text-red-500">{{ errors.scientificName }}</p>
                 </div>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Captured on</span>
-                    <input type="datetime-local" placeholder="Start at" name="name" class="px-2 py-2 rounded-md text-black"
-                        v-model="animal.captureDate" required />
+                    <input type="datetime-local" placeholder="Start at" name="name"
+                        class="px-2 py-2 rounded-md text-black" v-model="animal.captureDate" required />
                     <p v-if="errors.captureDate" class="text-red-500">{{ errors.captureDate }}</p>
                 </div>
                 <h2 class="text-2xl mt-10">Auction</h2>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Title</span>
-                    <input type="text" placeholder="My amazing auction" name="name" class="px-2 py-2 rounded-md text-black"
-                        v-model="bid.title" required />
+                    <input type="text" placeholder="My amazing auction" name="name"
+                        class="px-2 py-2 rounded-md text-black" v-model="bid.title" required />
                     <p v-if="errors.title" class="text-red-500">{{ errors.title }}</p>
                 </div>
                 <div class="flex flex-col w-full">
@@ -95,14 +92,14 @@ const onSubmit = async () => {
                 </div>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Starts on</span>
-                    <input type="datetime-local" placeholder="Start at" name="name" class="px-2 py-2 rounded-md text-black"
-                        v-model="bid.startAt" required />
+                    <input type="datetime-local" placeholder="Start at" name="name"
+                        class="px-2 py-2 rounded-md text-black" v-model="bid.startAt" required />
                     <p v-if="errors.startAt" class="text-red-500">{{ errors.startAt }}</p>
                 </div>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Ends on</span>
-                    <input type="datetime-local" placeholder="End at" name="name" class="px-2 py-2 rounded-md text-black"
-                        v-model="bid.endAt" required />
+                    <input type="datetime-local" placeholder="End at" name="name"
+                        class="px-2 py-2 rounded-md text-black" v-model="bid.endAt" required />
                     <p v-if="errors.endAt" class="text-red-500">{{ errors.endAt }}</p>
                 </div>
                 <button type="submit" class="px-2 py-2 rounded-md bg-blue-500 text-white">
