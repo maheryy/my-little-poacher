@@ -43,6 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'name' => 'partial',
         'price' => 'exact',
         'status' => 'exact',
+        'creator' => 'exact',
     ]
 )]
 #[ApiResource (
@@ -57,13 +58,17 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             denormalizationContext: ['groups' => ['event_write']],
-            security: "is_granted('ROLE_ADMIN') or object.getCreator() == user",
+            security: "is_granted('ROLE_SELLER') or object.getCreator() == user",
             securityMessage: 'Only the creator of the event can edit it.'
         ),
         new Post(
             denormalizationContext: ['groups' => ['event_write']],
-            security: "is_granted('ROLE_USER')",
-            securityMessage: 'Only authenticated users can create events.'
+            security: "is_granted('ROLE_SELLER')",
+            securityMessage: 'Only sellers users can create events.'
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_SELLER") or object.getCreator() == user',
+            securityMessage: 'Only the creator can delete comments.'
         ),
     ]
 
