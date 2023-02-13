@@ -36,7 +36,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
 
         $bidName = ["Lion Auctions", "Siberian Tiger Auctions", "Lemur Auctions", "Kangaroo Auctions", "Koala Auctions", "Platypus Auctions", "Red Panda Auctions", "Wombat Auctions", "Sloth Auctions", "Anteater Auctions", "Hippopotamus Auctions", "Giraffe Auctions"];
 
-        $animals = ["Lion", "Cheetah", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe", "Zebra", "Camel", "Elephant", "Rhino", "Gorilla", "Bear", "Owl", "Peacock"];
+        $animals = ["Lion", "Siberian Tiger", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe"];
 
         $sellers = $manager->getRepository(User::class)->findAll();
         $bidOwner = [];
@@ -47,7 +47,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
         }
 
         for ($i = 0; $i < 8; $i++) {
-            $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $faker->randomElement($animals)]);
+            $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $animals[$i]]);
             $dateDebut = $faker->dateTimeBetween('-3 week', ' +3 week');
             $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
 

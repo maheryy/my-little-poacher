@@ -20,7 +20,7 @@ class AnimalFixtures extends Fixture
     {
         $faker = Factory::create('en_US');
 
-        $animals = ["Lion", "Cheetah", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe", "Zebra", "Camel", "Elephant", "Rhino", "Gorilla", "Bear", "Owl", "Peacock"];
+        $animals = ["Lion", "Siberian Tiger", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe"];
         $nomScientifique = ["Panthera leo", "Acinonyx jubatus", "Lemuriformes", "Macropus", "Phascolarctos cinereus", "Ornithorhynchus anatinus", "Ailurus fulgens", "Vombatidae", "Folivora", "Myrmecophaga tridactyla", "Hippopotamus amphibius", "Giraffa camelopardalis", "Equus quagga", "Camelus dromedarius", "Elephantidae", "Rhinocerotidae", "Gorilla", "Ursidae", "Strigiformes", "Pavo"];
 
 
