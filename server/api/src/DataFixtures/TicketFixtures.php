@@ -9,12 +9,15 @@ use App\Enum\TicketStatus;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class TicketFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+
+        //$faker = Factory::create('en_US');
 
         $captureDate = new \DateTimeImmutable();
         $captureDate->sub(new \DateInterval('P7D'));

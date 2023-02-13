@@ -6,6 +6,7 @@ use App\Entity\Bid;
 use App\Entity\User;
 use App\Entity\UserBid;
 use DateTimeImmutable;
+use Faker\Factory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -14,52 +15,38 @@ class UserBidFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        $aker = \Faker\Factory::create('fr_FR');
+
+        $bids = $manager->getRepository(Bid::class)->findAll();
         
-        
-        for($j = 0 ; $j < 14 ; $j++){
-            $bid = $manager->getRepository(Bid::class)->findOneBy(['title' => 'Marsupilami au plus offrant '.$j]);
-            if($bid->getEndAt() < new DateTimeImmutable()){
-                for($i = 0; $i < 14; $i++){
-                    $bidder = $manager->getRepository(User::class)->findOneBy(['name' => 'client'.$i]);
-        
-                    if($i>7){
-                        $event = new UserBid();
-                    $event
-                        ->setBid($bid)
-                        ->setBidder($bidder)
-                        ->setStatus('-1')
-                    ;
-        
-                    $manager->persist($event);
-                    }
-                    else{
-                        $event = new UserBid();
-                        $event
-                            ->setBid($bid)
-                            ->setBidder($bidder)
-                            ->setStatus('1')
-                        ;
+        foreach($bids as $bid){
             
-                        $manager->persist($event);
-                    }
-                    
-                }
-            }
-            elseif($bid->getEndAt() > new DateTimeImmutable() && $bid->getStartAt() < new DateTimeImmutable()){
-                for($i = 0; $i < 14; $i++){
-                    $bidder = $manager->getRepository(User::class)->findOneBy(['name' => 'client'.$i]);
+            $bidders = $manager->getRepository(User::class)->findAll();
+
+            if($bid->getEndAt() < new DateTimeImmutable()){
+                
+
         
                     $event = new UserBid();
                     $event
                         ->setBid($bid)
-                        ->setBidder($bidder)
+                        ->setBidder($aker->randomElement($bidders))
                         ->setStatus('0');
         
                     $manager->persist($event);
                     
             }
+            else{
+
+                    $event = new UserBid();
+                    $event
+                        ->setBid($bid)
+                        ->setBidder($aker->randomElement($bidders))
+                        ->setStatus('1');
+        
+                    $manager->persist($event);
+            }
         }
-    }
         $manager->flush();
     }
 

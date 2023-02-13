@@ -45,7 +45,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
             }
         }
     
-        for($i = 0; $i < 12; $i++){
+        for($i = 0; $i < 8; $i++){
             $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $faker->randomElement($animals)]);
             $dateDebut = $faker->dateTimeBetween('-3 week', ' +3 week');  
             $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
@@ -61,6 +61,13 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
             $dateDebut = DateTimeImmutable::createFromMutable($dateDebut);
             $dateFin = DateTimeImmutable::createFromMutable($dateFin);
             
+            if($dateFin < new DateTimeImmutable()){
+                $status = '0';
+            }
+            else{
+                $status = '1';
+            }
+
             $bid = new Bid();
             $bid
                 ->setTitle($bidName[$i])
@@ -70,7 +77,47 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
                 ->setCurrentPrice($faker->numberBetween(201, 5000))
                 ->setStartAt($dateDebut)
                 ->setEndAt($dateFin)
-                ->setStatus('1')
+                ->setStatus($status)
+                ->setAnimal($animal)
+                ->setSeller($faker->randomElement($bidOwner))
+            ;
+
+            $manager->persist($bid);
+        }
+
+        for($i = 8; $i < 12; $i++){
+            $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $faker->randomElement($animals)]);
+            $dateDebut = $faker->dateTimeBetween('-3 week', ' +3 week');  
+            $dateFin = $faker->dateTimeBetween('-1 week', '+1 day');
+
+            while($dateFin < $dateDebut){
+                $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
+            }
+            //peut pas empêcher un vendeur de faire monter enchère sur son propre animal pcq getSeller existe pas
+            // while($faker->randomElement($seller) == $animal->getSeller()){
+            //     $faker->randomElement($seller);
+            // }
+
+            $dateDebut = DateTimeImmutable::createFromMutable($dateDebut);
+            $dateFin = DateTimeImmutable::createFromMutable($dateFin);
+            
+            if($dateFin < new DateTimeImmutable()){
+                $status = '0';
+            }
+            else{
+                $status = '1';
+            }
+
+            $bid = new Bid();
+            $bid
+                ->setTitle($bidName[$i])
+                ->setSlug(str_replace(' ','-',$bidName[$i]))
+                ->setDescription($bidDescription[$bidName[$i]])
+                ->setInitialPrice($faker->numberBetween(100, 200))
+                ->setCurrentPrice($faker->numberBetween(201, 5000))
+                ->setStartAt($dateDebut)
+                ->setEndAt($dateFin)
+                ->setStatus($status)
                 ->setAnimal($animal)
                 ->setSeller($faker->randomElement($bidOwner))
             ;
