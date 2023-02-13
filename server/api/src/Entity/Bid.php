@@ -73,7 +73,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/bids/{id}/end',
             controller: EndBidController::class,
             normalizationContext: ['groups' => ['bid_read']],
-            security: 'is_granted("ROLE_SELLER")',
+            security: 'is_granted("ROLE_SELLER") or object.getCreator() == user',
             securityMessage: 'Only the seller can end the bid.',
             openapiContext: [
                 'summary' => 'End the bid',

@@ -71,7 +71,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/events/{id}/end',
             controller: EndEventController::class,
             normalizationContext: ['groups' => ['event_read']],
-            security: 'is_granted("ROLE_SELLER")',
+            security: 'is_granted("ROLE_SELLER") or object.getCreator() == user',
             securityMessage: 'Only the seller can end the event.',
             openapiContext: [
                 'summary' => 'End the event',
