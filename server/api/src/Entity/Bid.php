@@ -24,7 +24,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiFilter(DateFilter::class,
     properties:[
-        'startAt' => DateFilter::EXCLUDE_NULL,
         'endAt' => DateFilter::EXCLUDE_NULL,
         'createdAt' => DateFilter::EXCLUDE_NULL,
     ]
@@ -130,10 +129,6 @@ class Bid
 
     #[ORM\Column]
     #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
-    private ?\DateTimeImmutable $startAt = null;
-
-    #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -228,18 +223,6 @@ class Bid
     public function setCurrentPrice(int $currentPrice): self
     {
         $this->currentPrice = $currentPrice;
-
-        return $this;
-    }
-
-    public function getStartAt(): ?\DateTimeImmutable
-    {
-        return $this->startAt;
-    }
-
-    public function setStartAt(\DateTimeImmutable $startAt): self
-    {
-        $this->startAt = $startAt;
 
         return $this;
     }

@@ -32,10 +32,6 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
                 $bids = $manager->getRepository(Bid::class)->findAll();
 
                 $bid = $faker->randomElement($bids);
-                while ($bid->getStartAt() > $dateTimeNow) {
-                    $bid = $faker->randomElement($bids);
-                }
-
                 
                 $object = new Comment();
                 $object
