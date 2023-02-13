@@ -85,7 +85,6 @@ const outbid = () => {
       </div>
       <div class="flex flex-col">
         <span>Stating bid: {{ bid.initialPrice }} €</span>
-        <span>Auction start: {{ bid.startAt }}</span>
         <span>Auction end: {{ bid.endAt }}</span>
       </div>
       <div class="flex flex-col">

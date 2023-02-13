@@ -15,7 +15,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Active auctions</h1>
+  <h1 class="ml-10 mt-10">Active auctions</h1>
   <section class="my-12">
     <div class="m-auto w-fit">
       <ul class="flex flex-col gap-8">

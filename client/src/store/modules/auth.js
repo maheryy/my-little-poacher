@@ -14,6 +14,9 @@ const getters = {
   },
   isPro(state) {
     return state.user?.roles.includes("ROLE_SELLER");
+  },
+  isAdmin(state) {
+    return state.user?.roles.includes("ROLE_ADMIN");
   }
 };
 
@@ -30,7 +33,7 @@ const actions = {
   async login({ dispatch }, credentials) {
     try {
       const response = await axios.post("auth", credentials);
-      return dispatch("attempt", {token: response.data.token});
+      return await dispatch("attempt", {token: response.data.token});
     } catch (e) {
       throw e;
     }

@@ -17,10 +17,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Upcoming events</h1>
-  <section class="my-12">
-    <div class="m-auto w-fit">
-      <ul class="flex flex-wrap gap-8">
+  <h1 class="ml-10 mt-10">Upcoming events</h1>
+  <section class="py-12 flex justify-center w-full">
+    <div class="my-16">
+      <ul class="flex flex-wrap justify-center gap-8">
         <li v-for="event in events" :key="event.id">
           <EventListCard :event="event" />
         </li>
