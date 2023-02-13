@@ -11,6 +11,20 @@ const bid = ref({});
 const comment = ref("");
 const auction = ref();
 
+const getBid = () => {
+  axios.get(`bids/${id}`).then((res) => {
+    bid.value = res.data;
+    auction.value = bid.value.currentPrice + 1;
+  });
+};
+
+const poll = () => {
+  setTimeout(() => {
+    getBid();
+    poll();
+  }, 5000);
+};
+
 onMounted(() => {
   axios.get(`bids/${id}`).then((res) => {
     bid.value = res.data;
