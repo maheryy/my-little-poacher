@@ -7,6 +7,8 @@ use App\Entity\Animal;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use DateTimeImmutable;
+use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class BidFixtures extends Fixture implements DependentFixtureInterface
@@ -14,110 +16,54 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
 
-        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur3']);
-        $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'Marsupilami1']);
-        for($i = 0; $i < 15; $i++){
+        $bidDescription = [
+            "Lion Auctions" => "Illegal sale of lion cubs.",
+            "Siberian Tiger Auctions" => "Auctions of Siberian tigers.",
+            "Lemur Auctions" => "Sale of lemurs under the table.",
+            "Kangaroo Auctions" => "Sale of kangaroo.",
+            "Koala Auctions" => "Purchase of adult koalas.",
+            "Platypus Auctions" => "Sale of baby platypus.",
+            "Red Panda Auctions" => "Black market for red pandas.",
+            "Wombat Auctions" => "Purchase of combat wombats.",
+            "Sloth Auctions" => "Illegal sale of pygmy sloths.",
+            "Anteater Auctions" => "Sale of anteaters.",
+            "Hippopotamus Auctions" => "Sale of adult hippopotamuses.",
+            "Giraffe Auctions" => "Sale of breathtaking giraffes."
+            ];
 
-            $fin= mt_rand(1675595044,1678014244); // 5 février à 5 mars
-            $dateFin = new \DateTimeImmutable();
-            $dateFin = $dateFin->setTimestamp($fin);
+        $faker = Factory::create('en_US');
 
-            $debut= mt_rand(1674126244,1675595044);//19 janv à 5 février
-            $dateDebut = new \DateTimeImmutable();
-            if($i<5){
-                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
-                $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
+        $bidName = ["Lion Auctions", "Siberian Tiger Auctions", "Lemur Auctions", "Kangaroo Auctions", "Koala Auctions", "Platypus Auctions", "Red Panda Auctions", "Wombat Auctions", "Sloth Auctions", "Anteater Auctions", "Hippopotamus Auctions", "Giraffe Auctions"];
 
-            }else{
-                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P8D'));
-                $dateFin = $dateFin->setTimestamp($fin)->add(new \DateInterval('P5D'));
+        $animals = ["Lion", "Cheetah", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe", "Zebra", "Camel", "Elephant", "Rhino", "Gorilla", "Bear", "Owl", "Peacock"];
+
+        $seller = $manager->getRepository(User::class)->findAll();
+
+    
+        for($i = 0; $i < 12; $i++){
+            $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $faker->randomElement($animals)]);
+            $dateDebut = $faker->dateTimeBetween('-3 week', ' +3 week');  
+            $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
+
+            while($dateFin < $dateDebut){
+                $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
             }
+
+            $dateDebut = DateTimeImmutable::createFromMutable($dateDebut);
+            $dateFin = DateTimeImmutable::createFromMutable($dateFin);
             
             $bid = new Bid();
             $bid
-                ->setTitle('Marsupilami au plus offrant '.$i)
-                ->setSlug('marsu-slug'.$i)
-                ->setDescription('Marsupilami à vendre parlez pas chinois num-'.$i)
-                ->setInitialPrice(100)
-                ->setCurrentPrice(100)
+                ->setTitle($bidName[$i])
+                ->setSlug(str_replace(' ','-',$bidName[$i]))
+                ->setDescription($bidDescription[$bidName[$i]])
+                ->setInitialPrice($faker->numberBetween(100, 200))
+                ->setCurrentPrice($faker->numberBetween(201, 5000))
                 ->setStartAt($dateDebut)
                 ->setEndAt($dateFin)
                 ->setStatus('1')
                 ->setAnimal($animal)
-                ->setSeller($seller)
-            ;
-
-            $manager->persist($bid);
-        }
-
-        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur2']);
-        $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'WinnieOurson1']);
-        for($i = 0; $i < 15; $i++){
-
-            
-            $fin= mt_rand(1675595044,1678014244);
-            $dateFin = new \DateTimeImmutable();
-            $dateFin = $dateFin->setTimestamp($fin);
-
-            $debut= mt_rand(1674126244,1675595044);
-            $dateDebut = new \DateTimeImmutable();
-            if($i<5){
-                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
-                $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
-
-            }else{
-                $dateDebut = $dateDebut->setTimestamp($debut);
-                $dateFin = $dateFin->setTimestamp($fin);
-            }
-
-            $bid = new Bid();
-            $bid
-                ->setTitle('WinnieOurson pour le plus gourmand '.$i)
-                ->setSlug('winnie-slug'.$i)
-                ->setDescription('Winnizi ourson gourmand chantant num-'.$i)
-                ->setInitialPrice(100)
-                ->setCurrentPrice(100)
-                ->setStartAt($dateDebut)
-                ->setEndAt($dateFin)
-                ->setStatus('1')
-                ->setAnimal($animal)
-                ->setSeller($seller)
-            ;
-
-            $manager->persist($bid);
-        }
-
-        $seller = $manager->getRepository(User::class)->findOneBy(['name' => 'vendeur1']);
-        $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => 'PanthereRose1']);
-        for($i = 0; $i < 15; $i++){
-
-            $fin= mt_rand(1675595044,1678014244);
-            $dateFin = new \DateTimeImmutable();
-            $dateFin = $dateFin->setTimestamp($fin);
-
-            $debut= mt_rand(1674126244,1675595044);
-            $dateDebut = new \DateTimeImmutable();
-            if($i<5){
-                $dateDebut = $dateDebut->setTimestamp($debut)->sub(new \DateInterval('P40D'));
-                $dateFin = $dateFin->setTimestamp($fin)->sub(new \DateInterval('P40D'));
-
-            }else{
-                $dateDebut = $dateDebut->setTimestamp($debut);
-                $dateFin = $dateFin->setTimestamp($fin);
-            }
-
-            $bid = new Bid();
-            $bid
-                ->setTitle('PanthereRose vous connaissez la chanson '.$i)
-                ->setSlug('panthere-rose-slug'.$i)
-                ->setDescription('Panthere ROSE discrète et malicieuse num-'.$i)
-                ->setInitialPrice(100)
-                ->setCurrentPrice(100)
-                ->setStartAt($dateDebut)
-                ->setEndAt($dateFin)
-                ->setStatus('1')
-                ->setAnimal($animal)
-                ->setSeller($seller)
+                ->setSeller($faker->randomElement($seller))
             ;
 
             $manager->persist($bid);
