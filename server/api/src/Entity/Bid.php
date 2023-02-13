@@ -154,7 +154,7 @@ class Bid
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(type: Types::STRING, enumType: BidStatus::class)]
-    #[Groups(['bid_read'])]
+    #[Groups(['bid_read', 'read:UserBids'])]
     private BidStatus $status = BidStatus::PENDING;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]

@@ -15,7 +15,12 @@ defineProps({
     </div>
     <div class="flex gap-2 basis-full">
       <div class="flex flex-col basis-full p-4 justify-center">
-        <span>{{ bid.title }}</span>
+        <RouterLink
+          :to="{ name: 'bid', params: { id: bid.id } }"
+          class="text-2xl"
+        >
+          {{ bid.title }}
+        </RouterLink>
         <span>{{ bid.animal.name }}</span>
         <span>Sold by {{ bid.seller.name }}</span>
       </div>

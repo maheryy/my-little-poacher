@@ -43,5 +43,4 @@ onUnmounted(() => {
     <p>Your payment has been confirmed</p>
     <p>You will be redirected to your tickets...</p>
   </div>
-  <p></p>
 </template>

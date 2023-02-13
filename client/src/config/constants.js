@@ -9,6 +9,7 @@ export const TICKET_STATUS = {
 export const BID_STATUS = {
   PENDING: "pending",
   DONE: "done",
+  PAID: "paid",
 };
 
 export const EVENT_STATUS = {
