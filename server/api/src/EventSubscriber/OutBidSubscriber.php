@@ -14,6 +14,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Security\Core\Security;
 
 final class OutBidSubscriber implements EventSubscriberInterface
@@ -23,7 +25,7 @@ final class OutBidSubscriber implements EventSubscriberInterface
     private $security;
     private $entityManager;
 
-    public function __construct(BidLogRepository $bidLogRepository, Security $security, UserBidRepository $userBidRepository, EntityManagerInterface $entityManager)
+    public function __construct(BidLogRepository $bidLogRepository, Security $security, UserBidRepository $userBidRepository, EntityManagerInterface $entityManager, private MailerInterface $mailer)
     {
         $this->userBidRepository = $userBidRepository;
         $this->bidLogRepository = $bidLogRepository;
@@ -54,6 +56,8 @@ final class OutBidSubscriber implements EventSubscriberInterface
         $this->checkPrice($price, $bid);
         $this->checkUserBid($bid);
         $this->setOutBid($bid, $price);
+        $this->sendEmailOutbidWinner($this->security->getUser(), $bid); //user courant qui outbid
+
     }
 
     private function checkUser()
@@ -107,4 +111,41 @@ final class OutBidSubscriber implements EventSubscriberInterface
 
         return;
     }
+
+    private function sendEmailOutbidWinner($user, $bid){
+        try {
+            $email = (new TemplatedEmail())
+                ->from("no-reply@mlp.com")
+                ->to($user->getEmail())
+                ->subject('My Little Poacher - Votre demande a été entendu')
+                ->htmlTemplate('emails/outBidWinner.html.twig')
+                ->context([ 
+                    'user' => $user,
+                    'bid' => $bid
+                ]);
+            $this->mailer->send($email);
+        } catch(\Exception $e) {
+            throw new \Exception('Error sending email');
+        }
+    }
+
+    private function sendEmailOutbidLoser($user, $bid){
+        try {
+            $email = (new TemplatedEmail())
+                ->from("no-reply@mlp.com")
+                ->to($user->getEmail())
+                ->subject('My Little Poacher - Votre demande a été entendu')
+                ->htmlTemplate('emails/outBidLoser.html.twig')
+                ->context([ 
+                    'user' => $user,
+                    'bid' => $bid
+                ]);
+            $this->mailer->send($email);
+        } catch(\Exception $e) {
+            throw new \Exception('Error sending email');
+        }
+    }
+
+}
+
 }
