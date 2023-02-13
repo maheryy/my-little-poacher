@@ -87,7 +87,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             securityMessage: 'Only the seller can create the bid.',
         ),
         new Delete(
-            security: 'is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_SELLER") or object.getCreator() == user',
             securityMessage: 'Only the admin can delete the bid.'
         ),
         new Patch(

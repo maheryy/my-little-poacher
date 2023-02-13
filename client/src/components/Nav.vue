@@ -16,7 +16,6 @@ const store = useStore();
 const router = useRouter();
 const isLogged = computed(() => store.getters["auth/authenticated"]);
 const isPro = computed(() => store.getters["auth/isPro"]);
-const isAdmin = computed(() => store.getters["auth/isAdmin"]);
 
 const currentRoute = computed(() => router?.currentRoute.value.name)
 
@@ -38,11 +37,6 @@ const logout = () => {
         <div class="h-20 w-20 flex justify-center items-center">
           <RouterLink :to="{ name: 'home' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'home' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
             <img :src="Home" class="hover:scale-105 transition-all duration-200" />
-          </RouterLink>
-        </div>
-        <div class="h-20 w-20 flex justify-center items-center" v-if="isAdmin">
-          <RouterLink :to="{ name: 'admin' }" :class="`h-16 w-16 transition-all duration-200 rounded-lg cursor-pointer flex items-center justify-center ${currentRoute === 'admin' ? 'bg-slate-700' : 'hover:bg-slate-800'}`">
-            <img :src="Checklist" class="hover:scale-105 transition-all duration-200" />
           </RouterLink>
         </div>
         <div class="h-20 w-20 flex justify-center items-center">

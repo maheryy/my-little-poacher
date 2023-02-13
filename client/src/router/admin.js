@@ -1,14 +1,20 @@
-import { authProResolver, checkoutResolver } from "./middlewares";
+import { authAdminResolver, checkoutResolver } from "./middlewares";
 
 const options = {
-  beforeEnter: authProResolver,
+  beforeEnter: authAdminResolver,
 };
 
 const routes = [
   {
-    path: "/admin",
-    name: "admin",
-    component: () => import("../views/protected/admin/Admin.vue"),
+    path: "/approve-adm",
+    name: "approve-adm",
+    component: () => import("../views/protected/admin/ApproveUser.vue"),
+    ...options,
+  },
+  {
+    path: "/delete-comments",
+    name: "delete-comments",
+    component: () => import("../views/protected/admin/DeleteComment.vue"),
     ...options,
   },
 ];

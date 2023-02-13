@@ -30,9 +30,21 @@ const routes = [
     ...options,
   },
   {
+    path: "/pro/my-auctions",
+    name: "my-auctions",
+    component: () => import("../views/protected/pro/SellerAuctionList.vue"),
+    ...options,
+  },
+  {
     path: "/update-event/:id",
     name: "update-event",
     component: () => import("../views/protected/pro/UpdateEvent.vue"),
+    props: true,
+  },
+  {
+    path: "/update-bid/:id",
+    name: "update-bid",
+    component: () => import("../views/protected/pro/UpdateBid.vue"),
     props: true,
   }
 ];
