@@ -60,7 +60,7 @@ const deleteAuction = async () => {
 
 const finishAuction = async () => {
     try {
-        await axios.put(`bids/${id}/end`)
+        await axios.post(`bids/${id}/end`)
         router.push({ name: "dashboard" });
     } catch (error) {
         if (error.response.status === 422) {

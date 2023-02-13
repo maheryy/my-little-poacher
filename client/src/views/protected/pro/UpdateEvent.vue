@@ -62,7 +62,7 @@ const deleteEvent = async () => {
 
 const finishEvent = async () => {
     try {
-        await axios.put(`events/${id}/end`)
+        await axios.post(`events/${id}/end`)
         router.push({ name: "dashboard" });
     } catch (error) {
         if (error.response.status === 422) {

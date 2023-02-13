@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, ref } from "vue";
+import { USER_SELLER_STATUS } from "../../../config/constants";
 import axios from "axios";
 
 const store = useStore();
@@ -22,6 +23,28 @@ onMounted(() => {
             userReqs.value = res.data;
         })
 });
+
+const approveUser = (id) => {
+    axios
+        .patch(`user_sellers/${id}`, { status: USER_SELLER_STATUS.APPROVED })
+        .then((res) => {
+            userReqs.value = userReqs.value.filter((userReq) => userReq.id !== id);
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+};
+
+const rejectUser = (id) => {
+    axios
+        .patch(`user_sellers/${id}`, { status: USER_SELLER_STATUS.REJECTED })
+        .then((res) => {
+            userReqs.value = userReqs.value.filter((userReq) => userReq.id !== id);
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+};
 </script>
 
 <template>
@@ -41,10 +64,13 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="flex flex-row gap-4">
-                    <button class="bg-green-500 w-28 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    <button class="bg-green-500 w-28 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    @click="() => { approveUser(userReq.id) }">
                         Approve
                     </button>
-                    <button class="bg-red-500 w-28 flex-1 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button class="bg-red-500 w-28 flex-1 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    @click="() => { rejectUser(userReq.id) }"
+                    >
                         Deny
                     </button>
                 </div>
