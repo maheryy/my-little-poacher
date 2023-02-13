@@ -18,6 +18,15 @@ onMounted(() => {
             comments.value = res.data;
         })
 });
+
+const deleteComment = async (id) => {
+    try {
+        await axios.delete(`comments/${id}`);
+        comments.value = comments.value.filter((comment) => comment.id !== id);
+    } catch (error) {
+        console.error(error.message);
+    }
+};
 </script>
 
 <template>
@@ -36,7 +45,8 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="flex flex-row gap-4">
-                    <button class="bg-red-500 w-28 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button class="bg-red-500 w-28 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                        @click="() => { deleteComment(comment.id) }">
                         Delete
                     </button>
                 </div>
