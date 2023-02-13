@@ -34,8 +34,6 @@ class AnimalFixtures extends Fixture
                 ->setName($animals[$i])
                 ->setScientificName($nomScientifique[$i])
                 ->setCaptureDate($date)
-                ->setLatitude($faker->randomFloat(5,-90, 90))
-                ->setLongitude($faker->randomFloat(5,-180, 180))
                 ->setCountry($faker->country);
 
             $manager->persist($object);

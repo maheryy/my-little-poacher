@@ -23,8 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'name' => 'partial',
         'scientificName' => 'partial',
         'captureDate' => 'exact',
-        'latitude' => 'exact',
-        'longitude' => 'exact',
         'country' => 'exact',
 ])]
 #[ApiResource(
@@ -39,6 +37,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(
             normalizationContext: ['groups' => ['animal_read']]
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['animal_write']],
+            security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_SELLER")',
+            securityMessage: 'Only the seller can create the animal.'
         ),
         new Put(
             denormalizationContext: ['groups' => ['animal_write']],
@@ -88,20 +91,6 @@ class Animal
     #[ORM\Column]
     #[Groups(['animal_read','animal_write','read:Bid'])]
     private ?\DateTimeImmutable $captureDate = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['animal_read','animal_write','read:Bid'])]
-    #[Assert\NotBlank]
-    private ?string $longitude = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['animal_read','animal_write','read:Bid'])]
-    #[Assert\NotBlank]
-    #[Assert\Range(
-        min: -90, max: 90,
-        notInRangeMessage: 'The latitude must be between -90 and 90',
-    )]
-    private ?string $latitude = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['animal_read','animal_write','read:Bid', 'read:Bids'])]
@@ -160,30 +149,6 @@ class Animal
     public function setCaptureDate(\DateTimeInterface $captureDate): self
     {
         $this->captureDate = $captureDate;
-
-        return $this;
-    }
-
-    public function getLongitude(): ?string
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(?string $longitude): self
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    public function getLatitude(): ?string
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(?string $latitude): self
-    {
-        $this->latitude = $latitude;
 
         return $this;
     }
