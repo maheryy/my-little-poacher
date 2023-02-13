@@ -12,6 +12,7 @@ const isPro = store.getters["auth/isPro"];
 
 const form = reactive({
   address: "",
+  description: "",
 });
 
 const errors = ref({});
@@ -79,6 +80,17 @@ onMounted(() => {
             required
           />
           <p v-if="errors.address" class="text-red-500">{{ errors.address }}</p>
+        </div>
+        <div class="flex flex-col w-full">
+          <textarea
+            type="text"
+            placeholder="Description"
+            name="name"
+            class="px-2 py-2 rounded-md text-black"
+            v-model="form.description"
+            required
+          />
+          <p v-if="errors.description" class="text-red-500">{{ errors.description }}</p>
         </div>
         <button
           type="submit"

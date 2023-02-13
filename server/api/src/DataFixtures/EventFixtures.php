@@ -57,11 +57,10 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             
                 $event = new Event();
             $event
-                ->setName($eventName[$i])
-                ->setSlug(str_replace(' ','-',$eventName[$i]))
-                ->setDescription($eventDescription[$eventName[$i]])
-                ->setPrice($faker->numberBetween(200, 3000))
                 ->setAddress("24 boulevard du double rotor, 75013 Paris")
+                ->setPrice($faker->numberBetween(200, 3000))
+                ->setDescription($eventDescription[$eventName[$i]])
+                ->setName($eventName[$i])
                 ->setCapacity(16)
                 ->setDate($dateDebut)
                 ->setCreator($faker->randomElement($seller))

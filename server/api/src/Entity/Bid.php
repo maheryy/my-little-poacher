@@ -101,10 +101,6 @@ class Bid
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
-    private ?string $slug = null;
-
-    #[ORM\Column(length: 255)]
     #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[Assert\Length(
         min: 3, minMessage: 'The description must be at least 3 characters long',
@@ -196,18 +192,6 @@ class Bid
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }

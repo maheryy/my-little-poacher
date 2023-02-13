@@ -91,12 +91,6 @@ class Event
     )]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['read:Ticket','events_read','event_read','event_write'])]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 5)]
-    private ?string $slug = null;
-
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['read:Ticket','events_read','event_read','event_write', 'read:Tickets'])]
     #[Assert\NotBlank]
@@ -169,18 +163,6 @@ class Event
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }

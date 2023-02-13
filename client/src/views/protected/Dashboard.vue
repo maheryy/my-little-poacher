@@ -4,6 +4,7 @@ import { useStore } from "vuex";
 const store = useStore();
 const router = useRouter();
 const user = store.state.auth.user;
+const isPro = store.getters["auth/isPro"];
 
 const logout = () => {
   store.dispatch("auth/logout");
@@ -17,6 +18,12 @@ const logout = () => {
   <button @click="logout" class="px-2 py-2 rounded-md bg-blue-500 text-white">
     Logout
   </button>
+  <RouterLink :to="{ name: 'create-event' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
+    Create an event
+  </RouterLink>
+  <RouterLink :to="{ name: 'create-auction' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
+    Create an auction
+  </RouterLink>
 </template>
 
 <style></style>
