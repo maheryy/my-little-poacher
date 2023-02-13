@@ -23,13 +23,10 @@ class EndBidController extends AbstractController
 
     public function __invoke(Bid $data, Request $request): Bid
     {
-        if($data->getSeller() !== $this->security->getUser()) {
-            throw $this->createAccessDeniedException();
+        if($data->getSeller() !== $this->security->getUser()){
+            throw new \Exception('The user is not valide.');
         }
-        if($request->get('status') !== "done") {
-            throw new \Exception('The status is not valide.');
-        }
-        $data->setStatus($request->get('status'));
+        $data->setStatus(1);
         return $data;
     }
 }
