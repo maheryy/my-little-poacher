@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\EndBidController;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -61,9 +62,17 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['bid_read', 'read:Bid']]
         ),
         new Put(
+            uriTemplate: '/bids/{id}/end',
+            controller: EndBidController::class,
             denormalizationContext: ['groups' => ['bid_write']],
-            security: 'is_granted("ROLE_ADMIN") or object.getSeller() == user',
-            securityMessage: 'Only the seller can edit the bid.'
+            read: false,
+            security: 'is_granted("ROLE_SELLER")',
+            securityMessage: 'Only the seller can end the bid.',
+            openapiContext: [
+                'summary' => 'End the bid',
+                'tags' => ['Bid'],
+                'description' => 'End the bid',
+            ],
         ),
         new Post(
             denormalizationContext: ['groups' => ['bid_write']],
