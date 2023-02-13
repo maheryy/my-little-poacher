@@ -58,8 +58,7 @@ final class OutBidSubscriber implements EventSubscriberInterface
         $this->updateLastUserBidEntry($bid);
         $this->checkUserBid($bid);
         $this->setOutBid($bid, $price);
-        $this->sendEmailOutbidWinner($this->security->getUser(), $bid); //user courant qui outbid
-
+        $this->sendEmailOutbidWinner($this->security->getUser(), $bid);
     }
 
     private function updateLastUserBidEntry(Bid $bid)
@@ -74,7 +73,7 @@ final class OutBidSubscriber implements EventSubscriberInterface
         $this->entityManager->persist($lastUserBid);
         $this->entityManager->flush();
 
-        // Send email to last user bid
+        $this->sendEmailOutbidLoser($lastUserBid->getBidder(), $bid);
     }
 
 

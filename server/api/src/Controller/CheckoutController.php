@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\BidStatus;
 use App\Enum\TicketStatus;
 use App\Repository\BidRepository;
 use App\Repository\TicketRepository;
@@ -24,37 +25,22 @@ class CheckoutController extends AbstractController
             if (!$bidIds || !count($bidIds)) {
                 throw new \Exception("No items to purchase");
             }
-            /*
-                // Functionnal code but waiting for some fixtures
-                $items = array_filter(array_map(function ($id) use($bidRepository) {
-                    if ($bid = $bidRepository->find($id)) {
-                        return [
-                            'price_data' => [
-                                'currency' => 'eur',
-                                'product_data' => [
-                                    'name' => $bid['name'],
-                                ],
-                                'unit_amount' => $bid['price'] * 100,
-                            ],
-                            'quantity' => 1,
-                        ];
-                    }
-                    return null;
-                }, $bidIds));
-            */
 
-            $items = [
-                [
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => "T-shirt",
+            $items = [];
+            foreach ($bidIds as $bidId) {
+                if ($bid = $bidRepository->find($bidId)) {
+                    $items[] = [
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => $bid->getTitle(),
+                            ],
+                            'unit_amount' => $bid->getCurrentPrice() * 100,
                         ],
-                        'unit_amount' => 35 * 100,
-                    ],
-                    'quantity' => 1,
-                ]
-            ];
+                        'quantity' => 1,
+                    ];
+                }
+            }
 
             Stripe::setApiKey($this->getParameter('stripe_secret'));
             $session = Session::create([
@@ -62,6 +48,7 @@ class CheckoutController extends AbstractController
                 'mode' => 'payment',
                 'success_url' => $this->getParameter('app_client_url') . "/checkout/bids?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => $this->getParameter('app_client_url') . "/cart",
+                "metadata" =>  ["bids" => implode(',', $bidIds)],
             ]);
             return new JsonResponse(["redirect_url" => $session->url]);
         } catch (\Exception $e) {
@@ -80,18 +67,22 @@ class CheckoutController extends AbstractController
             Stripe::setApiKey($this->getParameter('stripe_secret'));
             $session = Session::retrieve($sessionId);
 
-            // TODO : handle payment registration after success
-            $session->line_items;
-            $session->customer;
-            $session->amount_total;
-            $session->created;
-            $session->invoice;
+            $bidIds = explode(',', $session->metadata['bids']);
+            if (!$bidIds || !count($bidIds)) {
+                throw new \Exception("No items to validate");
+            }
+
+            foreach ($bidIds as $bidId) {
+                $bid = $bidRepository->find($bidId);
+                $bid->setStatus(BidStatus::PAID);
+                $bidRepository->save($bid, true);
+            }
 
             return new JsonResponse(["success" => true]);
         } catch (\Exception $e) {
-            return new JsonResponse(["error" => [
+            return new JsonResponse([
                 "message" => $e->getMessage()
-            ]], 400);
+            ], 400);
         }
     }
 
