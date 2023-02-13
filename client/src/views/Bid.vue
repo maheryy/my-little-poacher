@@ -30,7 +30,6 @@ const submitComment = () => {
     .post("comments", {
       content: comment.value.trim(),
       bid: `/bids/${id}`,
-      author: `/users/${store.state.auth.user.id}`,
     })
     .then((res) => {
       bid.value = {
@@ -43,7 +42,7 @@ const submitComment = () => {
 
 const outbid = () => {
   axios
-    .post(`bids/${id}/outbid`, {
+    .patch(`bids/${id}`, {
       price: auction.value,
     })
     .then((res) => {
