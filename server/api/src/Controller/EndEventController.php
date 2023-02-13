@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Bid;
-use App\Enum\BidStatus;
-use App\Repository\BidRepository;
+use App\Entity\Event;
+use App\Enum\EventStatus;
+use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Core\Security;
 
 #[AsController]
-class EndBidController extends AbstractController
+class EndEventController extends AbstractController
 {
     private $security;
 
@@ -19,13 +19,12 @@ class EndBidController extends AbstractController
         $this->security = $security;
     }
 
-    public function __invoke(Bid $data): Bid
+    public function __invoke(Event $data):Event
     {
-        if($data->getSeller() !== $this->security->getUser()){
-            throw new \Exception('The user is not the seller of the bid.');
+        if($data->getCreator() !== $this->security->getUser()){
+            throw new \Exception('The user is not the creator of the event.');
         }
-        $data->setStatus(BidStatus::DONE);
+        $data->setStatus(EventStatus::DONE);
         return $data;
     }
 }
-
