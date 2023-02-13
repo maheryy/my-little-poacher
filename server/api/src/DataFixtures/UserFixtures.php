@@ -30,7 +30,7 @@ class UserFixtures extends Fixture
             ->setRoles(['ROLE_USER'])
             ->setStatus(UserStatus::DEFAULT)
             ->setIsVerified(true);
-        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'usermylittlepoacher2023'));
         $manager->persist($object);
         
         $object = (new User())
@@ -38,7 +38,7 @@ class UserFixtures extends Fixture
             ->setEmail('user2@gmail.com')
             ->setRoles(['ROLE_USER'])
             ->setIsVerified(true);
-        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'usermylittlepoacher2023'));
         $manager->persist($object);
         
         $object = (new User())
@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
             ->setEmail('seller@gmail.com')
             ->setRoles(['ROLE_USER', 'ROLE_SELLER'])
             ->setIsVerified(true);
-        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'sellermylittlepoacher2023'));
         $manager->persist($object);
 
         $object = (new User())
@@ -55,7 +55,7 @@ class UserFixtures extends Fixture
             ->setRoles(['ROLE_ADMIN'])
             ->setIsVerified(true);
 
-        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'admin20232023admin'));
         $manager->persist($object);
 
         for($i = 0; $i < 5; $i++) {
@@ -65,7 +65,7 @@ class UserFixtures extends Fixture
                 ->setRoles(['ROLE_USER'])
                 ->setIsVerified(true);
 
-            $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+            $object->setPassword($this->userPasswordHash->hashPassword($object, 'usermylittlepoacher2023'));
 
             $manager->persist($object);
         }
@@ -77,7 +77,7 @@ class UserFixtures extends Fixture
                 ->setRoles(['ROLE_USER', 'ROLE_SELLER'])
                 ->setIsVerified(true);
 
-            $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+            $object->setPassword($this->userPasswordHash->hashPassword($object, 'sellermylittlepoacher2023'));
 
             $manager->persist($object);
         }
