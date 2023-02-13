@@ -2,7 +2,6 @@
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
-import EventListCard from "../../../components/cards/EventListCard.vue";
 
 const store = useStore();
 
@@ -24,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Upcoming events</h1>
+  <h1 class="ml-10 mt-10">My events</h1>
   <section class="my-12">
     <div class="m-auto w-fit">
       <ul class="flex flex-wrap gap-8">

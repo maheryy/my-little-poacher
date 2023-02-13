@@ -59,6 +59,19 @@ const deleteEvent = async () => {
         }
     }
 };
+
+const finishEvent = async () => {
+    try {
+        await axios.put(`events/${id}/end`)
+        router.push({ name: "dashboard" });
+    } catch (error) {
+        if (error.response.status === 422) {
+            errors.value = getErrorMessagesFromResponse(error);
+        } else {
+            alert("Something went wrong");
+        }
+    }
+};
 </script>
 
 
@@ -111,6 +124,9 @@ const deleteEvent = async () => {
             </form>
             <button @click="deleteEvent" class="px-2 py-2 rounded-md bg-red-500 w-80 text-white">
                 Delete
+            </button>
+            <button @click="finishEvent" class="px-2 mt-8 py-2 rounded-md bg-emerald-500 w-80 text-white">
+                End the event
             </button>
         </div>
     </div>

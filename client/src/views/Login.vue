@@ -16,13 +16,10 @@ const form = reactive({
 const error = ref("");
 const success = ref("");
 
-const isAdmin = computed(() => store.getters["auth/isAdmin"]);
-
 const onSubmit = async () => {
   try {
     await store.dispatch("auth/login", form);
-    if (isAdmin.value) router.push({ name: "admin" });
-    else router.push({ name: "dashboard" });
+    router.push({ name: "dashboard" });
   } catch (e) {
     if (e.response?.status === 401) {
       error.value = e.response.data.message;
