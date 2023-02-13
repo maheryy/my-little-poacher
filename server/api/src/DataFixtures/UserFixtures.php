@@ -25,17 +25,34 @@ class UserFixtures extends Fixture
 
         $object = (new User())
             ->setName($faker->firstName())
-            ->setEmail('mlpuser@gmail.com')
+            ->setEmail('user1@gmail.com')
             ->setRoles(['ROLE_USER'])
             ->setStatus('1')
             ->setIsVerified(true);
-
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $manager->persist($object);
+        
+        $object = (new User())
+            ->setName($faker->firstName())
+            ->setEmail('user2@gmail.com')
+            ->setRoles(['ROLE_USER'])
+            ->setStatus('1')
+            ->setIsVerified(true);
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $manager->persist($object);
+        
+        $object = (new User())
+            ->setName($faker->firstName())
+            ->setEmail('seller@gmail.com')
+            ->setRoles(['ROLE_USER', 'ROLE_SELLER'])
+            ->setStatus('1')
+            ->setIsVerified(true);
         $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
         $manager->persist($object);
 
         $object = (new User())
-            ->setName($faker->firstName())
-            ->setEmail('mlpadmin@gmail.com')
+            ->setName('admin')
+            ->setEmail('admin@gmail.com')
             ->setRoles(['ROLE_ADMIN'])
             ->setStatus('1')
             ->setIsVerified(true);
@@ -43,7 +60,7 @@ class UserFixtures extends Fixture
         $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
         $manager->persist($object);
 
-        for($i = 0; $i < 15; $i++) {
+        for($i = 0; $i < 5; $i++) {
             $object = (new User())
                 ->setName($faker->firstName())
                 ->setEmail($faker->freeEmail())
@@ -56,7 +73,7 @@ class UserFixtures extends Fixture
             $manager->persist($object);
         }
 
-        for($i = 0; $i < 15; $i++) {
+        for($i = 0; $i < 5; $i++) {
             $object = (new User())
                 ->setName($faker->firstName())
                 ->setEmail($faker->freeEmail())

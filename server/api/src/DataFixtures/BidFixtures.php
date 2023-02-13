@@ -47,7 +47,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
     
         for($i = 0; $i < 8; $i++){
             $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $faker->randomElement($animals)]);
-            $dateDebut = $faker->dateTimeBetween('-3 week', ' +3 week');  
+            $dateDebut = $faker->dateTimeBetween('-3 week', ' +3 week');
             $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
 
             while($dateFin < $dateDebut){
