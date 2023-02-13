@@ -71,7 +71,6 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
             $bid = new Bid();
             $bid
                 ->setTitle($bidName[$i])
-                ->setSlug(str_replace(' ','-',$bidName[$i]))
                 ->setDescription($bidDescription[$bidName[$i]])
                 ->setInitialPrice($faker->numberBetween(100, 200))
                 ->setCurrentPrice($faker->numberBetween(201, 5000))
@@ -111,7 +110,6 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
             $bid = new Bid();
             $bid
                 ->setTitle($bidName[$i])
-                ->setSlug(str_replace(' ','-',$bidName[$i]))
                 ->setDescription($bidDescription[$bidName[$i]])
                 ->setInitialPrice($faker->numberBetween(100, 200))
                 ->setCurrentPrice($faker->numberBetween(201, 5000))
@@ -124,6 +122,20 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($bid);
         }
+
+        $bid = new Bid();
+        $bid
+            ->setTitle("Lion")
+            ->setDescription("Illegal sale of lion cubs.")
+            ->setInitialPrice($faker->numberBetween(100, 200))
+            ->setCurrentPrice($faker->numberBetween(201, 5000))
+            ->setStartAt(new DateTimeImmutable())
+            ->setEndAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('+1 week', '+2 week')))
+            ->setStatus(1)
+            ->setAnimal($manager->getRepository(Animal::class)->findOneBy(['name' => 'Lion']))
+            ->setSeller($manager->getRepository(User::class)->findOneBy(['email' => 'seller@gmail.com']))
+        ;
+        $manager->persist($bid);
 
         $manager->flush();
     }

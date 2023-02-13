@@ -15,36 +15,32 @@ class UserBidFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $aker = \Faker\Factory::create('fr_FR');
+        $faker = \Faker\Factory::create('en_US');
 
         $bids = $manager->getRepository(Bid::class)->findAll();
+        $users = $manager->getRepository(User::class)->findAll();
+        $bidders = [];
+        foreach($users as $user){
+            if(!in_array("ROLE_SELLER", $user->getRoles())){
+                array_push($bidders, $user);
+            }
+        }
         
         foreach($bids as $bid){
-            
-            $bidders = $manager->getRepository(User::class)->findAll();
-
             if($bid->getEndAt() < new DateTimeImmutable()){
-                
-
-        
-                    $event = new UserBid();
-                    $event
-                        ->setBid($bid)
-                        ->setBidder($aker->randomElement($bidders))
-                        ->setStatus('0');
-        
-                    $manager->persist($event);
-                    
-            }
-            else{
-
-                    $event = new UserBid();
-                    $event
-                        ->setBid($bid)
-                        ->setBidder($aker->randomElement($bidders))
-                        ->setStatus('1');
-        
-                    $manager->persist($event);
+                $userBid = new UserBid();
+                $userBid
+                    ->setBid($bid)
+                    ->setBidder($faker->randomElement($bidders))
+                    ->setStatus('0');
+                $manager->persist($userBid);
+            } else {
+                $userBid = new UserBid();
+                $userBid
+                    ->setBid($bid)
+                    ->setBidder($faker->randomElement($bidders))
+                    ->setStatus('1');
+                $manager->persist($userBid);
             }
         }
         $manager->flush();

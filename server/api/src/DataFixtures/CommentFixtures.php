@@ -28,8 +28,6 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
 
         $dateTimeNow = new DateTimeImmutable();
         for ($j = 0; $j < 40; $j++) {
-            
-
                 $author = $manager->getRepository(User::class)->findAll();
                 $bids = $manager->getRepository(Bid::class)->findAll();
 
