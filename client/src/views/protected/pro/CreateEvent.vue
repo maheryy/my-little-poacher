@@ -33,8 +33,8 @@ const onSubmit = async () => {
 
 <template>
     <div class="w-full h-screen flex flex-col items-center mt-10">
-        <h1>Create an auction</h1>
-        <p>Create an auction for an animal you own</p>
+        <h1>Create an event</h1>
+        <p>Create a private event for sales</p>
         <div class="form-wrapper w-80">
             <form @submit.prevent="onSubmit" class="flex flex-col gap-4 py-8">
                 <h2 class="text-2xl mt-10">Event</h2>
