@@ -23,7 +23,6 @@ const bid = reactive({
     initialPrice: 0,
     currentPrice: 123,
     animal: "test",
-    startAt: "",
     endAt: "",
 });
 
@@ -89,12 +88,6 @@ const onSubmit = async () => {
                     <input type="number" placeholder="Initial price" name="name" class="px-2 py-2 rounded-md text-black"
                         v-model="bid.initialPrice" required />
                     <p v-if="errors.initialPrice" class="text-red-500">{{ errors.initialPrice }}</p>
-                </div>
-                <div class="flex flex-col w-full">
-                    <span class="text-gray-300">Starts on</span>
-                    <input type="datetime-local" placeholder="Start at" name="name"
-                        class="px-2 py-2 rounded-md text-black" v-model="bid.startAt" required />
-                    <p v-if="errors.startAt" class="text-red-500">{{ errors.startAt }}</p>
                 </div>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Ends on</span>

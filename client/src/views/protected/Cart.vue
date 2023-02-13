@@ -21,9 +21,9 @@ const checkout = async () => {
 </script>
 
 <template>
-  <h1>My bids</h1>
-  <section class="my-12">
-    <button class="btn" @click="checkout">Pay</button>
+  <h1 class="ml-10 mt-10">My bids</h1>
+  <section class="my-12 flex flex-col items-center">
+    <button class="btn w-min mb-10" @click="checkout">Pay</button>
     <div class="m-auto w-fit">
       <ul class="flex flex-col gap-8">
         <li v-for="bid in bids" :key="bid.id">

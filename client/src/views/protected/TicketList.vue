@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>My tickets</h1>
+  <h1 class="ml-10 mt-10">My tickets</h1>
   <section class="my-12">
     <div class="m-auto w-2/5">
       <ul class="flex flex-col gap-8">
