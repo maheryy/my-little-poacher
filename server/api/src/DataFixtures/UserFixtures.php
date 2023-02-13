@@ -4,6 +4,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -27,7 +28,7 @@ class UserFixtures extends Fixture
             ->setName($faker->firstName())
             ->setEmail('user1@gmail.com')
             ->setRoles(['ROLE_USER'])
-            ->setStatus('1')
+            ->setStatus(UserStatus::DEFAULT)
             ->setIsVerified(true);
         $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
         $manager->persist($object);
@@ -36,7 +37,6 @@ class UserFixtures extends Fixture
             ->setName($faker->firstName())
             ->setEmail('user2@gmail.com')
             ->setRoles(['ROLE_USER'])
-            ->setStatus('1')
             ->setIsVerified(true);
         $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
         $manager->persist($object);
@@ -45,7 +45,6 @@ class UserFixtures extends Fixture
             ->setName($faker->firstName())
             ->setEmail('seller@gmail.com')
             ->setRoles(['ROLE_USER', 'ROLE_SELLER'])
-            ->setStatus('1')
             ->setIsVerified(true);
         $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
         $manager->persist($object);
@@ -76,7 +75,6 @@ class UserFixtures extends Fixture
                 ->setName($faker->firstName())
                 ->setEmail($faker->freeEmail())
                 ->setRoles(['ROLE_USER', 'ROLE_SELLER'])
-                ->setStatus('1')
                 ->setIsVerified(true);
 
             $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));

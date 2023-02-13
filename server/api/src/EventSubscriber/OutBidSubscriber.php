@@ -133,40 +133,39 @@ final class OutBidSubscriber implements EventSubscriberInterface
         return;
     }
 
-    private function sendEmailOutbidWinner($user, $bid){
+    private function sendEmailOutbidWinner($user, $bid)
+    {
         try {
             $email = (new TemplatedEmail())
                 ->from("no-reply@mlp.com")
                 ->to($user->getEmail())
                 ->subject('My Little Poacher - Votre demande a été entendu')
                 ->htmlTemplate('emails/outBidWinner.html.twig')
-                ->context([ 
+                ->context([
                     'user' => $user,
                     'bid' => $bid
                 ]);
             $this->mailer->send($email);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception('Error sending email');
         }
     }
 
-    private function sendEmailOutbidLoser($user, $bid){
+    private function sendEmailOutbidLoser($user, $bid)
+    {
         try {
             $email = (new TemplatedEmail())
                 ->from("no-reply@mlp.com")
                 ->to($user->getEmail())
                 ->subject('My Little Poacher - Votre demande a été entendu')
                 ->htmlTemplate('emails/outBidLoser.html.twig')
-                ->context([ 
+                ->context([
                     'user' => $user,
                     'bid' => $bid
                 ]);
             $this->mailer->send($email);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception('Error sending email');
         }
     }
-
-}
-
 }
