@@ -20,13 +20,13 @@ const confirmTicket = async (id) => {
 </script>
 
 <template>
-  <div class="flex rounded-lg gap-2 border-cyan-500 border-2 h-36 w-full">
+  <div class="flex rounded-lg gap-2 border-cyan-500 border-2 h-36 w-screen md:w-full">
     <div class="flex gap-2 basis-full">
       <div class="flex flex-col basis-full p-4 justify-center gap-3">
         <span>{{ ticket.event.name }}</span>
         <span>Up to {{ ticket.event.capacity }} attendees</span>
       </div>
-      <div class="flex flex-col basis-1/3 p-4 justify-center gap-2">
+      <div class="flex flex-col md:basis-1/3 p-4 justify-center gap-2">
         <span class="font-semibold">{{ ticket.reference }}</span>
         <span>{{ ticket.status }}</span>
         <button

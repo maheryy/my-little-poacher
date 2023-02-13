@@ -72,7 +72,7 @@ onUnmounted(() => {
 
 <template>
   <h1 class="text-center mt-10">Ticket verification</h1>
-  <section class="w-1/2 m-auto">
+  <section class="p-6 md:w-1/2 m-auto">
     <article class="w-full border border-slate-300 rounded-md my-8 p-8">
       <h2 class="text-center text-xl">Manually confirm a ticket</h2>
       <p class="italic text-center">
