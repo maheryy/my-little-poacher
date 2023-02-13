@@ -91,9 +91,9 @@ class Ticket
     #[ApiProperty(identifier: true)]
     private string $reference;
 
-    #[ORM\Column(length: 255, type: "string", enumType: TicketStatus::class)]
+    #[ORM\Column(type: Types::STRING, enumType: TicketStatus::class)]
     #[Groups(['tickets_read', 'ticket_read', 'read:Event', 'ticket_patch'])]
-    private TicketStatus $status;
+    private TicketStatus $status = TicketStatus::PENDING;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['ticket_read', 'tickets_read'])]

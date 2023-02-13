@@ -10,13 +10,15 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\UserSellerRoleController;
+use App\Enum\UserSellerStatus;
 use App\Repository\UserSellerRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    normalizationContext: ['groups' => [ 'userSeller_read' ]],
+    normalizationContext: ['groups' => ['userSeller_read']],
     denormalizationContext: ['groups' => ['userSeller_write']],
     operations: [
         new GetCollection(
@@ -34,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: 'is_granted("ROLE_ADMIN") or object.getSeller() == user',
             securityMessage: 'Only admins or the seller can edit a user seller.'
         ),
-        
+
         new Patch(
             denormalizationContext: ['groups' => ['userSeller_patch']],
             inputFormats: ['json' => ['application/json']],
@@ -67,9 +69,9 @@ class UserSeller
     #[Groups(['userSeller_read', 'userSeller_read', 'userSeller_write'])]
     private string $description;
 
-    #[ORM\Column(type: 'string',length:'25')]
-    #[Groups(['userSeller_read','userSeller_write','userSeller_patch'])]
-    private string $status = 'pending';
+    #[ORM\Column(type: Types::STRING, enumType: UserSellerStatus::class)]
+    #[Groups(['userSeller_read', 'userSeller_write', 'userSeller_patch'])]
+    private UserSellerStatus $status = UserSellerStatus::PENDING;
 
     #[ORM\OneToOne(inversedBy: 'userSeller', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -118,16 +120,15 @@ class UserSeller
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): UserSellerStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(UserSellerStatus $status): self
     {
         $this->status = $status;
 
         return $this;
     }
-    
 }

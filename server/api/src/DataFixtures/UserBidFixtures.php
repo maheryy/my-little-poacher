@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Bid;
 use App\Entity\User;
 use App\Entity\UserBid;
+use App\Enum\UserBidStatus;
 use DateTimeImmutable;
 use Faker\Factory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -32,14 +33,14 @@ class UserBidFixtures extends Fixture implements DependentFixtureInterface
                 $userBid
                     ->setBid($bid)
                     ->setBidder($faker->randomElement($bidders))
-                    ->setStatus('0');
+                    ->setStatus(UserBidStatus::DEFAULT);
                 $manager->persist($userBid);
             } else {
                 $userBid = new UserBid();
                 $userBid
                     ->setBid($bid)
                     ->setBidder($faker->randomElement($bidders))
-                    ->setStatus('1');
+                    ->setStatus(UserBidStatus::DEFAULT);
                 $manager->persist($userBid);
             }
         }

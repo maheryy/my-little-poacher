@@ -71,9 +71,7 @@ class Comment
     #[Groups(['read:Bid', 'comment_read', 'comments_read', 'comment_write', 'comment_patch'])]
     #[Assert\NotBlank]
     #[Assert\Length(
-        min: 5,
         max: 1000,
-        minMessage: 'Your comment must be at least 10 characters long',
         maxMessage: 'Your comment cannot be longer than 1000 characters'
     )]
     private ?string $content = null;

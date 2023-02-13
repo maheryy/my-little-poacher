@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\EndBidController;
+use App\Enum\BidStatus;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,31 +24,38 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiFilter(DateFilter::class,
-    properties:[
+#[ApiFilter(
+    DateFilter::class,
+    properties: [
+        'startAt' => DateFilter::EXCLUDE_NULL,
         'endAt' => DateFilter::EXCLUDE_NULL,
         'createdAt' => DateFilter::EXCLUDE_NULL,
     ]
 )]
-#[ApiFilter(OrderFilter::class,
+#[ApiFilter(
+    OrderFilter::class,
     properties: [
         'endAt',
         'createdAt',
     ]
 )]
-#[ApiFilter(SearchFilter::class,
+#[ApiFilter(
+    SearchFilter::class,
     properties: [
         'id' => 'exact',
         'title' => 'exact',
         'status' => 'exact',
         'animal.name' => 'exact',
         'seller' => 'exact',
-])]
-#[ApiFilter(NumericFilter::class,
+    ]
+)]
+#[ApiFilter(
+    NumericFilter::class,
     properties: [
         'initialPrice',
         'currentPrice',
-    ])]
+    ]
+)]
 #[ApiResource(
     normalizationContext: ['groups' => ['bids_read', 'bid_read']],
     denormalizationContext: ['groups' => ['bid_write']],
@@ -96,41 +104,47 @@ class Bid
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['bid_read','bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bid_read','bids_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bids_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[Assert\Length(
-        min: 3, minMessage: 'The title must be at least 3 characters long',
-        max: 255, maxMessage: 'The title cannot be longer than 255 characters'
+        min: 3,
+        minMessage: 'The title must be at least 3 characters long',
+        max: 255,
+        maxMessage: 'The title cannot be longer than 255 characters'
     )]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[Assert\Length(
-        min: 3, minMessage: 'The description must be at least 3 characters long',
-        max: 600, maxMessage: 'The description cannot be longer than 600 characters'
+        min: 3,
+        minMessage: 'The description must be at least 3 characters long',
+        max: 600,
+        maxMessage: 'The description cannot be longer than 600 characters'
     )]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write','read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[Assert\NotBlank]
     #[Assert\Positive(message: 'The price must be positive')]
     #[Assert\Range(
-        min: 5, max: 1000000,
+        min: 5,
+        max: 1000000,
         notInRangeMessage: 'The initial price must be between 0 and 1000000',
     )]
     private ?int $initialPrice = null;
 
     #[ORM\Column]
-    #[Groups(['bid_read', 'bid_write','bid_patch', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bid_write', 'bid_patch', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     #[Assert\NotBlank]
     #[Assert\Positive(message: 'The price must be positive')]
     #[Assert\Range(
-        min: 5, max: 1000000,
+        min: 5,
+        max: 1000000,
         notInRangeMessage: 'The current price must be between 0 and 1000000',
     )]
     private ?int $currentPrice = null;
@@ -139,26 +153,26 @@ class Bid
     #[Groups(['bid_read', 'bid_write', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $endAt = null;
 
-    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[ORM\Column(type: Types::STRING, enumType: BidStatus::class)]
     #[Groups(['bid_read'])]
-    private ?int $status = null;
+    private BidStatus $status = BidStatus::PENDING;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(['bid_read','bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(['bid_read','bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bid_read', 'bids_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['bids_read','bid_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bids_read', 'bid_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?Animal $animal = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['bids_read','bid_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
+    #[Groups(['bids_read', 'bid_read', 'read:BidLog', 'read:BidLogs', 'read:UserBid', 'read:UserBids'])]
     private ?User $seller = null;
 
     #[ORM\OneToMany(mappedBy: 'bid', targetEntity: BidLog::class)]
@@ -247,12 +261,12 @@ class Bid
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): BidStatus
     {
         return $this->status;
     }
 
-    public function setStatus(?int $status): self
+    public function setStatus(BidStatus $status): self
     {
         $this->status = $status;
 
@@ -396,5 +410,4 @@ class Bid
 
         return $this;
     }
-
 }

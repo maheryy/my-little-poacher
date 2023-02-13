@@ -1,16 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import bidList from "../../mock_data/models/bids.json";
-import commentList from "../../mock_data/models/comments.json";
 import BidComment from "../components/BidComment.vue";
 import axios from "axios";
-import { useStore } from "vuex";
 
 const { id } = defineProps({
   id: String,
 });
-
-const store = useStore();
 
 const bid = ref({});
 const comment = ref("");
@@ -30,7 +25,6 @@ const submitComment = () => {
     .post("comments", {
       content: comment.value.trim(),
       bid: `/bids/${id}`,
-      author: `/users/${store.state.auth.user.id}`,
     })
     .then((res) => {
       bid.value = {
@@ -43,7 +37,7 @@ const submitComment = () => {
 
 const outbid = () => {
   axios
-    .post(`bids/${id}/outbid`, {
+    .patch(`bids/${id}`, {
       price: auction.value,
     })
     .then((res) => {
@@ -51,7 +45,6 @@ const outbid = () => {
         ...bid.value,
         currentPrice: res.data.currentPrice,
       };
-    
     });
 };
 </script>

@@ -13,24 +13,28 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\MeController;
+use App\Enum\UserStatus;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiFilter(SearchFilter::class,
+#[ApiFilter(
+    SearchFilter::class,
     properties: [
         'id' => 'exact',
         'email' => 'exact',
     ]
 )]
-#[ApiFilter(OrderFilter::class,
+#[ApiFilter(
+    OrderFilter::class,
     properties: [
         'id',
     ]
@@ -93,13 +97,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 180)]
-    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLogs', 'read:Ticket', 'read:Event', 'read:UserBid', 'read:UserBids','read:UserSeller', 'read:UserSellers'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:Bids', 'read:BidLogs', 'read:Ticket', 'read:Event', 'read:UserBid', 'read:UserBids', 'read:UserSeller', 'read:UserSellers'])]
     #[ORM\Column(length: 180, unique: true)]
     private string $name;
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLogs', 'read:UserBid', 'read:UserBids','read:UserSeller', 'read:UserSellers'])]
+    #[Groups(['user_read', 'user_create', 'user_update', 'read:Bid', 'read:BidLogs', 'read:UserBid', 'read:UserBids', 'read:UserSeller', 'read:UserSellers'])]
     #[ORM\Column(length: 180, unique: true)]
     private string $email;
 
@@ -116,13 +120,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $plainPassword;
 
-    #[Groups(['user_read','userSeller_read','userSeller_patch', 'userSeller_write'])]
+    #[Groups(['user_read', 'userSeller_read', 'userSeller_patch', 'userSeller_write'])]
     #[ORM\Column(type: 'json')]
     private array $roles = ['ROLE_USER'];
 
     #[Groups(['user_read'])]
-    #[ORM\Column(type: 'integer')]
-    private int $status = 1;
+    #[ORM\Column(type: Types::STRING, enumType: UserStatus::class)]
+    private UserStatus $status = UserStatus::DEFAULT;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
@@ -233,12 +237,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getStatus(): int
+    public function getStatus(): UserStatus
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(UserStatus $status): self
     {
         $this->status = $status;
 
@@ -436,7 +440,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->tickets->removeElement($ticket)) {
             // set the owning side to null (unless already changed)
             if ($ticket->getHolder() === $this) {
-                $ticket->setHolder(null);
+                // $ticket->setHolder(null);
             }
         }
 
