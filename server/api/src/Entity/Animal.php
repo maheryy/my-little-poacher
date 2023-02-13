@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['animals_read', 'animal_read']]
         ),
         new Get(
-            normalizationContext: ['groups' => ['animal_read']]
+            normalizationContext: ['groups' => ['animal_read', 'read:UserBids']]
         ),
         new Post(
             denormalizationContext: ['groups' => ['animal_write']],
@@ -59,7 +59,7 @@ class Animal
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['animal_read','animals_read','read:Bid'])]
+    #[Groups(['animal_read','animals_read','read:Bid', 'read:UserBids'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -72,7 +72,7 @@ class Animal
         minMessage: 'The name of the animal must be at least 3 characters long',
         maxMessage: 'The name of the animal cannot be longer than 255 characters'
     )]
-    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids', 'read:UserBids'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -85,15 +85,15 @@ class Animal
         minMessage: 'The scientific name of the animal must be at least 3 characters long',
         maxMessage: 'The scientific name of the animal cannot be longer than 255 characters'
     )]
-    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animals_read','animal_write','read:Bid', 'read:Bids', 'read:UserBids'])]
     private ?string $scientificName = null;
 
     #[ORM\Column]
-    #[Groups(['animal_read','animal_write','read:Bid'])]
+    #[Groups(['animal_read','animal_write','read:Bid', 'read:UserBids'])]
     private ?\DateTimeImmutable $captureDate = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['animal_read','animal_write','read:Bid', 'read:Bids'])]
+    #[Groups(['animal_read','animal_write','read:Bid', 'read:Bids', 'read:UserBids'])]
     #[Assert\NotBlank(
         message: 'The country of the animal is required'
     )]
