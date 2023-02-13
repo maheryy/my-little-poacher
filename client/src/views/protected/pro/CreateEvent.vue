@@ -63,8 +63,8 @@ const onSubmit = async () => {
                     <p v-if="errors.address" class="text-red-500">{{ errors.address }}</p>
                 </div>
                 <div class="flex flex-col w-full">
-                    <span class="text-gray-300">Starts on</span>
-                    <input type="number" placeholder="Start at" name="name"
+                    <span class="text-gray-300">Ticket price</span>
+                    <input type="number" placeholder="Ticket price" name="name"
                         class="px-2 py-2 rounded-md text-black" v-model="event.capacity" required />
                     <p v-if="errors.capacity" class="text-red-500">{{ errors.capacity }}</p>
                 </div>
