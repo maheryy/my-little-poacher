@@ -6,6 +6,7 @@ use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Bid;
 use App\Entity\BidLog;
 use App\Entity\UserBid;
+use App\Enum\UserBidStatus;
 use App\Repository\UserBidRepository;
 use App\Repository\BidLogRepository;
 use Doctrine\DBAL\Schema\View;
@@ -54,15 +55,32 @@ final class OutBidSubscriber implements EventSubscriberInterface
         $this->checkUser();
         $this->checkSeller($bid);
         $this->checkPrice($price, $bid);
+        $this->updateLastUserBidEntry($bid);
         $this->checkUserBid($bid);
         $this->setOutBid($bid, $price);
         $this->sendEmailOutbidWinner($this->security->getUser(), $bid); //user courant qui outbid
 
     }
 
+    private function updateLastUserBidEntry(Bid $bid)
+    {
+        $lastUserBid = $this->userBidRepository->findOneBy(['bid' => $bid, 'status' => UserBidStatus::WINNING]);
+
+        if (!$lastUserBid) {
+            return;
+        }
+
+        $lastUserBid->setStatus(UserBidStatus::DEFAULT);
+        $this->entityManager->persist($lastUserBid);
+        $this->entityManager->flush();
+
+        // Send email to last user bid
+    }
+
+
     private function checkUser()
     {
-        if(!$this->security->getUser()) {
+        if (!$this->security->getUser()) {
             throw new \Exception('User is not connected');
         }
         return;
@@ -70,17 +88,17 @@ final class OutBidSubscriber implements EventSubscriberInterface
 
     private function checkSeller(Bid $bid)
     {
-        if($this->security->getUser() === $bid->getSeller()) {
+        if ($this->security->getUser() === $bid->getSeller()) {
             throw new \Exception('Seller cannot outbid');
         }
     }
 
     private function checkPrice($price, $bid)
     {
-        if(!$price) {
+        if (!$price) {
             throw new \Exception('price is required');
         }
-        if($price <= $bid->getCurrentPrice()) {
+        if ($price <= $bid->getCurrentPrice()) {
             throw new \Exception('Price is lower or equal than current price');
         }
         return;
@@ -89,13 +107,16 @@ final class OutBidSubscriber implements EventSubscriberInterface
     private function checkUserBid(Bid $bid)
     {
         $userBid = $this->userBidRepository->findOneBy(['bidder' => $this->security->getUser(), 'bid' => $bid]);
-        if(!$userBid) {
+
+        if (!$userBid) {
             $userBid = new UserBid();
             $userBid->setBid($bid);
             $userBid->setBidder($this->security->getUser());
-            $userBid->setStatus('current');
-            $this->entityManager->persist($userBid);
         }
+
+        $userBid->setStatus(UserBidStatus::WINNING);
+        $this->entityManager->persist($userBid);
+        $this->entityManager->flush();
         return;
     }
 

@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Enum\UserBidStatus;
 use App\Repository\UserBidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,14 +17,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiFilter(SearchFilter::class,
+#[ApiFilter(
+    SearchFilter::class,
     properties: [
         'id' => 'exact',
         'status' => 'exact',
     ]
 )]
 #[ApiResource(
-    normalizationContext: ['groups' => ['userBids_read', 'userBid_read']],
+    normalizationContext: ['groups' => ['userBids_read', 'userBid_read', 'read:UserBids']],
     denormalizationContext: ['groups' => ['userBid_write']],
     paginationItemsPerPage: 12,
     paginationMaximumItemsPerPage: 12,
@@ -60,9 +62,9 @@ class UserBid
     #[Groups(['userBid_read', 'userBids_read', 'read:Bid', 'read:Bids'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::STRING, enumType: UserBidStatus::class)]
     #[Groups(['userBid_read', 'userBids_read', 'userBid_write', 'read:Bid', 'read:Bids'])]
-    private ?string $status = null;
+    private UserBidStatus $status;
 
     #[ORM\ManyToOne(inversedBy: 'userBids')]
     #[ORM\JoinColumn(nullable: false)]
@@ -79,12 +81,12 @@ class UserBid
         return $this->id;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): UserBidStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(UserBidStatus $status): self
     {
         $this->status = $status;
 

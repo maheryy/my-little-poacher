@@ -54,7 +54,6 @@ class UserFixtures extends Fixture
             ->setName('admin')
             ->setEmail('admin@gmail.com')
             ->setRoles(['ROLE_ADMIN'])
-            ->setStatus('1')
             ->setIsVerified(true);
 
         $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
@@ -65,7 +64,6 @@ class UserFixtures extends Fixture
                 ->setName($faker->firstName())
                 ->setEmail($faker->freeEmail())
                 ->setRoles(['ROLE_USER'])
-                ->setStatus('1')
                 ->setIsVerified(true);
 
             $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));

@@ -1,16 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import bidList from "../../mock_data/models/bids.json";
-import commentList from "../../mock_data/models/comments.json";
 import BidComment from "../components/BidComment.vue";
 import axios from "axios";
-import { useStore } from "vuex";
 
 const { id } = defineProps({
   id: String,
 });
-
-const store = useStore();
 
 const bid = ref({});
 const comment = ref("");
@@ -50,7 +45,6 @@ const outbid = () => {
         ...bid.value,
         currentPrice: res.data.currentPrice,
       };
-    
     });
 };
 </script>
