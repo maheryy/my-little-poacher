@@ -20,18 +20,18 @@ class AnimalFixtures extends Fixture
     {
         $faker = Factory::create('en_US');
 
-        $animaux = ["Lion", "Guépard", "Lémurien", "Kangourou", "Koala", "Ornithorynque", "Panda roux", "Wombat", "Paresseux", "Tamanoir", "Hippopotame", "Girafe", "Zèbre", "Chameau", "Éléphant", "Rhino", "Gorille", "Ours", "Chouette", "Paon"];
+        $animals = ["Lion", "Cheetah", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe", "Zebra", "Camel", "Elephant", "Rhino", "Gorilla", "Bear", "Owl", "Peacock"];
         $nomScientifique = ["Panthera leo", "Acinonyx jubatus", "Lemuriformes", "Macropus", "Phascolarctos cinereus", "Ornithorhynchus anatinus", "Ailurus fulgens", "Vombatidae", "Folivora", "Myrmecophaga tridactyla", "Hippopotamus amphibius", "Giraffa camelopardalis", "Equus quagga", "Camelus dromedarius", "Elephantidae", "Rhinocerotidae", "Gorilla", "Ursidae", "Strigiformes", "Pavo"];
 
 
-        for($i = 0; $i < count($animaux); $i++){
+        for($i = 0; $i < count($animals); $i++){
 
             $date= $faker->dateTimeBetween('-1 years', '-3days');
             $date = DateTimeImmutable::createFromMutable($date);
 
             $object = new Animal();
             $object
-                ->setName($animaux[$i])
+                ->setName($animals[$i])
                 ->setScientificName($nomScientifique[$i])
                 ->setCaptureDate($date)
                 ->setLatitude($faker->randomFloat(5,-90, 90))

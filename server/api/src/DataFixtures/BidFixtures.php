@@ -37,8 +37,13 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
 
         $animals = ["Lion", "Cheetah", "Lemur", "Kangaroo", "Koala", "Platypus", "Red Panda", "Wombat", "Sloth", "Anteater", "Hippopotamus", "Giraffe", "Zebra", "Camel", "Elephant", "Rhino", "Gorilla", "Bear", "Owl", "Peacock"];
 
-        $seller = $manager->getRepository(User::class)->findAll();
-
+        $sellers = $manager->getRepository(User::class)->findAll();
+        $bidOwner =[];
+        for ($i = 0; $i < count($sellers); $i++) {
+            if (in_array("ROLE_SELLER", $sellers[$i]->getRoles())) {
+                array_push($bidOwner, $sellers[$i]);
+            }
+        }
     
         for($i = 0; $i < 12; $i++){
             $animal = $manager->getRepository(Animal::class)->findOneBy(['name' => $faker->randomElement($animals)]);
@@ -48,6 +53,10 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
             while($dateFin < $dateDebut){
                 $dateFin = $faker->dateTimeBetween('-1 week', '+4 week');
             }
+            //peut pas empêcher un vendeur de faire monter enchère sur son propre animal pcq getSeller existe pas
+            // while($faker->randomElement($seller) == $animal->getSeller()){
+            //     $faker->randomElement($seller);
+            // }
 
             $dateDebut = DateTimeImmutable::createFromMutable($dateDebut);
             $dateFin = DateTimeImmutable::createFromMutable($dateFin);
@@ -63,7 +72,7 @@ class BidFixtures extends Fixture implements DependentFixtureInterface
                 ->setEndAt($dateFin)
                 ->setStatus('1')
                 ->setAnimal($animal)
-                ->setSeller($faker->randomElement($seller))
+                ->setSeller($faker->randomElement($bidOwner))
             ;
 
             $manager->persist($bid);

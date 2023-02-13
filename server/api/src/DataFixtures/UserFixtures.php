@@ -25,8 +25,18 @@ class UserFixtures extends Fixture
 
         $object = (new User())
             ->setName($faker->firstName())
-            ->setEmail('chadmlpuser@gmail.com')
+            ->setEmail('mlpuser@gmail.com')
             ->setRoles(['ROLE_USER'])
+            ->setStatus('1')
+            ->setIsVerified(true);
+
+        $object->setPassword($this->userPasswordHash->hashPassword($object, 'password'));
+        $manager->persist($object);
+
+        $object = (new User())
+            ->setName($faker->firstName())
+            ->setEmail('mlpadmin@gmail.com')
+            ->setRoles(['ROLE_ADMIN'])
             ->setStatus('1')
             ->setIsVerified(true);
 

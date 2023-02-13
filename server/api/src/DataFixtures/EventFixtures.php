@@ -19,27 +19,24 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
         $faker = Factory::create('en_US');
 
-        $eventInfo = array (
 
-        );
 
         $eventDescription = [
-            "Vente secrète de Lion" =>  "Vente illégale de lionceaux.",
-         "Vente secrète de Tigre de siberie" => "Vente secrète de tigres de Siberie.",
-          "Vente secrète de Lémurien" => "Vente de Lémuriens sous le manteau.",
-          "Vente secrète de Kangourou" => "Vente de Kangourou.",
-           "Vente secrète de Koala" => "Achat de Koala adultes.",
-           "Vente secrète de Ornithorynque" => "Vente de bébés ornithorynque.",
-           "Vente secrète de Panda roux" => "Marché noir de panda roux.",
-           "Vente secrète de Wombat" => "Achat de wombat de combat.",
-           "Vente secrète de Paresseux" => "Vente illégale de paresseux nains.",
-           "Vente secrète de Tamanoir" => "Vente de tamanoir.", 
-           "Vente secrète de Hippopotame" => "Vente d'Hippopotames adultes", 
-           "Vente secrète de Girafe" => "Vente de girafes à couper le souffle."
-        ];
+            "Secret Lion Sale" => "Illegal sale of lion cubs.",
+            "Secret Siberian Tiger Sale" => "Secret sale of Siberian tigers.",
+            "Secret Lemur Sale" => "Sale of lemurs under the table.",
+            "Secret Kangaroo Sale" => "Sale of kangaroo.",
+            "Secret Koala Sale" => "Purchase of adult koalas.",
+            "Secret Platypus Sale" => "Sale of baby platypus.",
+            "Secret Red Panda Sale" => "Black market for red pandas.",
+            "Secret Wombat Sale" => "Purchase of combat wombats.",
+            "Secret Sloth Sale" => "Illegal sale of pygmy sloths.",
+            "Secret Anteater Sale" => "Sale of anteaters.",
+            "Secret Hippopotamus Sale" => "Sale of adult hippopotamuses.",
+            "Secret Giraffe Sale" => "Sale of breathtaking giraffes."
+            ];
 
-        $eventName = ["Vente secrète de Lion", "Vente secrète de Tigre de siberie", "Vente secrète de Lémurien", "Vente secrète de Kangourou", "Vente secrète de Koala", "Vente secrète de Ornithorynque", "Vente secrète de Panda roux", "Vente secrète de Wombat", "Vente secrète de Paresseux", "Vente secrète de Tamanoir", "Vente secrète de Hippopotame", "Vente secrète de Girafe"];
-
+            $eventName = ["Secret Lion Sale", "Secret Siberian Tiger Sale", "Secret Lemur Sale", "Secret Kangaroo Sale", "Secret Koala Sale", "Secret Platypus Sale", "Secret Red Panda Sale", "Secret Wombat Sale", "Secret Sloth Sale", "Secret Anteater Sale", "Secret Hippopotamus Sale", "Secret Giraffe Sale"];
         
  
 
@@ -54,8 +51,9 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         for($i = 0; $i < count($eventName); $i++){
             
             $dateDebut = $faker->dateTimeBetween('-2 week', '+4 week');  
+
             $dateDebut = DateTimeImmutable::createFromMutable($dateDebut);
-            
+
             
                 $event = new Event();
             $event
