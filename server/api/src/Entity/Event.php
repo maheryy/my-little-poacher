@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\EndEventController;
 use App\Enum\EventStatus;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -65,6 +66,18 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => ['event_write']],
             security: "is_granted('ROLE_SELLER') or object.getCreator() == user",
             securityMessage: 'Only the creator of the event can edit it.'
+        ),
+        new Post(
+            uriTemplate: '/events/{id}/end',
+            controller: EndEventController::class,
+            normalizationContext: ['groups' => ['event_read']],
+            security: 'is_granted("ROLE_SELLER")',
+            securityMessage: 'Only the seller can end the event.',
+            openapiContext: [
+                'summary' => 'End the event',
+                'tags' => ['Event'],
+                'description' => 'End the event',
+            ]
         ),
         new Post(
             denormalizationContext: ['groups' => ['event_write']],
