@@ -61,23 +61,22 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             normalizationContext: ['groups' => ['bid_read', 'read:Bid']]
         ),
-        new Put(
+        new Post(
             uriTemplate: '/bids/{id}/end',
             controller: EndBidController::class,
-            denormalizationContext: ['groups' => ['bid_write']],
-            read: false,
+            normalizationContext: ['groups' => ['bid_read']],
             security: 'is_granted("ROLE_SELLER")',
             securityMessage: 'Only the seller can end the bid.',
             openapiContext: [
                 'summary' => 'End the bid',
                 'tags' => ['Bid'],
                 'description' => 'End the bid',
-            ],
+            ]
         ),
         new Post(
             denormalizationContext: ['groups' => ['bid_write']],
             security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_USER")',
-            securityMessage: 'Only the seller can create the bid.'
+            securityMessage: 'Only the seller can create the bid.',
         ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN")',
