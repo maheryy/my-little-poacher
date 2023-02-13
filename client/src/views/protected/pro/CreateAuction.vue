@@ -14,6 +14,7 @@ const form = reactive({
 const animal = reactive({
     name: "",
     scientificName: "",
+    country: "",
     captureDate: "",
 });
 
@@ -63,6 +64,12 @@ const onSubmit = async () => {
                     <input type="text" placeholder="Erithacus rubecula" name="name"
                         class="px-2 py-2 rounded-md text-black" v-model="animal.scientificName" required />
                     <p v-if="errors.scientificName" class="text-red-500">{{ errors.scientificName }}</p>
+                </div>
+                <div class="flex flex-col w-full">
+                    <span class="text-gray-300">Country of origin</span>
+                    <input type="text" placeholder="Pays de capture" name="name"
+                        class="px-2 py-2 rounded-md text-black" v-model="animal.country" required />
+                    <p v-if="errors.country" class="text-red-500">{{ errors.country }}</p>
                 </div>
                 <div class="flex flex-col w-full">
                     <span class="text-gray-300">Captured on</span>
