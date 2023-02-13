@@ -6,50 +6,48 @@ use App\Entity\User;
 use App\Entity\Bid;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use DateTimeImmutable;
+use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        $comments = [ "Who dares to bid on it??",
+        "I am the best",
+        "I won't let go",
+        "Give up!",
+        "The strategy is to bid at the last minute",
+        "Not sure there will be enough for everyone",
+        "I can already picture it above the fireplace",
+        "I'm ready to do anything to get it",
+        "A beautiful creature in prospect",
+        ];
+        $faker = Factory::create('en_US');
 
-        for ($j = 0; $j < 15; $j++) {
-            for($i = 0; $i < 15; $i++) {
-                $author = $manager->getRepository(User::class)->findOneBy(['name' => ('client'.$i)]);
-                $bid = $manager->getRepository(Bid::class)->findOneBy(['title' => ('Marsupilami au plus offrant '.$j)]);
+        $dateTimeNow = new DateTimeImmutable();
+        for ($j = 0; $j < 40; $j++) {
+            
+
+                $author = $manager->getRepository(User::class)->findAll();
+                $bids = $manager->getRepository(Bid::class)->findAll();
+
+                $bid = $faker->randomElement($bids);
+                while ($bid->getStartAt() > $dateTimeNow) {
+                    $bid = $faker->randomElement($bids);
+                }
+
                 
                 $object = new Comment();
                 $object
-                    ->setContent('Je veux lui faire '.$i.' bisous ! OUBAH OUBAH')
+                    ->setContent($faker->randomElement($comments))
                     ->setBid($bid)
-                    ->setAuthor($author)
+                    ->setAuthor($faker->randomElement($author))
                 ;
                 $manager->persist($object);
-            }
+        
     
-            for($i = 0; $i < 15; $i++) {
-                $author = $manager->getRepository(User::class)->findOneBy(['name' => ('client'.$i)]);
-                $bid = $manager->getRepository(Bid::class)->findOneBy(['title' => ('WinnieOurson pour le plus gourmand '.$j)]);
-                $object = new Comment();
-                $object
-                    ->setContent('Je veux lui mettre au moins '.$i.' giffles !')
-                    ->setBid($bid)
-                    ->setAuthor($author)
-                ;
-                $manager->persist($object);
-            }
-    
-            for($i = 0; $i < 15; $i++) {
-                $author = $manager->getRepository(User::class)->findOneBy(['name' => ('client'.$i)]);
-                $bid = $manager->getRepository(Bid::class)->findOneBy(['title' => ('PanthereRose vous connaissez la chanson '.$j)]);
-                $object = new Comment();
-                $object
-                    ->setContent('Il m\en manque justement '.$i)
-                    ->setBid($bid)
-                    ->setAuthor($author)
-                ;
-                $manager->persist($object);
-            }
         }
         
 
