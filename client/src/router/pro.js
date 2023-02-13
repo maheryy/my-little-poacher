@@ -23,6 +23,18 @@ const routes = [
     component: () => import("../views/protected/pro/CreateEvent.vue"),
     ...options,
   },
+  {
+    path: "/pro/my-events",
+    name: "my-events",
+    component: () => import("../views/protected/pro/SellerEventList.vue"),
+    ...options,
+  },
+  {
+    path: "/update-event/:id",
+    name: "update-event",
+    component: () => import("../views/protected/pro/UpdateEvent.vue"),
+    props: true,
+  }
 ];
 
 export default routes;

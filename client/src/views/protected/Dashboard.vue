@@ -18,12 +18,19 @@ const logout = () => {
   <button @click="logout" class="px-2 py-2 rounded-md bg-blue-500 text-white">
     Logout
   </button>
-  <RouterLink :to="{ name: 'create-event' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
-    Create an event
-  </RouterLink>
-  <RouterLink :to="{ name: 'create-auction' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
-    Create an auction
-  </RouterLink>
+  <div v-if="isPro" class="flex gap-2 mt-10">
+    <RouterLink :to="{ name: 'create-event' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
+      Create an event
+    </RouterLink>
+    <RouterLink :to="{ name: 'create-auction' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
+      Create an auction
+    </RouterLink>
+    <RouterLink :to="{ name: 'my-events' }" class="px-2 py-2 rounded-md bg-blue-500 text-white">
+      My events
+    </RouterLink>
+  </div>
 </template>
 
-<style></style>
+<style>
+
+</style>
